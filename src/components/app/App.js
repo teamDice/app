@@ -10,7 +10,7 @@ import Home from './Home';
 import Game from '../game/Game';
 import Auth from '../auth/Auth';
 import Lobby from '../lobby/Lobby';
-import LeaderboardDisplay from '../game/LeaderboardDisplay';
+import LeaderboardDisplay from '../leaderboard/LeaderboardDisplay';
 import styles from './App.css';
 
 class App extends Component {
