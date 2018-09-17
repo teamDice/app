@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlayerDisplay from './PlayerDisplay';
+import QueueForm from './QueueForm';
 import { connect } from 'react-redux';
 import { getGames, getStats } from './reducers';
 import { getUser } from '../auth/reducers';
@@ -18,10 +19,10 @@ export class Lobby extends Component {
     history: PropTypes.object.isRequired
   };
 
-  componentDidMount() {
-    const { getStatsById, user } = this.props;
-    getStatsById(user.profile._id);
-  }
+  // componentDidMount() {
+    // const { getStatsById, user } = this.props;
+    // getStatsById(user.profile._id);
+  // }
 
   componentDidUpdate() {
     const { games, history } = this.props;
@@ -32,12 +33,13 @@ export class Lobby extends Component {
   }
 
   render() { 
-    const { user, requestGame, stats } = this.props;
+    // const { user, requestGame, stats } = this.props;
 
     return (
       <div className={styles.lobby}>
-        <PlayerDisplay profile={user.profile} stats={stats}/>
-        {user && <button onClick={requestGame}>PLAY GORTS</button>}
+        <QueueForm/>
+        <PlayerDisplay/>
+        {/* {user && <button onClick={requestGame}>PLAY GORTS</button>} */}
       </div>
     );
   }

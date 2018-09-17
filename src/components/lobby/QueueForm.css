@@ -1,0 +1,32 @@
+:local(.queueForm) {
+  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: "queue queue queue"
+                        "play play play";
+  section {
+    align-items: center;
+    color: black;
+    display: flex;
+    grid-area: queue;
+    justify-content: center;
+  }
+  section > article > div {
+    align-items: center;
+    background-color: black;
+    color: white;
+    display: flex;
+    height: 110px;
+    justify-content: center;
+    margin: 5px;
+    width: 110px;
+    font-size: 2.5em;
+  }
+  section > article > .queueSelected {
+    border: 3px solid yellow;
+  }
+
+  .submit {
+    grid-area: play;
+  }
+}
