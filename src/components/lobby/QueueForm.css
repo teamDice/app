@@ -1,0 +1,18 @@
+:local(.queue_form) {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  article > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    width: 100px;
+
+  }
+  article > div:hover {
+    background-color: white;
+    color: black;
+  }
+}
