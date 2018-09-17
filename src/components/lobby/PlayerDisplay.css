@@ -1,0 +1,31 @@
+:local(.playerDisplay) {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  height: 500px;
+  color: white;
+
+  img {
+    height: 200px;
+    width: 200px;
+    background: white;
+    border-radius: 1.6em;
+  }
+
+  h1 {
+    font-size: 1.5em;
+    padding-bottom: 10px;
+    border-bottom: 2px solid white;
+    color: #FF570C
+  }
+
+  h3 {
+    font-size: 1em;
+  }
+
+  .playerInfo {
+    text-align: left;
+  }
+}

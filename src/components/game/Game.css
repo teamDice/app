@@ -1,0 +1,8 @@
+:local(.game) {
+  background: rgba(247, 247, 247, .5);
+  display: grid;
+  grid-template: 3fr 1fr / 1fr;
+
+
+
+}

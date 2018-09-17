@@ -1,0 +1,27 @@
+:local(.home) {
+
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 0px;
+  color: white;
+
+  h1 {
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
+    padding: 20px 0px;
+    letter-spacing: .2em;
+    font-size: 3em;
+  }
+
+  ul {
+    padding: 0;
+  }
+
+
+  li {
+    text-align: left;
+  }
+}

@@ -1,0 +1,14 @@
+:local(.app) {
+  main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  div {
+    width: 95%;
+    height: 95%;
+    border-radius: 10px;
+    background: rgba(39, 39, 39, 0.7);
+  }
+}
