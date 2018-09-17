@@ -18,21 +18,22 @@ class PlayerDisplay extends PureComponent {
     // const { name, location, rank, avatar } = profile;
 
     return ( 
+      <div>
+        <section className={styles.playerDisplay}>
+          <h1>Bobby</h1>
+          <img src="https://toolnavy.com/customavatars/avatar38224_10.gif" />
+          <section className="playerInfo">
+            <p>Location: Portland</p>
+            <p>Rank: Private</p>
+            <p>Statistics:</p>
+            <ul>
+              <li>Total Wins: 3</li>
+              <li>Total Games: 11</li>
+            </ul>
+          </section>
+        </section>
 
-      <h1>User</h1>
-      // <section className={styles.playerDisplay}>
-      //   <img src={avatar} />
-      //   <section className="playerInfo">
-      //     <h1>{name}</h1>
-      //     <p>Location: {location}</p>
-      //     <p>Rank: {rank}</p>
-      //     <p>Statistics:</p>
-      //     <ul>
-      //       <li>Total Wins: {totalWins}</li>
-      //       <li>Total Games: {totalGames}</li>
-      //     </ul>
-      //   </section>
-      // </section>
+      </div>
     );
   }
 }

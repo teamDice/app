@@ -1,4 +1,4 @@
-:local(.queue_form) {
+:local(.queueForm) {
   color: white;
   display: flex;
   align-items: center;
@@ -11,7 +11,7 @@
     width: 100px;
 
   }
-  article > div:hover {
+  article > .queueSelected {
     background-color: white;
     color: black;
   }
