@@ -1,0 +1,21 @@
+:local(.player) {
+  display: grid;
+  grid-template: min-content 1fr / min-content 1fr auto;
+  grid-template-areas:
+    "username hand played"
+    "avatar hand played";
+  height: 130px;
+
+  h2 {
+    grid-area: username;
+    font-size: 1em;
+  }
+
+  .hand {
+    grid-area: hand;
+  }
+  .played {
+    grid-area: played;
+  }
+
+}

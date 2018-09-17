@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import Avatar from './Avatar';
 import Card from './Card';
 import PropTypes from 'prop-types';
+import styles from './Player.css';
 
 class Player extends PureComponent {
 
@@ -10,7 +11,7 @@ class Player extends PureComponent {
     hand: [
       { type: 1 },
       { type: 1 },
-      // { type: 1 },
+      { type: 1 },
       { type: 0 }
     ]
   };
@@ -19,16 +20,16 @@ class Player extends PureComponent {
     const { hand } = this.state;
 
     return (
-      <section>
-        <h2>User name</h2>
+      <section className={styles.player}>
         <Avatar/>
+        <h2>User name</h2>
         <div className="hand">
           {hand.map((card, i) => (
             <Card key={i} card={card}/>
           ))}
         </div>
         <div className="played">
-          {[...Array(1)].map((card, i) => (
+          {[...Array(0)].map((card, i) => (
             <Card key={i}/>
           ))}
         </div>
