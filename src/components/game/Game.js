@@ -8,7 +8,6 @@ class Game extends PureComponent {
   render() { 
     return (
       <section>
-        <h1>Game</h1>
         <Player/>
         <Player/>
         <Player/>
