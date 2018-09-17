@@ -1,0 +1,7 @@
+:local(.card) {
+  border-radius: 10%;
+  border: 2px solid black;
+  padding: 20px 0;
+  width: 60px;
+  margin: 2px 2px;
+}
