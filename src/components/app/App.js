@@ -10,7 +10,7 @@ import Home from './Home';
 import Game from '../game/Game';
 import Auth from '../auth/Auth';
 import Lobby from '../lobby/Lobby';
-import LeaderboardDisplay from '../game/LeaderboardDisplay';
+import LeaderboardDisplay from '../leaderboard/LeaderboardDisplay';
 import styles from './App.css';
 
 class App extends Component {
@@ -39,6 +39,8 @@ class App extends Component {
                 <Route path="/auth" component={Auth}/>
                 <Route exact path="/lobby" component={Lobby}/>
                 <Route exact path="/leaderboard" component={LeaderboardDisplay}/>
+                {/* Placeholder game route for static html */}
+                <Route exact path="/game" component={Game}/>
 
                 <PrivateRoute path="/games/:gameKey" component={Game}/>
                 <Redirect to="/"/>
