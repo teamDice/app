@@ -1,18 +1,31 @@
 :local(.queueForm) {
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  article > div {
-    display: flex;
+  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: "queue queue queue"
+                        "play play play";
+  section {
     align-items: center;
-    justify-content: center;
-    height: 100px;
-    width: 100px;
-
-  }
-  article > .queueSelected {
-    background-color: white;
     color: black;
+    display: flex;
+    grid-area: queue;
+    justify-content: center;
+  }
+  section > article > div {
+    align-items: center;
+    background-color: black;
+    color: white;
+    display: flex;
+    height: 100px;
+    justify-content: center;
+    margin: 5px;
+    width: 100px;
+  }
+  section > article > .queueSelected {
+    border: 3px solid yellow;
+  }
+
+  .submit {
+    grid-area: play;
   }
 }

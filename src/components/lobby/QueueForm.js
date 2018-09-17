@@ -6,13 +6,13 @@ class QueueForm extends Component {
 
   render() { 
     return (
-      <div>
-        <section className={styles.queueForm}>
+      <div className={styles.queueForm}>
+        <section>
           <QueueItem playersWaiting="1" queueType="2"/>
           <QueueItem playersWaiting="0" queueType="3"/>
           <QueueItem playersWaiting="3" queueType="4"/>
         </section>
-        <button className="submit">Go</button>
+        <button className="submit">Find Game</button>
       </div>
     );
   }
