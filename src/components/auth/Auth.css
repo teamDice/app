@@ -1,0 +1,13 @@
+:local(.auth) {
+  color: #f7f7f7;
+  background: #606470;
+  font-family: 'Metamorphous', cursive;
+
+  a {
+    color: #ff570c;
+    text-decoration: none;
+    border-style: 2px solid;
+    font-family: 'Metamorphous', cursive;
+  }
+
+}

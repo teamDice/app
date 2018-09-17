@@ -1,0 +1,13 @@
+:local(.lobby) {
+  button {
+    background: #FF570C;
+    border: none;
+    font-size: 1.5em;
+    margin-bottom: 50px;
+    padding: 6px;
+  }
+  button:hover {
+    background: white;
+  }
+
+}

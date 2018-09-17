@@ -1,0 +1,34 @@
+:local(.bidder) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  button {
+    height: 50px;
+    font-size: 1.3em;
+    margin: 2px;
+    border: none;
+    border-radius: .5em;
+    background: #FF570C;
+    color: white;
+  }
+
+  span {
+    display: grid;
+    grid-template: 1fr 1fr / repeat(5, 1fr);
+  }
+
+  button:hover {
+    background: black;
+  }
+
+  .numbers {
+    width: 50px;
+  }
+
+  .submit {
+    width: 266px;
+    height: 40px;
+  }
+
+}
