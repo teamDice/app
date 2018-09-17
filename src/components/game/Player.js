@@ -4,14 +4,34 @@ import Card from './Card';
 import PropTypes from 'prop-types';
 
 class Player extends PureComponent {
-  state = {  }
-  render() { 
+
+  // placeholder hand data
+  state = {
+    hand: [
+      { type: 1 },
+      { type: 1 },
+      // { type: 1 },
+      { type: 0 }
+    ]
+  };
+
+  render() {
+    const { hand } = this.state;
+
     return (
       <section>
-        <h2>Player</h2>
+        <h2>User name</h2>
         <Avatar/>
-        <Card/>
-
+        <div className="hand">
+          {hand.map((card, i) => (
+            <Card key={i} card={card}/>
+          ))}
+        </div>
+        <div className="played">
+          {[...Array(1)].map((card, i) => (
+            <Card key={i}/>
+          ))}
+        </div>
       </section>
     );
   }
