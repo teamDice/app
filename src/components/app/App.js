@@ -39,6 +39,8 @@ class App extends Component {
                 <Route path="/auth" component={Auth}/>
                 <Route exact path="/lobby" component={Lobby}/>
                 <Route exact path="/leaderboard" component={LeaderboardDisplay}/>
+                {/* Placeholder game route for static html */}
+                <Route exact path="/game" component={Game}/>
 
                 <PrivateRoute path="/games/:gameKey" component={Game}/>
                 <Redirect to="/"/>
