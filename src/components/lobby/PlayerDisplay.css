@@ -27,7 +27,40 @@
     font-size: 1em;
   }
 
+  .top-playerInfo {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas: "picture quote"
+  }
+
+  .top-playerInfo > img {
+    grid-area: picture;
+  }
+
+  .top-playerInfo > h3 {
+    grid-area: quote;
+  }
+
   .playerInfo {
     text-align: left;
+  }
+
+  .playerInfo > img {
+    margin-top: 10px;
+  }
+
+  .title {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 10px;
+    margin-left: 10px;
+    width: 100%;
+  }
+
+  .edit {
+    background-color: white;
+    color: gray;
+    margin: 0px;
+    padding: 0px;
   }
 }

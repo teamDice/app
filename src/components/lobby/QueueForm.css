@@ -16,10 +16,11 @@
     background-color: black;
     color: white;
     display: flex;
-    height: 100px;
+    height: 110px;
     justify-content: center;
     margin: 5px;
-    width: 100px;
+    width: 110px;
+    font-size: 2.5em;
   }
   section > article > .queueSelected {
     border: 3px solid yellow;
