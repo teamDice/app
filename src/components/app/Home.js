@@ -7,7 +7,7 @@ export class Home extends Component {
 
     return (
       <div className={styles.home}>
-        <h1>GORTS</h1>
+        <h1>Snakes &amp; Squirrels</h1>
         <section>
           <h3>How to Play:</h3>
           <p>You and your opponent choose how many troops to send to battle. </p>

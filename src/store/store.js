@@ -2,7 +2,7 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import promiseMiddleware from './promise-middleware';
 import { error, loading } from '../components/app/reducers';
-// import { game, moves } from '../components/game/reducers';
+// import { game } from '../components/game/reducers';
 import { user, checkedAuth } from '../components/auth/reducers';
 import { stats, leaders } from '../components/lobby/reducers';
 
