@@ -4,13 +4,14 @@ import Player from './Player';
 import Control from './Control';
 import PropTypes from 'prop-types';
 import { loadGame } from './actions';
-import { getGame } from './reducers';
+import { getGame, getHand } from './reducers';
 
 class Game extends PureComponent {
 
   static propTypes = {
     loadGame: PropTypes.func.isRequired,
-    game: PropTypes.object
+    game: PropTypes.object,
+    hand: PropTypes.array
   };
 
   componentDidMount() {
@@ -19,7 +20,7 @@ class Game extends PureComponent {
 
   render() { 
 
-    const { game } = this.props;
+    const { game, hand } = this.props;
     const { players } = game;
 
     return (
@@ -39,7 +40,8 @@ class Game extends PureComponent {
  
 export default connect(
   state => ({
-    game: getGame(state)
+    game: getGame(state),
+    hand: getHand(state)
   }),
   { loadGame }
 )(Game);

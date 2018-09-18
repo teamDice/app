@@ -3,6 +3,7 @@ export const GAME_END = 'GAME_END';
 export const CARD_PLAY = 'CARD_PLAY';
 
 export const getGame = state => state.game;
+export const getHand = state => state.hand;
 
 export function game(state = {}, { type, payload }) {
   switch(type) {

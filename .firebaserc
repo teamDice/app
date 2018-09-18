@@ -1,5 +1,6 @@
 {
   "projects": {
-    "snakes-game": "snakes-game-2b62c"
+    "snakes-game": "snakes-game-2b62c",
+    "snakes": "snakes-game-2b62c"
   }
 }
