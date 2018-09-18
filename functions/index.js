@@ -57,7 +57,7 @@ exports.playerQueue2 = functions.database.ref('/queue2/{uid}').onCreate((snapsho
       const newGameRef = gamesRef.push();
 
       const players = shuffle([uid, opponent]);
-      const firstPlayer = players[0];
+
       const gameId = newGameRef.key;
       const startingState = { gameId, hand };
 
@@ -73,8 +73,8 @@ exports.playerQueue2 = functions.database.ref('/queue2/{uid}').onCreate((snapsho
         queue3Ref.child(opponent).remove(),
         queue4Ref.child(uid).remove(),
         queue4Ref.child(opponent).remove(),
-        handsRef.child(uid).set(startingHand),
-        handsRef.child(opponent).set(startingHand)
+        handsRef.child(uid).set(startingState),
+        handsRef.child(opponent).set(startingState)
       ]);
     });
 });
@@ -109,9 +109,9 @@ exports.playerQueue3 = functions.database.ref('/queue3/{uid}').onCreate((snapsho
           queue4Ref.child(uid).remove(),
           queue4Ref.child(opponent1).remove(),
           queue4Ref.child(opponent2).remove(),
-          handsRef.child(uid).set(startingHand),
-          handsRef.child(opponent1).set(startingHand),
-          handsRef.child(opponent2).set(startingHand)
+          handsRef.child(uid).set(startingState),
+          handsRef.child(opponent1).set(startingState),
+          handsRef.child(opponent2).set(startingState)
         ]);
     });
 });
@@ -149,10 +149,10 @@ exports.playerQueue4 = functions.database.ref('/queue4/{uid}').onCreate((snapsho
         queue4Ref.child(opponent1).remove(),
         queue4Ref.child(opponent2).remove(),
         queue4Ref.child(opponent3).remove(),
-        handsRef.child(uid).set(startingHand),
-        handsRef.child(opponent1).set(startingHand),
-        handsRef.child(opponent2).set(startingHand),
-        handsRef.child(opponent3).set(startingHand)
+        handsRef.child(uid).set(startingState),
+        handsRef.child(opponent1).set(startingState),
+        handsRef.child(opponent2).set(startingState),
+        handsRef.child(opponent3).set(startingState)
       ]);
     });
 });

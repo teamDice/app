@@ -26,7 +26,8 @@ export const loadHand = () => {
   return (dispatch, getState) => {
     const { profile } = getUser(getState());
     handsRef.child(profile._id).on('value', snapshot => {
-      const hand = Object.values(snapshot.val());
+      const startingState = snapshot.val();
+      const hand = Object.values(startingState.hand);
       dispatch({
         type: HAND_START,
         payload: hand

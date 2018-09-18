@@ -18,7 +18,7 @@ export const requestGame = (searching, queueRef) => {
   return (dispatch, getState) => {
 
     const { profile } = getUser(getState());
-    const { profileId } = profile;
+    const profileId = profile._id;
 
     if(searching) {
       db.ref(queueRef).child(profileId).remove();
