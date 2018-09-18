@@ -1,38 +1,54 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { getLeaders } from '../lobby/reducers';
-import { loadLeaders } from '../lobby/actions';
+// import PropTypes from 'prop-types';
+import styles from './LeaderboardDisplay.css';
+
 
 class LeaderboardDisplay extends Component {
-  static propTypes = {
-    leaders: PropTypes.array,
-    loadLeaders: PropTypes.func.isRequired
-  };
+  
 
-  componentDidMount() {
-    this.props.loadLeaders();
-  }
+
+ 
 
   render() { 
-    const { leaders } = this.props;
 
     return (
-      <div>
-        <h2>Top 5 Most Successful Generals</h2>
-        <ul>
-          {leaders.map(leader => {
-            <li>{leader.name}: {leader.wins}</li>;
-          })}
-        </ul>
+      <div className={styles.leader_display}>
+        <h2>L E A D E R B O A R D</h2>
+        <table className="leader_table">
+          <tr className="leader_heading">
+            <th>Name</th>
+            <th>Total Wins</th>
+            <th>Total Games</th>
+            <th>Win %</th> 
+          </tr>
+          <tr>
+            <td>Bobby</td>
+            <td>5</td>
+            <td>10</td>
+            <td>50</td>
+          </tr>
+          <tr>
+            <td>Arthur</td>
+            <td>6</td>
+            <td>10</td>
+            <td>60</td>
+          </tr>
+          <tr>
+            <td>Easton</td>
+            <td>7</td>
+            <td>10</td>
+            <td>70</td>
+          </tr>
+          <tr>
+            <td>Injoong</td>
+            <td>8</td>
+            <td>10</td>
+            <td>80</td>
+          </tr>
+        </table>
       </div>
     );
   }
 }
  
-export default connect(
-  state => ({
-    leaders: getLeaders(state)
-  }),
-  { loadLeaders }
-)(LeaderboardDisplay);
+export default LeaderboardDisplay;
