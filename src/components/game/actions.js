@@ -3,7 +3,7 @@ import { getUser } from '../auth/reducers';
 import { gamesRef, handsRef } from '../../services/firebaseRef';
 
 
-export const loadGame = gameKey => {
+export const startGame = gameKey => {
 
   return (dispatch, getState) => {
     gamesRef.child(gameKey).on('value', snapshot => {

@@ -7,17 +7,12 @@ class Control extends PureComponent {
   state = {
     bid: 3,
     emoting: false,
-    bidding: false,
-    hand: [
-      { type: 1 },
-      { type: 1 },
-      { type: 1 },
-      { type: 0 }
-    ]
+    bidding: false
   };
 
   static propTypes = {
-    phase: PropTypes.number
+    phase: PropTypes.number,
+    hand: PropTypes.array.isRequired
   };
 
   toggleEmoting = () => {
@@ -33,8 +28,8 @@ class Control extends PureComponent {
   };
 
   render() { 
-    const { hand, emoting, bidding, bid } = this.state;
-    const { phase } = this.props;
+    const { emoting, bidding, bid } = this.state;
+    const { hand, phase } = this.props;
 
     switch(phase) {
       case 1:

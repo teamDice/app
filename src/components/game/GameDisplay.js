@@ -9,17 +9,12 @@ import { getGame } from './reducers';
 class Game extends PureComponent {
 
   static propTypes = {
-    loadGame: PropTypes.func.isRequired,
-    game: PropTypes.object
+    hand: PropTypes.array.isRequired,
+    game: PropTypes.object.isRequired
   };
 
-  componentDidMount() {
-    this.props.loadGame();
-  }
-
   render() { 
-
-    const { game } = this.props;
+    const { game, hand } = this.props;
     const { players, phase } = game;
 
     return (
@@ -31,7 +26,7 @@ class Game extends PureComponent {
             ))
         }
         
-        <Control phase={phase}/>
+        <Control hand={hand} phase={phase}/>
       </section>
     );
   }

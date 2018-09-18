@@ -2,23 +2,23 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import GameDisplay from './GameDisplay';
-import { startGame, endGame } from './actions';
+import { startGame, loadHand, endGame } from './actions';
 import { getGame, getHand } from './reducers';
 
 class Game extends PureComponent {
 
   static propTypes = {
     match: PropTypes.object.isRequired,
-    loadGame: PropTypes.func.isRequired,
+    startGame: PropTypes.func.isRequired,
     loadHand: PropTypes.func.isRequired,
     game: PropTypes.object,
     hand: PropTypes.array
   };
 
   componentDidMount() {
-    const { match, loadGame, loadHand } = this.props;
+    const { match, startGame, loadHand } = this.props;
     const { gameKey } = match.params;
-    loadGame(gameKey);
+    startGame(gameKey);
     loadHand();
   }
 
@@ -43,5 +43,5 @@ export default connect(
     game: getGame(state),
     hand: getHand(state)
   }),
-  { startGame, endGame }
+  { startGame, loadHand, endGame }
 )(Game);

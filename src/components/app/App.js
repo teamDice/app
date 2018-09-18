@@ -7,7 +7,7 @@ import { tryLoadUser } from '../auth/actions';
 import { getCheckedAuth } from '../auth/reducers';
 import Header from './Header';
 import Home from './Home';
-import GameDisplay from '../game/GameDisplay';
+import Game from '../game/Game';
 import Auth from '../auth/Auth';
 import Lobby from '../lobby/Lobby';
 import LeaderboardDisplay from '../leaderboard/LeaderboardDisplay';
@@ -40,9 +40,9 @@ class App extends Component {
                 <Route exact path="/lobby" component={Lobby}/>
                 <Route exact path="/leaderboard" component={LeaderboardDisplay}/>
                 {/* Placeholder game route for static html */}
-                <Route exact path="/game" component={GameDisplay}/>
+                {/* <Route exact path="/game" component={GameDisplay}/> */}
 
-                {/* <PrivateRoute path="/games/:gameKey" component={Game}/> */}
+                <PrivateRoute path="/games/:gameKey" component={Game}/>
                 <Redirect to="/"/>
               </Switch>
             }
