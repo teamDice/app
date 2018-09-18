@@ -1,25 +1,21 @@
 :local(.header) {
+height: 8vh;
+
   section {
     display: flex;
     flex-direction: column;
-    
   }
 
   h1 {
-    color: #FF570C;
-    text-shadow:  1px 1px 2px black;
-    letter-spacing: 5px;
     font-size: 1em;
   }
 
   span {
     position: absolute;
-    top: 10px;
+    top: 5px;
     right: 10px;
     font-size: .5em;
     text-align: right;
-    color: #FF570C;
-    text-shadow: 1px 1px 2px black;
   }
 
   ul {

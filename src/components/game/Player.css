@@ -4,7 +4,7 @@
   grid-template-areas:
     "username hand played"
     "avatar hand played";
-  height: 130px;
+  height: 18vh;
 
   h2 {
     grid-area: username;

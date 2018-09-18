@@ -23,7 +23,7 @@ class Header extends Component {
       <header className={styles.header}>
         <section>
           {user && <span>Logged in as {user.profile.name}</span>}
-          <h1><NavLink exact to="/">GORTS</NavLink></h1>
+          <h1><NavLink exact to="/">Snakes & Squirrels</NavLink></h1>
           <nav>
             <ul>
               { user &&
