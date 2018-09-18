@@ -62,8 +62,8 @@ exports.playerQueue2 = functions.database.ref('/queue2/{uid}').onCreate((snapsho
           queue3Ref.child(opponent).remove(),
           queue4Ref.child(uid).remove(),
           queue4Ref.child(opponent).remove(),
-          handsRef.child(uid).set({ startingHand }),
-          handsRef.child(opponent).set({ startingHand })
+          handsRef.child(uid).set(startingHand),
+          handsRef.child(opponent).set(startingHand)
         ]);
     });
 });
@@ -99,8 +99,49 @@ exports.playerQueue3 = functions.database.ref('/queue3/{uid}').onCreate((snapsho
           queue4Ref.child(opponent1).remove(),
           queue4Ref.child(opponent2).remove(),
           handsRef.child(uid).set({ startingHand }),
-          handsRef.child(opponent1).set({ startingHand }),
-          handsRef.child(opponent2).set({ startingHand })
+          handsRef.child(opponent1).set(startingHand),
+          handsRef.child(opponent2).set(startingHand)
+        ]);
+    });
+});
+
+exports.playerQueue4 = functions.database.ref('/queue4/{uid}').onCreate((snapshot, context) => {
+  const { uid } = context.params;
+
+  return queue4Ref.once('value')
+    .then(snapshot => {
+      if(Object.keys(snapshot.val()) < 4) return null;
+
+      const [opponent1, opponent2, opponent3] = Object.keys(snapshot.val())
+        .filter(key => key !== uid);
+
+        const newGameRef = gamesRef.push();
+
+        const players = [uid, opponent1, opponent2, opponent3];
+        const firstPlayer = getRandomPlayer(players);
+
+        return Promise.all([
+          newGameRef.set({ 
+            players,
+            turn: firstPlayer,
+            phase: 0
+          }),
+          queue2Ref.child(uid).remove(),
+          queue2Ref.child(opponent1).remove(),
+          queue2Ref.child(opponent2).remove(),
+          queue2Ref.child(opponent3).remove(),
+          queue3Ref.child(uid).remove(),
+          queue3Ref.child(opponent1).remove(),
+          queue3Ref.child(opponent2).remove(),
+          queue3Ref.child(opponent3).remove(),
+          queue4Ref.child(uid).remove(),
+          queue4Ref.child(opponent1).remove(),
+          queue4Ref.child(opponent2).remove(),
+          queue4Ref.child(opponent3).remove(),
+          handsRef.child(uid).set(startingHand),
+          handsRef.child(opponent1).set(startingHand),
+          handsRef.child(opponent2).set(startingHand),
+          handsRef.child(opponent3).set(startingHand)
         ]);
     });
 });

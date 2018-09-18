@@ -6,8 +6,8 @@ import styles from './QueueForm.css';
 class QueueForm extends Component {
   state = {
     two: false,
-    three: true,
-    four: false
+    three: false,
+    four: true
   };
 
   static propTypes = {
