@@ -1,38 +1,38 @@
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
-import Player from './Player';
-import Control from './Control';
 import PropTypes from 'prop-types';
-import { loadGame } from './actions';
+import { connect } from 'react-redux';
+import GameDisplay from './GameDisplay';
+import { startGame, endGame } from './actions';
 import { getGame, getHand } from './reducers';
 
 class Game extends PureComponent {
 
   static propTypes = {
+    match: PropTypes.object.isRequired,
     loadGame: PropTypes.func.isRequired,
+    loadHand: PropTypes.func.isRequired,
     game: PropTypes.object,
     hand: PropTypes.array
   };
 
   componentDidMount() {
-    this.props.loadGame();
+    const { match, loadGame, loadHand } = this.props;
+    const { gameKey } = match.params;
+    loadGame(gameKey);
+    loadHand();
   }
 
   render() { 
-
     const { game, hand } = this.props;
-    const { players, phase } = game;
 
     return (
       <section>
-        {
-          players &&
-            players.map(player => (
-              <Player key={player.id} player={player}/>
-            ))
+        {game && hand &&
+          <GameDisplay
+            game={game}
+            hand={hand}
+          />
         }
-        
-        <Control phase={phase}/>
       </section>
     );
   }
@@ -43,5 +43,5 @@ export default connect(
     game: getGame(state),
     hand: getHand(state)
   }),
-  { loadGame }
+  { startGame, endGame }
 )(Game);

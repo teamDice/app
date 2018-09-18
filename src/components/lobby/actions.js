@@ -17,8 +17,8 @@ const convertToArray = obj => {
 export const requestGame = (searching, queueRef) => {
   return (dispatch, getState) => {
 
-    const user = getUser(getState());
-    const profileId = user.profile._id;
+    const { profile } = getUser(getState());
+    const { profileId } = profile;
 
     if(searching) {
       db.ref(queueRef).child(profileId).remove();
@@ -29,10 +29,11 @@ export const requestGame = (searching, queueRef) => {
         .set(true)
         .then(() => {
           handsRef.child(profileId).on('value', snapshot => {
-            if(snapshot.val()) {
+            const userGame = snapshot.val();
+            if(userGame) {
               dispatch({
                 type: GAMES_LOAD,
-                payload: Object.keys(snapshot.val())[0]
+                payload: userGame.gameId
               });
             }
           });

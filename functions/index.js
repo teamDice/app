@@ -25,7 +25,7 @@ const shuffle = players => {
   return players;
 };
 
-const startingHand = [
+const hand = [
   {
     type: 1,
     order: 0,
@@ -58,6 +58,8 @@ exports.playerQueue2 = functions.database.ref('/queue2/{uid}').onCreate((snapsho
 
       const players = shuffle([uid, opponent]);
       const firstPlayer = players[0];
+      const gameId = newGameRef.key;
+      const startingState = { gameId, hand };
 
       return Promise.all([
         newGameRef.set({ 

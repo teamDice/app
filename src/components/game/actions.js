@@ -1,4 +1,4 @@
-import { GAME_START, GAME_END, CARD_PLAY, getGame } from './reducers';
+import { GAME_START, GAME_END, CARD_PLAY, HAND_START, getGame } from './reducers';
 import { getUser } from '../auth/reducers';
 import { gamesRef, handsRef } from '../../services/firebaseRef';
 
@@ -14,10 +14,25 @@ export const loadGame = gameKey => {
         type: GAME_START,
         payload: game
       });
+      
     });
   };
 
 
 };
 
+export const loadHand = () => {
+
+  return (dispatch, getState) => {
+    const { profile } = getUser(getState());
+    handsRef.child(profile._id).on('value', snapshot => {
+      const hand = Object.values(snapshot.val());
+      dispatch({
+        type: HAND_START,
+        payload: hand
+      });
+    });
+
+  };
+};
 
