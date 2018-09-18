@@ -2,6 +2,7 @@ export const GAME_START = 'GAME_START';
 export const GAME_END = 'GAME_END';
 export const HAND_START = 'HAND_START';
 export const CARD_PLAY = 'CARD_PLAY';
+export const EMOTE_CLEAR_ALL = 'EMOTE_CLEAR';
 
 export const getGame = state => state.game;
 export const getHand = state => state.hand;
@@ -12,6 +13,15 @@ export function game(state = {}, { type, payload }) {
       return payload;
     case GAME_END:
       return null;
+    case EMOTE_CLEAR_ALL:
+      return {
+        ...state,
+        players: state.players.map(player => {
+          //eslint-disable-next-line
+          const { emote, ...rest } = player;
+          return rest;
+        })
+      };
     default:
       return state;
   }
