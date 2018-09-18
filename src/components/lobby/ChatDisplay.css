@@ -1,4 +1,5 @@
 :local(.chat_display) {
   height: 250px;
   overflow: scroll;
+  border: 5px solid black;
 }

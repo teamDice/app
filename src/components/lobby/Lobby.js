@@ -35,12 +35,12 @@ export class Lobby extends Component {
   }
 
   render() { 
-    const { requestGame } = this.props;
+    const { requestGame, user } = this.props;
 
     return (
       <div className={styles.lobby}>
         <QueueForm onClick={requestGame}/>
-        <Chatroom/>
+        <Chatroom user={user}/>
         {/* <PlayerDisplay/> */}
         {/* {user && <button onClick={requestGame}>PLAY GORTS</button>} */}
       </div>

@@ -50,7 +50,6 @@ export const requestGame = (searching, queueRef) => {
 export const loadChatroom = () => {
   return (dispatch) => {
     db.ref(chatRef).on('value', snapshot => {
-      // console.log(snapshot.val());
       if(snapshot.val()) {
         dispatch({
           type: CHAT_LOAD,
@@ -61,12 +60,12 @@ export const loadChatroom = () => {
   };
 };
 
-export const sendChat = message => {
-  db.ref(chatRef).push({
-    name: 'anon',
-    text: message
-  });
-};
+// export const sendChat = message => {
+//   db.ref(chatRef).push({
+//     name: 'anon',
+//     text: message
+//   });
+// };
   
 
 export const getStatsById = id => ({
