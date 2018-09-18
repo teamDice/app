@@ -1,35 +1,31 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import Avatar from './Avatar';
 import Card from './Card';
-import PropTypes from 'prop-types';
 import styles from './Player.css';
 
 class Player extends PureComponent {
 
-  // placeholder hand data
-  state = {
-    hand: [
-      { type: 1 },
-      { type: 1 },
-      { type: 1 },
-      { type: 0 }
-    ]
+  static propTypes = {
+    player: PropTypes.object.isRequired
   };
 
+
   render() {
-    const { hand } = this.state;
+    const { player } = this.props;
+    const { hand, played } = player;
 
     return (
       <section className={styles.player}>
         <Avatar/>
         <h2>User name</h2>
         <div className="hand">
-          {hand.map((card, i) => (
+          {[...Array(hand)].map((card, i) => (
             <Card key={i} card={card}/>
           ))}
         </div>
         <div className="played">
-          {[...Array(0)].map((card, i) => (
+          {[...Array(played)].map((card, i) => (
             <Card key={i}/>
           ))}
         </div>
