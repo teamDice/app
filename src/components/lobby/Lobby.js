@@ -34,6 +34,13 @@ export class Lobby extends Component {
     });
   }
 
+  componentWillUnmount() {
+    const { requestGame } = this.props;
+    requestGame(true, 'queue2');
+    requestGame(true, 'queue3');
+    requestGame(true, 'queue4');
+  }
+
   render() { 
     const { requestGame, user } = this.props;
 
