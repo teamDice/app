@@ -26,23 +26,31 @@ const shuffle = players => {
 };
 
 const hand = [
-  {
-    type: 1,
-    order: 0,
-  },
-  {
-    type: 1,
-    order: 0,
-  },
-  {
-    type: 1,
-    order: 0,
-  },
-  {
-    type: 0,
-    order: 0,
-  },
+  { type: 1, order: 0 },
+  { type: 1, order: 0 },
+  { type: 1, order: 0 },
+  { type: 0, order: 0 }
 ];
+
+const createNewGame = users => {
+  const players = users.map(user => {
+    return {
+      userId: user,
+      wins: 0,
+      hand: 4,
+      played: 0,
+      bid: null
+    };
+  });
+
+  return {
+    players,
+    turn: players[0].userId,
+    phase: 0,
+    challenger: null
+  };
+};
+
 
 exports.playerQueue2 = functions.database.ref('/queue2/{uid}').onCreate((snapshot, context) => {
   const { uid } = context.params;
@@ -57,16 +65,13 @@ exports.playerQueue2 = functions.database.ref('/queue2/{uid}').onCreate((snapsho
       const newGameRef = gamesRef.push();
 
       const players = shuffle([uid, opponent]);
+      const newGame = createNewGame(players);
 
       const gameId = newGameRef.key;
       const startingState = { gameId, hand };
 
       return Promise.all([
-        newGameRef.set({ 
-          players,
-          turn: players[0],
-          phase: 0
-        }),
+        newGameRef.set(newGame),
         queue2Ref.child(uid).remove(),
         queue2Ref.child(opponent).remove(),
         queue3Ref.child(uid).remove(),
@@ -92,14 +97,10 @@ exports.playerQueue3 = functions.database.ref('/queue3/{uid}').onCreate((snapsho
         const newGameRef = gamesRef.push();
 
         const players = shuffle([uid, opponent1, opponent2]);
-        const firstPlayer = players[0];
+        const newGame = createNewGame(players);
 
         return Promise.all([
-          newGameRef.set({ 
-            players,
-            turn: firstPlayer,
-            phase: 0
-          }),
+          newGameRef.set(newGame),
           queue2Ref.child(uid).remove(),
           queue2Ref.child(opponent1).remove(),
           queue2Ref.child(opponent2).remove(),
@@ -129,14 +130,10 @@ exports.playerQueue4 = functions.database.ref('/queue4/{uid}').onCreate((snapsho
       const newGameRef = gamesRef.push();
 
       const players = shuffle([uid, opponent1, opponent2, opponent3]);
-      const firstPlayer = players[0];
+      const newGame = createNewGame(players);
 
       return Promise.all([
-        newGameRef.set({ 
-          players,
-          turn: firstPlayer,
-          phase: 0
-        }),
+        newGameRef.set(newGame),
         queue2Ref.child(uid).remove(),
         queue2Ref.child(opponent1).remove(),
         queue2Ref.child(opponent2).remove(),
