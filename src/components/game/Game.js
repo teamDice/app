@@ -1,21 +1,45 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import Player from './Player';
 import Control from './Control';
 import PropTypes from 'prop-types';
+import { loadGame } from './actions';
+import { getGame } from './reducers';
 
 class Game extends PureComponent {
-  state = {  }
+
+  static propTypes = {
+    loadGame: PropTypes.func.isRequired,
+    game: PropTypes.object
+  };
+
+  componentDidMount() {
+    this.props.loadGame();
+  }
+
   render() { 
+
+    const { game } = this.props;
+    const { players } = game;
+
     return (
       <section>
-        <Player/>
-        <Player/>
-        <Player/>
-        <Player/>
+        {
+          players &&
+            players.map(player => (
+              <Player key={player.id} player={player}/>
+            ))
+        }
+        
         <Control/>
       </section>
     );
   }
 }
  
-export default Game;
+export default connect(
+  state => ({
+    game: getGame(state)
+  }),
+  { loadGame }
+)(Game);

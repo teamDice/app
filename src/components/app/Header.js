@@ -23,19 +23,26 @@ class Header extends Component {
       <header className={styles.header}>
         <section>
           {user && <span>Logged in as {user.profile.name}</span>}
-          <h1><NavLink exact to="/">GORTS</NavLink></h1>
+          <h1><NavLink exact to="/">Snakes & Squirrels</NavLink></h1>
           <nav>
             <ul>
               { user &&
                 <li>
-                  <NavLink exact to="/lobby">Play</NavLink>
+                  <NavLink
+                    activeStyle={{ borderBottom: '2px solid black' }}
+                    exact to="/lobby"
+                  >
+                    Play
+                  </NavLink>
                 </li>
               }
               <li>
-                <NavLink exact to="/leaderboard">Leaderboard</NavLink>
-              </li>
-              <li>
-                <NavLink exact to="/players">Players</NavLink>
+                <NavLink
+                  activeStyle={{ borderBottom: '2px solid black' }}
+                  exact to="/leaderboard"
+                >
+                  Leaderboard
+                </NavLink>
               </li>
               <li>
                 { user

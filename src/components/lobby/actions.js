@@ -1,32 +1,41 @@
 import { ERROR } from '../app/reducers';
 import { getUser } from '../auth/reducers';
 import { GAMES_LOAD, STATS_LOAD, LEADERS_LOAD } from './reducers';
-import { playersRef, userGamesRef } from '../../services/firebaseRef';
+import { db } from '../../services/firebase';
+import { handsRef } from '../../services/firebaseRef';
+
 import { getStatsById as _getStats, getLeaderboard } from '../../services/api';
 
-export const requestGame = () => {
+export const requestGame = (searching, queueRef) => {
   return (dispatch, getState) => {
+
     const user = getUser(getState());
     const profileId = user.profile._id;
+
+    if(searching) {
+      db.ref(queueRef).child(profileId).remove();
+    }
     
-    playersRef.child(profileId)
-      .set(true)
-      .then(() => {
-        userGamesRef.child(profileId).on('value', snapshot => {
-          if(snapshot.val()) {
-            dispatch({
-              type: GAMES_LOAD,
-              payload: Object.keys(snapshot.val())[0]
-            });
-          }
+    else {
+      db.ref(queueRef).child(profileId)
+        .set(true)
+        .then(() => {
+          handsRef.child(profileId).on('value', snapshot => {
+            if(snapshot.val()) {
+              dispatch({
+                type: GAMES_LOAD,
+                payload: Object.keys(snapshot.val())[0]
+              });
+            }
+          });
+        })
+        .catch(err => {
+          dispatch({
+            type: ERROR,
+            payload: err.message
+          });
         });
-      })
-      .catch(err => {
-        dispatch({
-          type: ERROR,
-          payload: err.message
-        });
-      });
+    }
   };
 };
 

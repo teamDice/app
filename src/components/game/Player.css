@@ -2,9 +2,9 @@
   display: grid;
   grid-template: min-content 1fr / min-content 1fr auto;
   grid-template-areas:
-    "username hand played"
+    "username message message"
     "avatar hand played";
-  height: 130px;
+  height: 18vh;
 
   h2 {
     grid-area: username;
@@ -13,9 +13,13 @@
 
   .hand {
     grid-area: hand;
+    display: flex;
+    align-items: center;
   }
   .played {
     grid-area: played;
+    display: flex;
+    align-items: center;
   }
 
 }

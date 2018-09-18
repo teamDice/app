@@ -4,17 +4,23 @@ import PropTypes from 'prop-types';
 class QueueItem extends Component {
 
   state = {
-    selected: false
+    searching: false
   };
 
   static propTypes = {
     playersWaiting: PropTypes.string,
-    queueType: PropTypes.string
+    queueType: PropTypes.string,
+    onClick: PropTypes.func.isRequired
   };
 
   handleClick = () => {
+    const { onClick, queueType } = this.props;
+    const { searching } = this.state;
+
+    onClick(searching, `queue${queueType}`);
+     
     this.setState({
-      selected: !this.state.selected
+      searching: !this.state.searching
     });
   };
 
@@ -25,7 +31,7 @@ class QueueItem extends Component {
         <p>Players: {playersWaiting}</p>
         <div 
           onClick={ this.handleClick }
-          className={ this.state.selected ? 'queueSelected' : 'queue'}
+          className={ this.state.searching ? 'queueSelected' : 'queue'}
         >
           {queueType}
         </div>

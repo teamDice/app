@@ -9,7 +9,7 @@
     "test": "npm run jest",
     "jest": "jest -c ./jest/jest.config.js",
     "test:watch": "npm run jest -- --watch",
-    "build": "webpack && rm -rf ../fullstack-server/public && cp -R build ../fullstack-server/public",
+    "build": "webpack && rm -rf ../server/public && cp -R build ../server/public",
     "start": "webpack-dev-server --hot --open --mode development"
   },
   "repository": {
