@@ -4,7 +4,7 @@ import PlayerDisplay from './PlayerDisplay';
 import QueueForm from './QueueForm';
 import Chatroom from './Chatroom';
 import { connect } from 'react-redux';
-import { getGames, getStats } from './reducers';
+import { getStats, getGames } from './reducers';
 import { getUser } from '../auth/reducers';
 import { requestGame, getStatsById, loadChatroom } from './actions';
 import styles from './Lobby.css';

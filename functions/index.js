@@ -12,59 +12,75 @@ const gamesRef = db.ref('games');
 const movesRef = db.ref('moves');
 const handsRef = db.ref('hands');
 
-const getRandomPlayer = players => {
-  return players[Math.floor(Math.random() * players.length)];
+// Fisher-Yates Shuffle algorithm
+const shuffle = players => {
+  let currentIndex = players.length, tempValue, randomIndex;
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    tempValue = players[currentIndex];
+    players[currentIndex] = players[randomIndex];
+    players[randomIndex] = tempValue;
+  }
+  return players;
 };
 
-const startingHand = [
-  {
-    type: 1,
-    played: 0,
-  },
-  {
-    type: 1,
-    played: 0,
-  },
-  {
-    type: 1,
-    played: 0,
-  },
-  {
-    type: 0,
-    played: 0,
-  },
+const hand = [
+  { type: 1, order: 0 },
+  { type: 1, order: 0 },
+  { type: 1, order: 0 },
+  { type: 0, order: 0 }
 ];
+
+const createNewGame = users => {
+  const players = users.map(user => {
+    return {
+      userId: user,
+      wins: 0,
+      hand: 4,
+      played: 0,
+      bid: null
+    };
+  });
+
+  return {
+    players,
+    turn: players[0].userId,
+    phase: 0,
+    challenger: null
+  };
+};
+
 
 exports.playerQueue2 = functions.database.ref('/queue2/{uid}').onCreate((snapshot, context) => {
   const { uid } = context.params;
 
   return queue2Ref.once('value')
     .then(snapshot => {
+      if(Object.keys(snapshot.val()) < 2) return null;
+
       const [opponent] = Object.keys(snapshot.val())
         .filter(key => key !== uid);
 
-        if(!opponent) return null;
+      const newGameRef = gamesRef.push();
 
-        const newGameRef = gamesRef.push();
+      const players = shuffle([uid, opponent]);
+      const newGame = createNewGame(players);
 
-        const players = [uid, opponent];
-        const firstPlayer = getRandomPlayer(players);
+      const gameId = newGameRef.key;
+      const startingState = { gameId, hand };
 
-        return Promise.all([
-          newGameRef.set({ 
-            players,
-            turn: firstPlayer,
-            phase: 0
-          }),
-          queue2Ref.child(uid).remove(),
-          queue2Ref.child(opponent).remove(),
-          queue3Ref.child(uid).remove(),
-          queue3Ref.child(opponent).remove(),
-          queue4Ref.child(uid).remove(),
-          queue4Ref.child(opponent).remove(),
-          handsRef.child(uid).set(startingHand),
-          handsRef.child(opponent).set(startingHand)
-        ]);
+      return Promise.all([
+        newGameRef.set(newGame),
+        queue2Ref.child(uid).remove(),
+        queue2Ref.child(opponent).remove(),
+        queue3Ref.child(uid).remove(),
+        queue3Ref.child(opponent).remove(),
+        queue4Ref.child(uid).remove(),
+        queue4Ref.child(opponent).remove(),
+        handsRef.child(uid).set(startingState),
+        handsRef.child(opponent).set(startingState)
+      ]);
     });
 });
 
@@ -80,15 +96,11 @@ exports.playerQueue3 = functions.database.ref('/queue3/{uid}').onCreate((snapsho
 
         const newGameRef = gamesRef.push();
 
-        const players = [uid, opponent1, opponent2];
-        const firstPlayer = getRandomPlayer(players);
+        const players = shuffle([uid, opponent1, opponent2]);
+        const newGame = createNewGame(players);
 
         return Promise.all([
-          newGameRef.set({ 
-            players,
-            turn: firstPlayer,
-            phase: 0
-          }),
+          newGameRef.set(newGame),
           queue2Ref.child(uid).remove(),
           queue2Ref.child(opponent1).remove(),
           queue2Ref.child(opponent2).remove(),
@@ -98,9 +110,9 @@ exports.playerQueue3 = functions.database.ref('/queue3/{uid}').onCreate((snapsho
           queue4Ref.child(uid).remove(),
           queue4Ref.child(opponent1).remove(),
           queue4Ref.child(opponent2).remove(),
-          handsRef.child(uid).set(startingHand),
-          handsRef.child(opponent1).set(startingHand),
-          handsRef.child(opponent2).set(startingHand)
+          handsRef.child(uid).set(startingState),
+          handsRef.child(opponent1).set(startingState),
+          handsRef.child(opponent2).set(startingState)
         ]);
     });
 });
@@ -115,34 +127,30 @@ exports.playerQueue4 = functions.database.ref('/queue4/{uid}').onCreate((snapsho
       const [opponent1, opponent2, opponent3] = Object.keys(snapshot.val())
         .filter(key => key !== uid);
 
-        const newGameRef = gamesRef.push();
+      const newGameRef = gamesRef.push();
 
-        const players = [uid, opponent1, opponent2, opponent3];
-        const firstPlayer = getRandomPlayer(players);
+      const players = shuffle([uid, opponent1, opponent2, opponent3]);
+      const newGame = createNewGame(players);
 
-        return Promise.all([
-          newGameRef.set({ 
-            players,
-            turn: firstPlayer,
-            phase: 0
-          }),
-          queue2Ref.child(uid).remove(),
-          queue2Ref.child(opponent1).remove(),
-          queue2Ref.child(opponent2).remove(),
-          queue2Ref.child(opponent3).remove(),
-          queue3Ref.child(uid).remove(),
-          queue3Ref.child(opponent1).remove(),
-          queue3Ref.child(opponent2).remove(),
-          queue3Ref.child(opponent3).remove(),
-          queue4Ref.child(uid).remove(),
-          queue4Ref.child(opponent1).remove(),
-          queue4Ref.child(opponent2).remove(),
-          queue4Ref.child(opponent3).remove(),
-          handsRef.child(uid).set(startingHand),
-          handsRef.child(opponent1).set(startingHand),
-          handsRef.child(opponent2).set(startingHand),
-          handsRef.child(opponent3).set(startingHand)
-        ]);
+      return Promise.all([
+        newGameRef.set(newGame),
+        queue2Ref.child(uid).remove(),
+        queue2Ref.child(opponent1).remove(),
+        queue2Ref.child(opponent2).remove(),
+        queue2Ref.child(opponent3).remove(),
+        queue3Ref.child(uid).remove(),
+        queue3Ref.child(opponent1).remove(),
+        queue3Ref.child(opponent2).remove(),
+        queue3Ref.child(opponent3).remove(),
+        queue4Ref.child(uid).remove(),
+        queue4Ref.child(opponent1).remove(),
+        queue4Ref.child(opponent2).remove(),
+        queue4Ref.child(opponent3).remove(),
+        handsRef.child(uid).set(startingState),
+        handsRef.child(opponent1).set(startingState),
+        handsRef.child(opponent2).set(startingState),
+        handsRef.child(opponent3).set(startingState)
+      ]);
     });
 });
 
