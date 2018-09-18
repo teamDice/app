@@ -1,0 +1,24 @@
+[debug] [2018-09-18T04:12:14.096Z] ----------------------------------------------------------------------
+[debug] [2018-09-18T04:12:14.099Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Robert Thompson\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve --only hosting
+[debug] [2018-09-18T04:12:14.100Z] CLI Version:   4.2.1
+[debug] [2018-09-18T04:12:14.100Z] Platform:      win32
+[debug] [2018-09-18T04:12:14.100Z] Node Version:  v10.5.0
+[debug] [2018-09-18T04:12:14.101Z] Time:          Mon Sep 17 2018 21:12:14 GMT-0700 (Pacific Daylight Time)
+[debug] [2018-09-18T04:12:14.101Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-09-18T04:12:14.109Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-09-18T04:12:14.110Z] > authorizing via signed-in user
+[debug] [2018-09-18T04:12:14.112Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/snakes-game-2b62c  
+ 
+[debug] [2018-09-18T04:12:14.448Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-18T04:12:14.449Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/snakes-game-2b62c  
+ 
+[debug] [2018-09-18T04:12:14.611Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\Robert Thompson\alchemy\Career\FinalProjectWeek\app'...
+[info] 
+[debug] [2018-09-18T04:12:14.614Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/228033163810/clients/_:getWebAppConfig  
+ 
+[debug] [2018-09-18T04:12:14.866Z] <<< HTTP RESPONSE 200
+[info] i  hosting[snakes-game-2b62c]: Serving hosting files from: build
+[info] +  hosting[snakes-game-2b62c]: Local server: http://localhost:5000

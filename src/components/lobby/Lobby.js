@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlayerDisplay from './PlayerDisplay';
 import QueueForm from './QueueForm';
+import Chatroom from './Chatroom';
 import { connect } from 'react-redux';
 import { getGames, getStats } from './reducers';
 import { getUser } from '../auth/reducers';
-import { requestGame, getStatsById } from './actions';
+import { requestGame, getStatsById, loadChatroom } from './actions';
 import styles from './Lobby.css';
 
 export class Lobby extends Component {
@@ -20,8 +21,9 @@ export class Lobby extends Component {
   };
 
   // componentDidMount() {
-    // const { getStatsById, user } = this.props;
-    // getStatsById(user.profile._id);
+
+  // const { getStatsById, user } = this.props;
+  // getStatsById(user.profile._id);
   // }
 
   componentDidUpdate() {
@@ -38,7 +40,8 @@ export class Lobby extends Component {
     return (
       <div className={styles.lobby}>
         <QueueForm onClick={requestGame}/>
-        <PlayerDisplay/>
+        <Chatroom/>
+        {/* <PlayerDisplay/> */}
         {/* {user && <button onClick={requestGame}>PLAY GORTS</button>} */}
       </div>
     );
@@ -51,5 +54,5 @@ export default connect(
     games: getGames(state),
     stats: getStats(state)
   }),
-  { requestGame, getStatsById }
+  { requestGame, getStatsById, loadChatroom }
 )(Lobby);

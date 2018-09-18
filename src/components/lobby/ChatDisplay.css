@@ -1,0 +1,4 @@
+:local(.chat_display) {
+  height: 250px;
+  overflow: scroll;
+}
