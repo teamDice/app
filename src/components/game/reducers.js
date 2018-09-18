@@ -2,7 +2,8 @@ export const GAME_START = 'GAME_START';
 export const GAME_END = 'GAME_END';
 export const HAND_START = 'HAND_START';
 export const CARD_PLAY = 'CARD_PLAY';
-export const EMOTE_CLEAR_ALL = 'EMOTE_CLEAR';
+export const EMOTE_CLEAR_ALL = 'EMOTE_CLEAR_ALL';
+// export const EMOTE_CLEAR = 'EMOTE_CLEAR';
 
 export const getGame = state => state.game;
 export const getHand = state => state.hand;
@@ -22,6 +23,11 @@ export function game(state = {}, { type, payload }) {
           return rest;
         })
       };
+    // case EMOTE_CLEAR:
+    //   return {
+    //     ...state,
+    //     players
+    //   }
     default:
       return state;
   }

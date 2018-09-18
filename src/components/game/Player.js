@@ -10,16 +10,16 @@ class Player extends PureComponent {
     player: PropTypes.object.isRequired
   };
 
-  componentDidMount() {
-    setTimeout(() => {
-      clearEmote();
-    }, 5000);
+  // componentDidMount() {
+  //   setTimeout(() => {
+  //     clearEmote();
+  //   }, 5000);
 
-  }
+  // }
 
   render() {
     const { player } = this.props;
-    const { hand, played, name } = player;
+    const { hand, played, name, emote } = player;
 
     return (
       <section className={styles.player}>
