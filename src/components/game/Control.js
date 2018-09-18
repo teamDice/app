@@ -37,32 +37,17 @@ class Control extends PureComponent {
     const { phase } = this.props;
 
     switch(phase) {
-      case 2:
+      case 1:
         return (
           <section className={styles.control}>
             {emoting && <Emotes toggle={this.toggleEmoting}/>}
-            {!emoting &&
+            {bidding && 
               <Bids 
                 toggle={this.toggleBidding} 
                 bid={bid}
                 changeBid={this.handleBidChange}
                 phase={phase}
-                emoteToggle={this.toggleEmoting}
-              />
-            }
-          </section>
-        );
-      default: 
-        return (
-          <section className={styles.control}>
-            {emoting && <Emotes toggle={this.toggleEmoting}/>}
-            {bidding && 
-            <Bids 
-              toggle={this.toggleBidding} 
-              bid={bid}
-              changeBid={this.handleBidChange}
-              phase={phase}
-            />}
+              />}
             {!emoting && !bidding &&
               <Fragment>
                 <div>
@@ -75,6 +60,21 @@ class Control extends PureComponent {
                   ))}
                 </div>
               </Fragment>
+            }
+          </section>
+        );
+      default: 
+        return (
+          <section className={styles.control}>
+            {emoting && <Emotes toggle={this.toggleEmoting}/>}
+            {!emoting &&
+              <Bids 
+                toggle={this.toggleBidding} 
+                bid={bid}
+                changeBid={this.handleBidChange}
+                phase={phase}
+                emoteToggle={this.toggleEmoting}
+              />
             }
           </section>
         );
@@ -152,10 +152,19 @@ class Bids extends PureComponent {
             <button>Bid</button>
           </div>
         );
-      // case 3:
-      //   return (
-          
-      //   )
+      case 3:
+        return (
+          <div className="bids">
+            <button onClick={emoteToggle}>Emote</button>
+            <h4>Flip {bid} squirrels</h4>
+          </div>
+        );
+      default:
+        return (
+          <div className="bids">
+            <h6>The game is not happening right now!</h6>
+          </div>
+        );
     }
   }
 }
