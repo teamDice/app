@@ -33,11 +33,11 @@ export class Lobby extends Component {
   }
 
   render() { 
-    // const { user, requestGame, stats } = this.props;
+    const { requestGame } = this.props;
 
     return (
       <div className={styles.lobby}>
-        <QueueForm/>
+        <QueueForm onClick={requestGame}/>
         <PlayerDisplay/>
         {/* {user && <button onClick={requestGame}>PLAY GORTS</button>} */}
       </div>

@@ -1,6 +1,7 @@
 import { db } from './firebase';
 
-export const playersRef = db.ref('players');
+export const queue2Ref = db.ref('queue2');
+export const queue3Ref = db.ref('queue3');
+export const queue4Ref = db.ref('queue4');
 export const gamesRef = db.ref('games');
-export const userGamesRef = db.ref('userGames');
-export const movesRef = db.ref('moves');
+export const userGamesRef = db.ref('hands');
