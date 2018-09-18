@@ -10,6 +10,7 @@ export const startGame = gameKey => {
       const game = snapshot.val();
       game.key = gameKey;
 
+      
       dispatch({
         type: GAME_START,
         payload: game

@@ -26,7 +26,7 @@ export const requestGame = (searching, queueRef) => {
     
     else {
       db.ref(queueRef).child(profileId)
-        .set(true)
+        .set(profile)
         .then(() => {
           handsRef.child(profileId).on('value', snapshot => {
             const userGame = snapshot.val();
