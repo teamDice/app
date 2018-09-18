@@ -28,14 +28,21 @@ class Header extends Component {
             <ul>
               { user &&
                 <li>
-                  <NavLink exact to="/lobby">Play</NavLink>
+                  <NavLink
+                    activeStyle={{ borderBottom: '2px solid black' }}
+                    exact to="/lobby"
+                  >
+                    Play
+                  </NavLink>
                 </li>
               }
               <li>
-                <NavLink exact to="/leaderboard">Leaderboard</NavLink>
-              </li>
-              <li>
-                <NavLink exact to="/players">Players</NavLink>
+                <NavLink
+                  activeStyle={{ borderBottom: '2px solid black' }}
+                  exact to="/leaderboard"
+                >
+                  Leaderboard
+                </NavLink>
               </li>
               <li>
                 { user

@@ -9,7 +9,6 @@ export const getLoading = state => state.loading;
 export function error(state = null, { type, payload }) {
   switch(type) {
     case ERROR:
-      console.log(payload);
       return payload;
     case LOAD_START:
     case ERROR_CLEAR:

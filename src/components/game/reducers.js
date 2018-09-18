@@ -1,6 +1,23 @@
-export const LOAD_GAME = 'LOAD_END';
+export const LOAD_GAME = 'LOAD_GAME';
 
 export const getGame = state => state.game;
+
+export function game(state = {}, { type, payload }) {
+  switch(type) {
+    case LOAD_GAME:
+    // PLACEHOLDER RETURNING STATE
+      return mockData;
+      // return payload;
+    default:
+      return state;
+  }
+}
+
+
+
+
+
+
 
 const mockData = {
   players: [
@@ -41,14 +58,3 @@ const mockData = {
   phase: 1,
   winner: null
 };
-
-export function game(state = mockData, { type, payload }) {
-  switch(type) {
-    case LOAD_GAME:
-    // PLACEHOLDER RETURNING STATE
-      return state;
-      // return payload;
-    default:
-      return state;
-  }
-}

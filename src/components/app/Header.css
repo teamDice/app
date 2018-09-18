@@ -1,9 +1,12 @@
 :local(.header) {
-height: 8vh;
+  height: 8vh;
+  padding: 5px 10px;
 
   section {
+    height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
   }
 
   h1 {
@@ -24,7 +27,7 @@ height: 8vh;
     display: flex;
     font-size: .7em;
     justify-content: space-around;
-    align-items: center;
+    
   }
 
   li {
@@ -33,6 +36,8 @@ height: 8vh;
 
   a {
     text-decoration: none;
+    // color: #F6F3A7;
+    color: black;
   }
 
 
