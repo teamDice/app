@@ -4,35 +4,24 @@ import QueueItem from './QueueItem';
 import styles from './QueueForm.css';
 
 class QueueForm extends Component {
-  state = {
-    two: false,
-    three: false,
-    four: true
-  };
 
   static propTypes = {
     onClick: PropTypes.func.isRequired
   };
 
 
-  handleSubmit = event => {
-    event.preventDefault();
-    const { onClick } = this.props;
-    onClick(this.state);
-  };
 
   render() { 
-
+    const { onClick } = this.props;
 
     return (
-      <form className={styles.queueForm} onSubmit={this.handleSubmit}>
+      <div className={styles.queueForm}>
         <section>
-          <QueueItem playersWaiting="1" queueType="2"/>
-          <QueueItem playersWaiting="0" queueType="3"/>
-          <QueueItem playersWaiting="3" queueType="4"/>
+          <QueueItem playersWaiting="1" onClick={onClick} queueType="2"/>
+          <QueueItem playersWaiting="0" onClick={onClick} queueType="3"/>
+          <QueueItem playersWaiting="3" onClick={onClick} queueType="4"/>
         </section>
-        <button className="submit">Find Game</button>
-      </form>
+      </div>
     );
   }
 }

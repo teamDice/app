@@ -98,7 +98,7 @@ exports.playerQueue3 = functions.database.ref('/queue3/{uid}').onCreate((snapsho
           queue4Ref.child(uid).remove(),
           queue4Ref.child(opponent1).remove(),
           queue4Ref.child(opponent2).remove(),
-          handsRef.child(uid).set({ startingHand }),
+          handsRef.child(uid).set(startingHand),
           handsRef.child(opponent1).set(startingHand),
           handsRef.child(opponent2).set(startingHand)
         ]);
