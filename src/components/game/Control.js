@@ -5,6 +5,7 @@ import styles from './Control.css';
 
 class Control extends PureComponent {
   state = {
+    bid: 3,
     emoting: false,
     bidding: false,
     hand: [
@@ -15,7 +16,7 @@ class Control extends PureComponent {
     ]
   };
 
-  toggleEmoting= () => {
+  toggleEmoting = () => {
     this.setState(({ emoting }) => ({ emoting: !emoting }));
   };
 
@@ -23,12 +24,21 @@ class Control extends PureComponent {
     this.setState(({ bidding }) => ({ bidding: !bidding }));
   };
 
+  handleBidChange = value => {
+    this.setState(({ bid }) => ({ bid: bid + value }));
+  };
+
   render() { 
-    const { hand, emoting, bidding } = this.state;
+    const { hand, emoting, bidding, bid } = this.state;
     return (
       <section className={styles.control}>
         {emoting && <Emotes toggle={this.toggleEmoting}/>}
-        {bidding && <Bids toggle={this.toggleBidding}/>}
+        {bidding && 
+        <Bids 
+          toggle={this.toggleBidding} 
+          bid={bid}
+          changeBid={this.handleBidChange}
+        />}
         {!emoting && !bidding &&
           <Fragment>
             <div>
@@ -73,12 +83,22 @@ class Emotes extends PureComponent {
 class Bids extends PureComponent {
 
   static propTypes = {
-    toggle: PropTypes.func.isRequired
+    toggle: PropTypes.func.isRequired,
+    changeBid: PropTypes.func.isRequired,
+    bid: PropTypes.number.isRequired
   };
 
   render() { 
+    const { toggle, bid, changeBid } = this.props;
+
     return (
-      <h1>bids</h1>
+      <div className="bids">
+        <i onClick={toggle} className="fas fa-times"></i>
+        <i className="fa fa-minus" onClick={() => changeBid(-1)}></i>
+        <p>{bid}</p>
+        <i className="fa fa-plus" onClick={() => changeBid(+1)}></i>
+        <button>Bid</button>
+      </div>
     );
   }
 }
