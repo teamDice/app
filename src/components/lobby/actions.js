@@ -14,12 +14,6 @@ const convertToArray = obj => {
   });
 };
 
-export const deQueue = () => {
-  requestGame(true, 'queue2');
-  requestGame(true, 'queue3');
-  requestGame(true, 'queue4');
-};
-
 export const requestGame = (searching, queueRef) => {
   return (dispatch, getState) => {
 
