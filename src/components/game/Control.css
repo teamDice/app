@@ -27,6 +27,13 @@
     display: flex;
     justify-content: space-around;
     font-size: 3em;
+  }
 
+  
+  .bids {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    font-size: 3em;
   }
 }
