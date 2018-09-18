@@ -94,9 +94,15 @@ class Bids extends PureComponent {
     return (
       <div className="bids">
         <i onClick={toggle} className="fas fa-times"></i>
-        <i className="fa fa-minus" onClick={() => changeBid(-1)}></i>
+        {bid <= 1 ? 
+          <i className="fa fa-minus"></i>
+          : <i className="fa fa-minus" onClick={() => changeBid(-1)}></i>
+        }
         <p>{bid}</p>
-        <i className="fa fa-plus" onClick={() => changeBid(+1)}></i>
+        {bid >= 8 ?
+          <i className="fa fa-plus"></i>
+          : <i className="fa fa-plus" onClick={() => changeBid(+1)}></i>
+        }
         <button>Bid</button>
       </div>
     );
