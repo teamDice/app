@@ -6,7 +6,7 @@ import Chatroom from './Chatroom';
 import { connect } from 'react-redux';
 import { getGames, getStats } from './reducers';
 import { getUser } from '../auth/reducers';
-import { requestGame, getStatsById, loadChatroom } from './actions';
+import { requestGame, deQueue, getStatsById, loadChatroom } from './actions';
 import styles from './Lobby.css';
 
 export class Lobby extends Component {
@@ -16,6 +16,7 @@ export class Lobby extends Component {
     games: PropTypes.string,
     stats: PropTypes.object,
     requestGame: PropTypes.func.isRequired,
+    deQueue: PropTypes.func.isRequired,
     getStatsById: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
   };
@@ -32,6 +33,10 @@ export class Lobby extends Component {
     history.push({
       pathname: `/games/${games}`
     });
+  }
+
+  componentDidUnmount() {
+    this.props.deQueue();
   }
 
   render() { 
@@ -54,5 +59,5 @@ export default connect(
     games: getGames(state),
     stats: getStats(state)
   }),
-  { requestGame, getStatsById, loadChatroom }
+  { requestGame, deQueue, getStatsById, loadChatroom }
 )(Lobby);
