@@ -72,7 +72,7 @@ class Control extends PureComponent {
                 <div>
                   <button onClick={this.toggleEmoting}>Emote</button>
                   {
-                    hand.filter(card => card.order > 0) &&
+                    hand.find(card => card.order > 0) &&
                     <button onClick={this.toggleBidding}>Bid</button>
                   }
                 </div>
