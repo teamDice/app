@@ -185,7 +185,7 @@ exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, conte
   }
 
 
-  if(move.bid) {
+  if(move.bid) {  
     return gamesRef.child(move.gameId).once('value').then(snapshot => {
       const game = snapshot.val();
         if(game) {
