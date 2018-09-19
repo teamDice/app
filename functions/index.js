@@ -216,7 +216,7 @@ exports.playerQueue4 = functions.database.ref('/queue4/{uid}').onCreate((snapsho
 
 
 // USERS POSTING MOVES
-exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, context) => {
+exports.cardMove = functions.database.ref('/cardMove/{uid}').onCreate((snapshot, context) => {
   const { uid } = context.params;
   const move = snapshot.val();
   const { gameId } = move;
@@ -233,69 +233,102 @@ exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, conte
       db.ref('startTimerRequest').child(gameId).remove();
       db.ref('timer').child(gameId).remove();
   
-      if(move.type === 0 || move.type === 1) {
-        return playerHandRef.once('value').then(snapshot => {
-          const hand = snapshot.val();
-          const card = hand.find(card => card.type === move.type && card.order === 0);
-          if(card) card.order = 1 + hand.filter(card => card.order > 0).length;
-    
-          return Promise.all([
-            playerHandRef.set(hand),
-            userMoveRef.remove()
-          ]);
-        });
-      }
 
-      if(move.bid) { 
-        const { players } = game;
-        const currentPlayer = players.find(player => player.userId === uid);
-        currentPlayer.bid = move.bid;
-  
-        const newChallenger = {
-          userId: uid,
-          bid: move.bid
-        };
-  
-        if(game.challenger) {
-          game.challenger = move.bid > game.challenger.bid ? newChallenger : game.challenger;
-        }
-        else game.challenger = newChallenger;
-  
-        const totalPlayedCards = players.reduce(((acc, cur) => acc + cur.played.length), 0);
-        console.log('***TOTAL PLAYED CARDS***', totalPlayedCards);
+      return playerHandRef.once('value')
+    })
+    .then(snapshot => {
+      const hand = snapshot.val();
+      const card = hand.find(card => card.type === move.type && card.order === 0);
+      if(card) card.order = 1 + hand.filter(card => card.order > 0).length;
 
-        if(move.bid === totalPlayedCards) game.phase = 3;
-        else {
-          const nextPlayerIndex = (players.indexOf(currentPlayer) + 1) % players.length;
-          game.turn = players[nextPlayerIndex].userId;
-
-          console.log('NEXT TURN IS', game.turn);
-          if(game.phase === 1) game.phase = 2;
-          else if(game.phase === 2 && game.challenger === game.turn) game.phase = 3;
-        }
-
-        return Promise.all([
-          gamesRef.child(gameId).set(game),
-          userMoveRef.child(uid).remove()
-        ]);
-
-      }
-
-      if(move.order) {
-        return handsRef.child(move.playerId).child('hand').once('value').then(snapshot => {
-          const hand = snapshot.val();
-          const card = hand.find(card => card.order === move.order);
-          card.selected = true;
-
-          return Promise.all([
-            handsRef.child(move.playerId).child('hand').set(hand),
-            userMoveRef.child(uid).remove()
-          ]);
-        });
-      }
-      return null;
+      return Promise.all([
+        playerHandRef.set(hand),
+        userMoveRef.remove()
+      ]);
     });
+});
+
+exports.bidMove = functions.database.ref('/bidMove/{uid}').onCreate((snapshot, context) => {
+  const { uid } = context.params;
+  const move = snapshot.val();
+  const { gameId } = move;
+  const userMoveRef = snapshot.ref.parent;
+
+  return gamesRef.child(gameId).once('value')
+    .then(snapshot => {
+      const game = snapshot.val();
+      // Prevent out of turn Plays
+      if(game.turn !== uid) return userMoveRef.child(uid).remove();
+
+      // Clear timers
+      db.ref('startTimerRequest').child(gameId).remove();
+      db.ref('timer').child(gameId).remove();
+
+      const { players } = game;
+      const currentPlayer = players.find(player => player.userId === uid);
+      currentPlayer.bid = move.bid;
+
+      const newChallenger = {
+        userId: uid,
+        bid: move.bid
+      };
+
+      if(game.challenger) {
+        game.challenger = move.bid > game.challenger.bid ? newChallenger : game.challenger;
+      }
+      else game.challenger = newChallenger;
+
+      const totalPlayedCards = players.reduce(((acc, cur) => acc + cur.played.length), 0);
+      console.log('***TOTAL PLAYED CARDS***', totalPlayedCards);
+
+      if(move.bid === totalPlayedCards) game.phase = 3;
+      else {
+        const nextPlayerIndex = (players.indexOf(currentPlayer) + 1) % players.length;
+        game.turn = players[nextPlayerIndex].userId;
+
+        console.log('NEXT TURN IS', game.turn);
+        if(game.phase === 1) game.phase = 2;
+        else if(game.phase === 2 && game.challenger === game.turn) game.phase = 3;
+      }
+
+      return Promise.all([
+        gamesRef.child(gameId).set(game),
+        userMoveRef.child(uid).remove()
+    ]);
   });
+});
+
+exports.flipMove = functions.database.ref('/flipMove/{uid}').onCreate((snapshot, context) => {
+  const { uid } = context.params;
+  const move = snapshot.val();
+  const { gameId } = move;
+  const userMoveRef = snapshot.ref.parent;
+  const playerHandRef = handsRef.child(move.playerId).child('hand');
+
+  return gamesRef.child(gameId).once('value')
+    .then(snapshot => {
+      const game = snapshot.val();
+      // Prevent out of turn Plays
+      if(game.turn !== uid) return userMoveRef.child(uid).remove();
+
+      // Clear timers
+      db.ref('startTimerRequest').child(gameId).remove();
+      db.ref('timer').child(gameId).remove();
+
+      return playerHandRef.once('value');
+    })
+    .then(snapshot => {
+      const hand = snapshot.val();
+      const card = hand.find(card => card.order === move.order);
+      
+
+      return Promise.all([
+        playerHandRef.set(hand),
+        userMoveRef.child(uid).remove()
+      ]);
+    });
+});
+
   
      
       
