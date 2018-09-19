@@ -95,6 +95,19 @@ class Control extends PureComponent {
               />}
           </section>
         );
+      case 3:
+        return (
+          <section className={styles.control}>
+            {emoting && <Emotes toggle={this.toggleEmoting}/>}
+            {!emoting &&
+              <Bids 
+                emoteToggle={this.toggleEmoting} 
+                bid={bid}
+                changeBid={this.handleBidChange}
+                phase={phase}
+              />}
+          </section>
+        );
       default: 
         return (
           <section className={styles.control}>
