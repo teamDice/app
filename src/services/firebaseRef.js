@@ -6,3 +6,4 @@ export const queue4Ref = db.ref('queue4');
 export const gamesRef = db.ref('games');
 export const handsRef = db.ref('hands');
 export const chatRef = db.ref('messages');
+export const movesRef = db.ref('moves');

@@ -8,7 +8,13 @@ import styles from './Card.css';
 class Card extends PureComponent {
   static propTypes = {
     card: PropTypes.object,
-    onClick: PropTypes.func
+    postMove: PropTypes.func
+  };
+
+  handleClick = () => {
+    const { postMove, card } = this.props;
+    const { type } = card;
+    postMove({ type });
   };
 
   render() { 
@@ -16,7 +22,7 @@ class Card extends PureComponent {
     return (
       <Fragment>
         
-        <img className={styles.card} src={
+        <img onClick={this.handleClick} className={styles.card} src={
           card
             ? card.type === 1
               ? squirrel

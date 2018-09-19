@@ -10,11 +10,12 @@ class Game extends PureComponent {
 
   static propTypes = {
     hand: PropTypes.array.isRequired,
-    game: PropTypes.object.isRequired
+    game: PropTypes.object.isRequired,
+    postMove: PropTypes.func.isRequired
   };
 
   render() { 
-    const { game, hand } = this.props;
+    const { game, hand, postMove } = this.props;
     const { players, phase, turn } = game;
 
     return (
@@ -26,7 +27,12 @@ class Game extends PureComponent {
             ))
         }
         
-        <Control hand={hand} phase={phase} turn={turn}/>
+        <Control 
+          hand={hand} 
+          phase={phase} 
+          turn={turn}
+          postMove={postMove}
+        />
       </section>
     );
   }
