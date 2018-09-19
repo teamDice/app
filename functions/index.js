@@ -41,7 +41,6 @@ const createNewGame = (users, queue) => {
       avatar: queue[user].avatar,
       wins: 0,
       hand: 4,
-      played: 0,
       bid: null
     };
   });
@@ -166,22 +165,93 @@ exports.playerQueue4 = functions.database.ref('/queue4/{uid}').onCreate((snapsho
     });
 });
 
-exports.updateHand = functions.database.ref('/hands/{uid}/move').onCreate((snapshot, context) => {
+exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, context) => {
   const { uid } = context.params;
-  const playerHandRef = handsRef.child(uid);
+  const move = snapshot.val();
+  const userMoveRef = snapshot.ref.parent;
+  const playerHandRef = handsRef.child(uid).child('hand');
+
+  if(move.type) {
+    return playerHandRef.once('value').then(snapshot => {
+      const hand = snapshot.val();
+      const card = hand.find(card => card.type === move.type && card.order === 0);
+      if(card) card.order = 1 + hand.filter(card => card.order > 0).length;
+
+      return Promise.all([
+        playerHandRef.set(hand),
+        userMoveRef.remove()
+      ]);
+    });
+  }
+
+
+  if(move.bid) {
+    return gamesRef.child(move.gameId).once('value').then(snapshot => {
+      const game = snapshot.val();
+        if(game) {
+          const { players } = game;
+          const currentPlayer = players.find(player => player.userId === uid);
+          currentPlayer.bid = move.bid;
+
+          let { challenger } = game;
+          const newChallenger = {
+            userId: currentPlayer.userId,
+            bid: currentPlayer.bid
+          };
+          if(challenger) {
+            challenger = newChallenger.bid > challenger.bid ? newChallenger : challenger;
+          }
+          else game.challenger = newChallenger;
+
+          const nextPlayerIndex = (players.indexOf(currentPlayer) + 1) % players.length;
+          game.turn = players[nextPlayerIndex].userId;
+
+          if(game.phase === 1) game.phase++;
+        }
+
+      return Promise.all([
+        gamesRef.child(move.gameId).set(game),
+        userMoveRef.remove()
+      ]);
+    });
+  }
+
+  return null;
   
-  return playerHandRef.once('value').then(snapshot => {
-    const state = snapshot.val();
-    const { move, hand, gameId } = state;
+});
 
-    const card = hand.find(card => card.type = move);
 
-    card.order = 1 + hand.filter(card => card.order > 0).length;
 
-    return Promise.all([
-      playerHandRef.child(hand).set(hand),
-      playerHandRef.child(move).remove()
-    ]);
+exports.updateGame = functions.database.ref('/hands/{uid}').onUpdate((change, context) => {
+  const { uid } = context.params;
+  const userState = change.after.val();
+  console.log('*** STATE ***', userState);
+  const { gameId, hand } = userState;
+  console.log(gameId, hand);
+  const playedCard = hand.sort((a, b) => b.order - a.order)[0];
+
+
+  return gamesRef.child(gameId).once('value').then(snapshot => {
+    const game = snapshot.val();
+    if(game) {
+      const { players } = game;
+      const currentPlayer = players.find(player => player.userId === uid);
+
+      if(currentPlayer) {
+        let played = currentPlayer.played;
+        if(played) played.push(playedCard);
+        else currentPlayer.played = [playedCard];
+        currentPlayer.hand = hand.length - currentPlayer.played.length;
+      }
+
+      const nextPlayerIndex = (players.indexOf(currentPlayer) + 1) % players.length;
+      game.turn = players[nextPlayerIndex].userId;
+
+      return Promise.all([
+        gamesRef.child(gameId).set(game),
+      ]);
+    }
+    return null;
   });
 });
 

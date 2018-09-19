@@ -16,7 +16,8 @@ class Control extends PureComponent {
     phase: PropTypes.number,
     hand: PropTypes.array.isRequired,
     turn: PropTypes.string,
-    user: PropTypes.object
+    user: PropTypes.object,
+    postMove: PropTypes.func
   };
 
   toggleEmoting = () => {
@@ -33,7 +34,7 @@ class Control extends PureComponent {
 
   render() { 
     const { emoting, bidding, bid } = this.state;
-    const { hand, phase, turn, user } = this.props;
+    const { hand, phase, turn, user, postMove } = this.props;
 
     if(user.profile._id !== turn) {
       return (
@@ -75,13 +76,18 @@ class Control extends PureComponent {
                 </div>
                 <div className="hand">
                   {hand.map((card, i) => (
-                    <Card key={i} card={card}/>
+                    <Card 
+                      key={i} 
+                      card={card}
+                      postMove={postMove}
+                    />
                   ))}
                 </div>
               </Fragment>
             }
           </section>
         );
+
       case 2:
         return (
           <section className={styles.control}>

@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import GameDisplay from './GameDisplay';
 import { startGame, loadHand, clearEmotes, endGame } from './actions';
 import { getGame, getHand } from './reducers';
+import { getUser } from '../auth/reducers';
+// import { db } from '../../services/firebase';
+import { movesRef } from '../../services/firebaseRef';
 
 class Game extends PureComponent {
 
@@ -12,7 +15,8 @@ class Game extends PureComponent {
     startGame: PropTypes.func.isRequired,
     loadHand: PropTypes.func.isRequired,
     game: PropTypes.object,
-    hand: PropTypes.array
+    hand: PropTypes.array,
+    user: PropTypes.object
   };
 
   componentDidMount() {
@@ -24,6 +28,16 @@ class Game extends PureComponent {
     setTimeout(() => clearEmotes(gameKey), 3000);
   }
 
+  postMove = move => {
+    const { user, match } = this.props;
+    const { gameKey } = match.params;
+    
+    movesRef.child(user.profile._id).set({
+      gameId: gameKey,
+      ...move
+    });
+  };
+
 
   render() { 
     const { game, hand } = this.props;
@@ -33,6 +47,7 @@ class Game extends PureComponent {
           <GameDisplay
             game={game}
             hand={hand}
+            postMove={this.postMove}
           />
         }
       </section>
@@ -43,7 +58,8 @@ class Game extends PureComponent {
 export default connect(
   state => ({
     game: getGame(state),
-    hand: getHand(state)
+    hand: getHand(state),
+    user: getUser(state)
   }),
   { startGame, loadHand, endGame }
 )(Game);
