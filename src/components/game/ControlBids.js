@@ -81,7 +81,7 @@ class Bids extends PureComponent {
               <i className="fa fa-plus"></i>
               : <i className="fa fa-plus" onClick={this.handleIncrement}></i>
             }
-            <button>Bid</button>
+            <button onClick={this.handleBid}>Bid</button>
           </div>
         );
       case 3:

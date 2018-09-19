@@ -7,7 +7,8 @@ import styles from './Player.css';
 class Player extends PureComponent {
 
   static propTypes = {
-    player: PropTypes.object.isRequired
+    player: PropTypes.object.isRequired,
+    turn: PropTypes.string,
   };
 
   // componentDidMount() {
@@ -18,16 +19,21 @@ class Player extends PureComponent {
   // }
 
   render() {
-    const { player } = this.props;
+    const { player, turn } = this.props;
     const { hand, played, name } = player;
 
     return (
-      <section className={styles.player}>
+      <section className={styles.player} 
+      
+      style={{ backgroundColor: turn === player.userId ? '#ff0000' : null }}
+      
+      
+      >
         <Avatar/>
         {/* <h2>{emote}</h2> */}
         <h2>{name}</h2>
         <div className="hand">
-          <Card cards={player.hand}/>
+          <Card cards={hand}/>
         </div>
         {played && 
           <div className="played">
