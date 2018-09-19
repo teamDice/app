@@ -5,7 +5,7 @@ import GameDisplay from './GameDisplay';
 import { startGame, loadHand, clearEmotes, endGame } from './actions';
 import { getGame, getHand } from './reducers';
 import { getUser } from '../auth/reducers';
-// import { db } from '../../services/firebase';
+import { db } from '../../services/firebase';
 import { movesRef } from '../../services/firebaseRef';
 
 class Game extends PureComponent {
@@ -24,6 +24,8 @@ class Game extends PureComponent {
     const { gameKey } = match.params;
     startGame(gameKey);
     loadHand();
+
+    db.ref('startTimerRequest').set(true);
   }
 
   postMove = move => {
