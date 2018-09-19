@@ -1,4 +1,4 @@
-export const GAME_START = 'GAME_START';
+export const GAME_LOAD = 'GAME_LOAD';
 export const GAME_END = 'GAME_END';
 export const HAND_START = 'HAND_START';
 export const CARD_PLAY = 'CARD_PLAY';
@@ -10,7 +10,7 @@ export const getHand = state => state.hand;
 
 export function game(state = {}, { type, payload }) {
   switch(type) {
-    case GAME_START:
+    case GAME_LOAD:
       return payload;
     case GAME_END:
       return null;
