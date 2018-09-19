@@ -11,6 +11,56 @@ const queue4Ref = db.ref('queue4');
 const gamesRef = db.ref('games');
 const movesRef = db.ref('moves');
 const handsRef = db.ref('hands');
+const timerRef = db.ref('timer');
+
+
+// TURN TIMER SET TO 5 SECONDS
+timerRef.child('timeInMs').set(5000);
+
+exports.myCloudTimer = functions.database.ref('/startTimerRequest/{gameId}').onCreate((snapshot, context) => {
+  const { gameId } = context.params;
+  return db.ref('timer/timeInMs').once('value', snap => {
+      if (!snap.exists()) {
+          return Promise.reject(Error('time is not defined in the database.'));
+      }
+
+      let timeInSeconds = snap.val() / 1000;
+      console.log('Cloud Timer was Started: ' + timeInSeconds);
+
+      return functionTimer(timeInSeconds,
+          elapsedTime => {
+              db.ref('cloudTimer').child(gameId).set(elapsedTime);
+          })
+          .then(totalTime => {
+              console.log('Timer of ' + totalTime + ' has finished.');
+              return new Promise(resolve => setTimeout(resolve, 1000));
+          })
+          .then(() => snapshot.ref.remove())
+          .catch(error => console.error(error));
+  });
+});
+
+function functionTimer (seconds, call) {
+  return new Promise((resolve, reject) => {
+      if (seconds > 300) {
+          reject(Error('execution would take too long...'));
+          return;
+      }
+      let interval = setInterval(onInterval, 1000);
+      let elapsedSeconds = 0;
+
+      function onInterval () {
+          if (elapsedSeconds >= seconds) {
+              clearInterval(interval);
+              call(0);
+              resolve(elapsedSeconds);
+              return;
+          }
+          call(seconds - elapsedSeconds);
+          elapsedSeconds++;
+      }
+  });
+}
 
 // Fisher-Yates Shuffle algorithm
 const shuffle = players => {
@@ -47,7 +97,6 @@ const createNewGame = (users, queue) => {
 
   return {
     players,
-    turn: players[0].userId,
     phase: 0,
     challenger: null
   };
@@ -165,9 +214,17 @@ exports.playerQueue4 = functions.database.ref('/queue4/{uid}').onCreate((snapsho
     });
 });
 
+
+// USERS POSTING MOVES
 exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, context) => {
   const { uid } = context.params;
   const move = snapshot.val();
+  const { gameId } = move;
+
+
+  db.ref('startTimerRequest').child(gameId).remove();
+  db.ref('timer').child(gameId).remove();
+
   const userMoveRef = snapshot.ref.parent;
   const playerHandRef = handsRef.child(uid).child('hand');
 
@@ -220,7 +277,19 @@ exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, conte
   
 });
 
+exports.moveToPhase1 = functions.database.ref('/games/{gameId}').onCreate((snapshot, context) => {
+  const { gameId } = context.params;
 
+  setTimeout(() => {
+    return gamesRef.child(gameId).once('value').then(snapshot => {
+      const { players } = snapshot.val();
+      return Promise.all([
+        gamesRef.child(gameId).child('phase').set(1),
+        gamesRef.child(gameId).child('turn').set(players[0].userId)
+      ]);
+    });
+  }, 5000);
+});
 
 exports.updateGame = functions.database.ref('/hands/{uid}').onUpdate((change, context) => {
   const { uid } = context.params;
@@ -255,141 +324,14 @@ exports.updateGame = functions.database.ref('/hands/{uid}').onUpdate((change, co
   });
 });
 
-exports.myCloudTimer = functions.database.ref('/startTimerRequest/').onCreate((event) => {
-  return db.ref('cloudTimer/timeInMs').once('value', snap => {
-      if (!snap.exists()) {
-          return Promise.reject('time is not defined in the database.');
-      }
 
-      let timeInSeconds = snap.val() / 1000;
-      console.log('Cloud Timer was Started: ' + timeInSeconds);
-
-      return functionTimer(timeInSeconds,
-          elapsedTime => {
-              db.ref('cloudTimer/observableTime').set(elapsedTime);
-          })
-          .then(totalTime => {
-              console.log('Timer of ' + totalTime + ' has finished.');
-          })
-          .then(() => new Promise(resolve => setTimeout(resolve, 1000)))
-          .then(() => event.data.ref.remove())
-          .catch(error => console.error(error));
-  });
+// ON TURN CHANGE, START A TURN TIMER
+exports.firstTurnTimer = functions.database.ref('/games/{gameId}/turn').onCreate((snapshot, context) => {
+  const { gameId } = context.params;
+  return db.ref('startTimerRequest').set({ [gameId]: true });
 });
 
-function functionTimer (seconds, call) {
-  return new Promise((resolve, reject) => {
-      if (seconds > 300) {
-          reject('execution would take too long...');
-          return;
-      }
-      let interval = setInterval(onInterval, 1000);
-      let elapsedSeconds = 0;
-
-      function onInterval () {
-          if (elapsedSeconds >= seconds) {
-              clearInterval(interval);
-              call(0);
-              resolve(elapsedSeconds);
-              return;
-          }
-          call(seconds - elapsedSeconds);
-          elapsedSeconds++;
-      }
-  });
-}
-
-// exports.moveQueue = functions.database.ref('/moves/{gameKey}/{uid}').onCreate((snapshot, context) => {
-
-//   const { gameKey } = context.params;
-
-//   const gameMovesRef = movesRef.child(gameKey);
-
-//   return gameMovesRef.once('value')
-//     .then(snapshot => {
-      
-//       const game = snapshot.val();
-//       const moves = Object.keys(game)
-//         .map(key => ({
-//           uid: key,
-//           play: game[key]
-//         }));
-//       if(moves.length < 2) return null;
-
-      
-//       const gameRef = gamesRef.child(gameKey);
-
-//       return Promise.all([
-//         gameMovesRef.remove(),
-//         gameRef.update({
-//           moves: moves
-//         })
-//       ]);
-//     });
-// });
-
-
-
-// exports.gameLogic = functions.database.ref('/games/{gameKey}/moves').onCreate((snapshot, context) => {
-//   const { gameKey } = context.params;
-
-//   const gameRef = gamesRef.child(gameKey);
-
-//   return gameRef.once('value')
-//     .then(snapshot => {
-//       const game = snapshot.val();
-//       const player1 = game.moves[0];
-//       const player2 = game.moves[1];
-      
-//       const winnerId = calculateWinner(game.moves);
-//       if(winnerId) {
-//         game[winnerId].wins++;
-
-//         game[player1.uid].troops -= player1.play;
-//         game[player2.uid].troops -= player2.play;
-
-//       }
-      
-//       delete game.moves;
-//       return Promise.all([
-//         gameRef.set(game)
-//       ]);
-//     });      
-// });
-
-// exports.endGame = functions.database.ref('/moves/{gameKey}').onCreate((snapshot, context) => {
-
-//   const { gameKey } = context.params;
-
-//   const gameRef = gamesRef.child(gameKey);
-
-//   return gameRef.on('value', snapshot => {
-//       const game = snapshot.val();
-//       const [ player1, player2 ] = Object.keys(game);
-      
-//       if(game[player1].wins < 2 && game[player2].wins < 2) return;
-
-//       const winner = game[player1].wins === 2 ? player1 : player2;
-      
-//       gameRef.off('value');
-//       return Promise.all([
-//         gameRef.child('winner').set(winner),
-//         userGamesRef.child(player1).remove(),
-//         userGamesRef.child(player2).remove(),
-//       ]);
-//   });
-// });
-
-// const calculateWinner = ([a, b]) => {
-
-//   // Refund if tie;
-//   if(a.play === b.play) return null;
-
-//   // Undercutter wins;
-//   const limit = 3;
-//   if(b.play - a.play > limit) return a.uid;
-//   if(a.play - b.play > limit) return b.uid;
-
-//   // High number wins;
-//   return a.play > b.play ? a.uid : b.uid;
-// };
+exports.turnTimer = functions.database.ref('/games/{gameId}/turn').onUpdate((snapshot, context) => {
+  const { gameId } = context.params;
+  return db.ref('startTimerRequest').set({ [gameId]: true });
+});
