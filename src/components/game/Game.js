@@ -24,8 +24,6 @@ class Game extends PureComponent {
     const { gameKey } = match.params;
     startGame(gameKey);
     loadHand();
-
-    setTimeout(() => clearEmotes(gameKey), 3000);
   }
 
   postMove = move => {

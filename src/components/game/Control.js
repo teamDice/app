@@ -98,11 +98,9 @@ class Control extends PureComponent {
             {!emoting &&
               <Bids 
                 emoteToggle={this.toggleEmoting} 
-                bid={
-                  bid
-                }
-                changeBid={this.handleBidChange}
                 phase={phase}
+                players={players}
+                postMove={postMove}
               />}
           </section>
         );

@@ -11,7 +11,7 @@ class Bids extends PureComponent {
   };
 
   static propTypes = {
-    toggle: PropTypes.func.isRequired,
+    toggle: PropTypes.func,
     players: PropTypes.array.isRequired,
     phase: PropTypes.number.isRequired,
     emoteToggle: PropTypes.func,
