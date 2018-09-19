@@ -20,15 +20,15 @@ class Bids extends PureComponent {
 
   componentDidMount() {
     const { players } = this.props;
-    const highestBid = Math.max(...players.map(player => player.bid)) || 1;
-    
-    const totalPlayed = players.reduce(((acc, cur) => acc + cur.played.length), 0);
-    this.setState({
-      minBid: highestBid,
-      bid: highestBid,
-      maxBid: totalPlayed
-    });
-    
+    if(players) {
+      const highestBid = Math.max(...players.map(player => player.bid)) || 1;
+      const totalPlayed = players.reduce(((acc, cur) => acc + cur.played.length), 0);
+      this.setState({
+        minBid: highestBid,
+        bid: highestBid,
+        maxBid: totalPlayed
+      });
+    }
   }
   
 
