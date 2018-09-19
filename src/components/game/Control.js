@@ -2,6 +2,8 @@ import React, { PureComponent, Fragment } from 'react';
 import Card from './Card';
 import PropTypes from 'prop-types';
 import styles from './Control.css';
+import { connect } from 'react-redux';
+import { getUser } from '../auth/reducers';
 
 class Control extends PureComponent {
   state = {
@@ -12,7 +14,9 @@ class Control extends PureComponent {
 
   static propTypes = {
     phase: PropTypes.number,
-    hand: PropTypes.array.isRequired
+    hand: PropTypes.array.isRequired,
+    turn: PropTypes.string,
+    user: PropTypes.object
   };
 
   toggleEmoting = () => {
@@ -29,7 +33,27 @@ class Control extends PureComponent {
 
   render() { 
     const { emoting, bidding, bid } = this.state;
-    const { hand, phase } = this.props;
+    const { hand, phase, turn, user } = this.props;
+
+    if(user.profile._id !== turn) {
+      return (
+        <section className={styles.control}>
+          {emoting && <Emotes toggle={this.toggleEmoting}/>}
+          {!emoting &&
+          <Fragment>
+            <div>
+              <button onClick={this.toggleEmoting}>Emote</button>
+            </div>
+            <div className="disabled">
+              {hand.map((card, i) => (
+                <Card key={i} card={card}/>
+              ))}
+            </div>
+          </Fragment>
+          }
+        </section>
+      );
+    }
 
     switch(phase) {
       case 1:
@@ -58,18 +82,47 @@ class Control extends PureComponent {
             }
           </section>
         );
-      default: 
+      case 2:
         return (
           <section className={styles.control}>
             {emoting && <Emotes toggle={this.toggleEmoting}/>}
             {!emoting &&
               <Bids 
-                toggle={this.toggleBidding} 
+                emoteToggle={this.toggleEmoting} 
                 bid={bid}
                 changeBid={this.handleBidChange}
                 phase={phase}
-                emoteToggle={this.toggleEmoting}
-              />
+              />}
+          </section>
+        );
+      case 3:
+        return (
+          <section className={styles.control}>
+            {emoting && <Emotes toggle={this.toggleEmoting}/>}
+            {!emoting &&
+              <Bids 
+                emoteToggle={this.toggleEmoting} 
+                bid={bid}
+                changeBid={this.handleBidChange}
+                phase={phase}
+              />}
+          </section>
+        );
+      default: 
+        return (
+          <section className={styles.control}>
+            {emoting && <Emotes toggle={this.toggleEmoting}/>}
+            {!emoting &&
+              <Fragment>
+                <div>
+                  <button onClick={this.toggleEmoting}>Emote</button>
+                </div>
+                <div className="disabled">
+                  {hand.map((card, i) => (
+                    <Card key={i} card={card}/>
+                  ))}
+                </div>
+              </Fragment>
             }
           </section>
         );
@@ -77,7 +130,12 @@ class Control extends PureComponent {
   }
 }
  
-export default Control;
+export default connect(
+  state => ({
+    user: getUser(state),
+  }),
+  null
+)(Control);
 
 class Emotes extends PureComponent {
 
