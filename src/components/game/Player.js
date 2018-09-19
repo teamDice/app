@@ -31,11 +31,13 @@ class Player extends PureComponent {
             <Card key={i} card={card}/>
           ))}
         </div>
-        <div className="played">
-          {[...Array(played)].map((card, i) => (
-            <Card key={i}/>
-          ))}
-        </div>
+        {played && 
+          <div className="played">
+            {[...Array(played.length)].map((card, i) => (
+              <Card key={i}/>
+            ))}
+          </div>
+        }
       </section>
     );
   }
