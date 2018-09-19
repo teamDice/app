@@ -228,7 +228,7 @@ exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, conte
   const userMoveRef = snapshot.ref.parent;
   const playerHandRef = handsRef.child(uid).child('hand');
 
-  if(move.type) {
+  if(move.type === 0 || move.type === 1) {
     return playerHandRef.once('value').then(snapshot => {
       const hand = snapshot.val();
       const card = hand.find(card => card.type === move.type && card.order === 0);
