@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import GameDisplay from './GameDisplay';
-import { startGame, loadHand, endGame } from './actions';
+import { startGame, loadHand, clearEmotes, endGame } from './actions';
 import { getGame, getHand } from './reducers';
 
 class Game extends PureComponent {
@@ -20,7 +20,10 @@ class Game extends PureComponent {
     const { gameKey } = match.params;
     startGame(gameKey);
     loadHand();
+
+    setTimeout(() => clearEmotes(gameKey), 3000);
   }
+
 
   render() { 
     const { game, hand } = this.props;
