@@ -7,20 +7,26 @@ import styles from './Card.css';
 
 class Card extends PureComponent {
   static propTypes = {
+    cards: PropTypes.number,
     card: PropTypes.object,
-    postMove: PropTypes.func
+    postMove: PropTypes.func,
+    setProcessing: PropTypes.func
   };
 
   handleClick = () => {
-    const { postMove, card } = this.props;
+    const { postMove, card, setProcessing } = this.props;
     const { type } = card;
+    setProcessing();
     postMove({ type });
   };
 
   render() { 
-    const { card } = this.props;
+    const { card, cards } = this.props;
     return (
       <Fragment>
+        {cards && 
+          <div>{cards}</div>
+        }
         
         <img onClick={this.handleClick} className={styles.card} src={
           card

@@ -10,7 +10,8 @@ import { getUser } from '../auth/reducers';
 class Control extends PureComponent {
   state = {
     emoting: false,
-    bidding: false
+    bidding: false,
+    processing: false
   };
 
   static propTypes = {
@@ -28,8 +29,12 @@ class Control extends PureComponent {
     this.setState(({ bidding }) => ({ bidding: !bidding }));
   };
 
+  toggleProcessing = () => {
+    this.setState(({ processing }) => ({ processing: !processing }));
+  };
+
   render() { 
-    const { emoting, bidding, bid } = this.state;
+    const { emoting, bidding, processing } = this.state;
     const { hand, game, user, postMove } = this.props;
     const { phase, turn, players } = game;
     
@@ -45,7 +50,7 @@ class Control extends PureComponent {
               <button onClick={this.toggleEmoting}>Emote</button>
             </div>
             <div className="disabled">
-              {hand.map((card, i) => (
+              {hand.filter(card => card.order === 0).map((card, i) => (
                 <Card key={i} card={card}/>
               ))}
             </div>
@@ -77,11 +82,12 @@ class Control extends PureComponent {
                   }
                 </div>
                 <div className="hand">
-                  {hand.map((card, i) => (
+                  {hand.filter(card => card.order === 0).map((card, i) => (
                     <Card 
                       key={i} 
                       card={card}
                       postMove={postMove}
+                      setProcessing={this.toggleProcessing}
                     />
                   ))}
                 </div>
