@@ -8,14 +8,14 @@ export const startGame = gameKey => {
   return (dispatch, getState) => {
     gamesRef.child(gameKey).on('value', snapshot => {
       const game = snapshot.val();
-      game.key = gameKey;
+      if(game) {
+        game.key = gameKey;
 
-      
-      dispatch({
-        type: GAME_LOAD,
-        payload: game
-      });
-      
+        dispatch({
+          type: GAME_LOAD,
+          payload: game
+        });
+      }
     });
   };
 
@@ -28,11 +28,14 @@ export const loadHand = () => {
     const { profile } = getUser(getState());
     handsRef.child(profile._id).on('value', snapshot => {
       const startingState = snapshot.val();
-      const hand = Object.values(startingState.hand);
-      dispatch({
-        type: HAND_START,
-        payload: hand
-      });
+
+      if(startingState) {
+        const hand = Object.values(startingState.hand);
+        dispatch({
+          type: HAND_START,
+          payload: hand
+        });
+      }
     });
 
   };
