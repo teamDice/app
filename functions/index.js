@@ -319,11 +319,18 @@ exports.flipMove = functions.database.ref('/flipMove/{uid}').onCreate((snapshot,
     })
     .then(snapshot => {
       const hand = snapshot.val();
-      const card = hand.find(card => card.order === move.order);
-      
+      const { type } = hand.find(card => card.order === move.order);
+      const player = game.players.find(player => player.userId === move.playerId);
+      const selectedCard = player.played.find(card => card.order === move.order);
+
+      console.log('** SELECTED **', selectedCard);
+
+      selectedCard.type = type;
+      player.bid--;
+      game.challenger.bid--;
 
       return Promise.all([
-        playerHandRef.set(hand),
+        gamesRef.child(gameId).set(game),
         userMoveRef.child(uid).remove()
       ]);
     });
