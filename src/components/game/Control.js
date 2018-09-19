@@ -35,39 +35,39 @@ class Control extends PureComponent {
     const { emoting, bidding, bid } = this.state;
     const { hand, phase, turn, user } = this.props;
 
+    if(user.profile._id !== turn) {
+      return (
+        <section className={styles.control}>
+          {emoting && <Emotes toggle={this.toggleEmoting}/>}
+          {!emoting &&
+          <Fragment>
+            <div>
+              <button onClick={this.toggleEmoting}>Emote</button>
+            </div>
+            <div className="disabled">
+              {hand.map((card, i) => (
+                <Card key={i} card={card}/>
+              ))}
+            </div>
+          </Fragment>
+          }
+        </section>
+      );
+    }
+
     switch(phase) {
       case 1:
-        if(user.profile._id !== turn) {
-          return (
-            <section className={styles.control}>
-              {emoting && <Emotes toggle={this.toggleEmoting}/>}
-              {!emoting &&
-              <Fragment>
-                <div>
-                  <button onClick={this.toggleEmoting}>Emote</button>
-                </div>
-                <div className="disabled">
-                  {hand.map((card, i) => (
-                    <Card key={i} card={card}/>
-                  ))}
-                </div>
-              </Fragment>
-              }
-            </section>
-          );
-        }
-        else {
-          return (
-            <section className={styles.control}>
-              {emoting && <Emotes toggle={this.toggleEmoting}/>}
-              {bidding && 
+        return (
+          <section className={styles.control}>
+            {emoting && <Emotes toggle={this.toggleEmoting}/>}
+            {bidding && 
               <Bids 
                 toggle={this.toggleBidding} 
                 bid={bid}
                 changeBid={this.handleBidChange}
                 phase={phase}
               />}
-              {!emoting && !bidding &&
+            {!emoting && !bidding &&
               <Fragment>
                 <div>
                   <button onClick={this.toggleEmoting}>Emote</button>
@@ -79,10 +79,22 @@ class Control extends PureComponent {
                   ))}
                 </div>
               </Fragment>
-              }
-            </section>
-          );
-        }
+            }
+          </section>
+        );
+      case 2:
+        return (
+          <section className={styles.control}>
+            {emoting && <Emotes toggle={this.toggleEmoting}/>}
+            {!emoting &&
+              <Bids 
+                emoteToggle={this.toggleEmoting} 
+                bid={bid}
+                changeBid={this.handleBidChange}
+                phase={phase}
+              />}
+          </section>
+        );
       default: 
         return (
           <section className={styles.control}>
