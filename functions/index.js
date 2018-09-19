@@ -242,7 +242,7 @@ exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, conte
   }
 
 
-  if(move.bid) {  
+  else if(move.bid) {  
     return gamesRef.child(move.gameId).once('value').then(snapshot => {
       const game = snapshot.val();
         if(game) {
@@ -251,12 +251,17 @@ exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, conte
           currentPlayer.bid = move.bid;
 
           let { challenger } = game;
+
+          console.log('*** CHALLENGER ***', challenger);
+
           const newChallenger = {
-            userId: currentPlayer.userId,
-            bid: currentPlayer.bid
+            userId: uid,
+            bid: move.bid
           };
+          console.log('NEW CHALLENGER', newChallenger);
+
           if(challenger) {
-            challenger = newChallenger.bid > challenger.bid ? newChallenger : challenger;
+            game.challenger = move.bid > challenger.bid ? newChallenger : challenger;
           }
           else game.challenger = newChallenger;
 

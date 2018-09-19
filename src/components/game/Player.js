@@ -24,10 +24,7 @@ class Player extends PureComponent {
 
     return (
       <section className={styles.player} 
-      
-      style={{ backgroundColor: turn === player.userId ? '#ff0000' : null }}
-      
-      
+        style={{ backgroundColor: turn === player.userId ? '#ff0000' : null }}
       >
         <Avatar/>
         {/* <h2>{emote}</h2> */}
@@ -37,8 +34,8 @@ class Player extends PureComponent {
         </div>
         {played && 
           <div className="played">
-            {[...Array(played.length)].map((card, i) => (
-              <Card key={i}/>
+            {played.map((card, i) => (
+              <Card key={i} order={card.order} player={player.userId}/>
             ))}
           </div>
         }

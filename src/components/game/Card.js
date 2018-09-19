@@ -10,14 +10,17 @@ class Card extends PureComponent {
     cards: PropTypes.number,
     card: PropTypes.object,
     postMove: PropTypes.func,
-    setProcessing: PropTypes.func
+    setProcessing: PropTypes.func,
+    order: PropTypes.number,
+    player: PropTypes.string
   };
 
   handleClick = () => {
-    const { postMove, card, setProcessing } = this.props;
+    const { postMove, card, setProcessing, order } = this.props;
     const { type } = card;
     setProcessing();
-    postMove({ type });
+    if(order) postMove({ order });
+    else postMove({ type });
   };
 
   render() { 

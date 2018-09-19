@@ -14,18 +14,18 @@ class Bids extends PureComponent {
     toggle: PropTypes.func,
     players: PropTypes.array.isRequired,
     phase: PropTypes.number.isRequired,
-    emoteToggle: PropTypes.func,
     postMove: PropTypes.func.isRequired
   };
 
   componentDidMount() {
-    const { players } = this.props;
+    const { players, phase } = this.props;
     if(players) {
-      const highestBid = Math.max(...players.map(player => player.bid)) || 1;
+      const previousBid = Math.max(...players.map(player => player.bid));
       const totalPlayed = players.reduce(((acc, cur) => acc + cur.played.length), 0);
+      const startingBid = phase === 1 ? 1 : previousBid + 1;
       this.setState({
-        minBid: highestBid,
-        bid: highestBid,
+        minBid: startingBid,
+        bid: startingBid,
         maxBid: totalPlayed
       });
     }
@@ -45,59 +45,20 @@ class Bids extends PureComponent {
   };
 
   render() { 
-    const { toggle, phase, emoteToggle } = this.props;
+    const { toggle, phase } = this.props;
     const { bid, minBid, maxBid } = this.state;
-
+   
+    return (
+      <div className="bids">
+        <i onClick={toggle} className="fas fa-times"></i>
+        {phase === 2 && <button>PASS</button>}
+        {bid > minBid && <i className="fa fa-minus" onClick={this.handleDecrement}></i>}
+        <p>{bid}</p>
+        {bid < maxBid && <i className="fa fa-plus" onClick={this.handleIncrement}></i>}
+        <button onClick={this.handleBid}>BID</button>
+      </div>
+    );
     
-  
-    switch(phase) {
-      case 1:
-        return (
-          <div className="bids">
-            <i onClick={toggle} className="fas fa-times"></i>
-            {bid <= minBid ? 
-              <i className="fa fa-minus"></i>
-              : <i className="fa fa-minus" onClick={this.handleDecrement}></i>
-            }
-            <p>{bid}</p>
-            {bid >= maxBid ?
-              <i className="fa fa-plus"></i>
-              : <i className="fa fa-plus" onClick={this.handleIncrement}></i>
-            }
-            <button onClick={this.handleBid}>Bid</button>
-          </div>
-        );
-      case 2:
-        return (
-          <div className="bids">
-            <button onClick={emoteToggle}>Emote</button>
-            <button>Pass</button>
-            {bid <= 1 ? 
-              <i className="fa fa-minus"></i>
-              : <i className="fa fa-minus" onClick={this.handleDecrement}></i>
-            }
-            <p>{bid}</p>
-            {bid >= 8 ?
-              <i className="fa fa-plus"></i>
-              : <i className="fa fa-plus" onClick={this.handleIncrement}></i>
-            }
-            <button onClick={this.handleBid}>Bid</button>
-          </div>
-        );
-      case 3:
-        return (
-          <div className="bids">
-            <button onClick={emoteToggle}>Emote</button>
-            <h4>Flip {bid} squirrels</h4>
-          </div>
-        );
-      default:
-        return (
-          <div className="bids">
-            <h6>The game is not happening right now!</h6>
-          </div>
-        );
-    }
   }
 }
 
