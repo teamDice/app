@@ -250,25 +250,29 @@ exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, conte
           const currentPlayer = players.find(player => player.userId === uid);
           currentPlayer.bid = move.bid;
 
-          let { challenger } = game;
+          let { challenger, phase, turn } = game;
 
-          console.log('*** CHALLENGER ***', challenger);
 
           const newChallenger = {
             userId: uid,
             bid: move.bid
           };
-          console.log('NEW CHALLENGER', newChallenger);
 
           if(challenger) {
-            game.challenger = move.bid > challenger.bid ? newChallenger : challenger;
+            challenger = move.bid > challenger.bid ? newChallenger : challenger;
           }
-          else game.challenger = newChallenger;
+          else challenger = newChallenger;
 
-          const nextPlayerIndex = (players.indexOf(currentPlayer) + 1) % players.length;
-          game.turn = players[nextPlayerIndex].userId;
+          const totalPlayedCards = players.reduce(((acc, cur) => acc + cur.played.length), 0);
 
-          if(game.phase === 1) game.phase++;
+          if(move.bid === totalPlayedCards) phase = 3;
+          else {
+            const nextPlayerIndex = (players.indexOf(currentPlayer) + 1) % players.length;
+            turn = players[nextPlayerIndex].userId;
+            if(phase === 1) phase = 2;
+            else if(phase === 2 && challenger === turn) phase = 3;
+          }
+
         }
 
       return Promise.all([
@@ -296,6 +300,8 @@ exports.moveToPhase1 = functions.database.ref('/games/{gameId}').onCreate((snaps
   }, 5000);
 });
 
+
+
 exports.updateGame = functions.database.ref('/hands/{uid}').onUpdate((change, context) => {
   const { uid } = context.params;
   const userState = change.after.val();
@@ -303,7 +309,7 @@ exports.updateGame = functions.database.ref('/hands/{uid}').onUpdate((change, co
   const { gameId, hand } = userState;
   console.log(gameId, hand);
   const playedCard = hand.sort((a, b) => b.order - a.order)[0];
-
+  delete playedCard.type;
 
   return gamesRef.child(gameId).once('value').then(snapshot => {
     const game = snapshot.val();
