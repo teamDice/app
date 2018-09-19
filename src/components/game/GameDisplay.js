@@ -16,14 +16,20 @@ class Game extends PureComponent {
 
   render() { 
     const { game, hand, postMove } = this.props;
-    const { players, turn } = game;
+    const { players, turn, phase } = game;
 
     return (
       <section>
         {
           players &&
             players.map(player => (
-              <Player key={player.userId} player={player} turn={turn}/>
+              <Player
+                key={player.userId}
+                player={player}
+                turn={turn}
+                phase={phase}
+                postMove={postMove}
+              />
             ))
         }
         

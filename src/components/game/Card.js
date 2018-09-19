@@ -16,15 +16,15 @@ class Card extends PureComponent {
   };
 
   handleClick = () => {
-    const { postMove, card, setProcessing, order } = this.props;
-    const { type } = card;
-    setProcessing();
+    const { postMove, card, order } = this.props;
+    
+    // setProcessing();
     if(order) postMove({ order });
-    else postMove({ type });
+    else postMove({ type: card.type });
   };
 
   render() { 
-    const { card, cards } = this.props;
+    const { card, cards, postMove } = this.props;
     return (
       <div className={styles.card}>
         {cards && 
@@ -32,7 +32,7 @@ class Card extends PureComponent {
         }
         
         
-        <img onClick={this.handleClick} src={
+        <img onClick={postMove ? this.handleClick : null} src={
           card
             ? card.type === 1
               ? squirrel
