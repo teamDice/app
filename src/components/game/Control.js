@@ -43,42 +43,11 @@ class Control extends PureComponent {
   render() { 
     const { emoting, bidding, processing } = this.state;
     const { hand, game, user, postMove } = this.props;
-    const { phase, turn, players } = game;
+    const { phase, turn, players, challenger } = game;
     const uid = user.profile._id;
     
-    const isChallenger = game.challenger === uid;
+    const isChallenger = challenger === uid;
     const isTurn = turn === uid;
-
-    // if(user.profile._id !== turn) {
-    //   return (
-    //     <section className={styles.control}>
-    //       {emoting && <Emotes toggle={this.toggleEmoting}/>}
-    //       {!emoting &&
-    //       <Fragment>
-    //         <div>
-    //           <button onClick={this.toggleEmoting}>Emote</button>
-    //         </div>
-    //         <div className="disabled">
-    //           {hand.filter(card => card.order === 0).map((card, i) => (
-    //             <Card key={i} card={card}/>
-    //           ))}
-    //         </div>
-    //       </Fragment>
-    //       }
-    //     </section>
-    //   );
-    // }
-
-    if(phase === 3) {
-      return (
-        <section className={styles.control}>
-          {emoting && <Emotes toggle={this.toggleEmoting}/>}
-          {!emoting && isChallenger &&
-            <p>Flip {game.challenger.bid} squirrels!</p>
-          }
-        </section>
-      );
-    }
     
     return (
       <section className={styles.control}>
@@ -98,11 +67,12 @@ class Control extends PureComponent {
                   ? <Bids 
                     toggle={this.toggleBidding}
                     players={players}
+                    challenger={challenger}
                     phase={phase}
                     postMove={postMove}
                   />
                   : <Fragment>
-                    {phase === 1 && !bidding && isTurn && <button onClick={this.toggleBidding}>Bid</button>}
+                    {phase === 1 && !bidding && isTurn && hand.filter(card => card.order > 0).length && <button onClick={this.toggleBidding}>Bid</button>}
                     <div className="hand">
                       {hand
                         .filter(card => card.order === 0)

@@ -220,71 +220,79 @@ exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, conte
   const { uid } = context.params;
   const move = snapshot.val();
   const { gameId } = move;
-
-
-  db.ref('startTimerRequest').child(gameId).remove();
-  db.ref('timer').child(gameId).remove();
-
   const userMoveRef = snapshot.ref.parent;
   const playerHandRef = handsRef.child(uid).child('hand');
 
-  if(move.type === 0 || move.type === 1) {
-    return playerHandRef.once('value').then(snapshot => {
-      const hand = snapshot.val();
-      const card = hand.find(card => card.type === move.type && card.order === 0);
-      if(card) card.order = 1 + hand.filter(card => card.order > 0).length;
-
-      return Promise.all([
-        playerHandRef.set(hand),
-        userMoveRef.remove()
-      ]);
-    });
-  }
-
-
-  else if(move.bid) {  
-    return gamesRef.child(move.gameId).once('value').then(snapshot => {
+  return gamesRef.child(gameId).once('value')
+    .then(snapshot => {
       const game = snapshot.val();
-        if(game) {
-          const { players } = game;
-          const currentPlayer = players.find(player => player.userId === uid);
-          currentPlayer.bid = move.bid;
+      // Prevent out of turn Plays
+      if(game.turn !== uid) return null;
 
-          let { challenger, phase, turn } = game;
+      // Clear timers
+      db.ref('startTimerRequest').child(gameId).remove();
+      db.ref('timer').child(gameId).remove();
+  
+      if(move.type === 0 || move.type === 1) {
+        return playerHandRef.once('value').then(snapshot => {
+          const hand = snapshot.val();
+          const card = hand.find(card => card.type === move.type && card.order === 0);
+          if(card) card.order = 1 + hand.filter(card => card.order > 0).length;
+    
+          return Promise.all([
+            playerHandRef.set(hand),
+            userMoveRef.remove()
+          ]);
+        });
+      }
 
+      if(move.bid) { 
+        const { players } = game;
+        const currentPlayer = players.find(player => player.userId === uid);
+        currentPlayer.bid = move.bid;
+  
+        const newChallenger = {
+          userId: uid,
+          bid: move.bid
+        };
+  
+        if(game.challenger) {
+          game.challenger = move.bid > game.challenger.bid ? newChallenger : game.challenger;
+        }
+        else game.challenger = newChallenger;
+  
+        const totalPlayedCards = players.reduce(((acc, cur) => acc + cur.played.length), 0);
+        console.log('***TOTAL PLAYED CARDS***', totalPlayedCards);
 
-          const newChallenger = {
-            userId: uid,
-            bid: move.bid
-          };
+        if(move.bid === totalPlayedCards) game.phase = 3;
+        else {
+          const nextPlayerIndex = (players.indexOf(currentPlayer) + 1) % players.length;
+          game.turn = players[nextPlayerIndex].userId;
 
-          if(challenger) {
-            challenger = move.bid > challenger.bid ? newChallenger : challenger;
-          }
-          else challenger = newChallenger;
-
-          const totalPlayedCards = players.reduce(((acc, cur) => acc + cur.played.length), 0);
-
-          if(move.bid === totalPlayedCards) phase = 3;
-          else {
-            const nextPlayerIndex = (players.indexOf(currentPlayer) + 1) % players.length;
-            turn = players[nextPlayerIndex].userId;
-            if(phase === 1) phase = 2;
-            else if(phase === 2 && challenger === turn) phase = 3;
-          }
-
+          console.log('NEXT TURN IS', game.turn);
+          if(game.phase === 1) game.phase = 2;
+          else if(game.phase === 2 && game.challenger === game.turn) game.phase = 3;
         }
 
-      return Promise.all([
-        gamesRef.child(move.gameId).set(game),
-        userMoveRef.remove()
-      ]);
-    });
-  }
+        return Promise.all([
+          gamesRef.child(gameId).set(game),
+          userMoveRef.remove()
+        ]);
 
-  return null;
+      }
+      return null;
+    });
+  });
   
-});
+     
+      
+      
+
+
+      
+  
+          
+  
 
 exports.moveToPhase1 = functions.database.ref('/games/{gameId}').onCreate((snapshot, context) => {
   const { gameId } = context.params;
