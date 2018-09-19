@@ -5,17 +5,17 @@ import styles from './Control.css';
 
 class Control extends PureComponent {
   state = {
+    bid: 3,
     emoting: false,
-    bidding: false,
-    hand: [
-      { type: 1 },
-      { type: 1 },
-      { type: 1 },
-      { type: 0 }
-    ]
+    bidding: false
   };
 
-  toggleEmoting= () => {
+  static propTypes = {
+    phase: PropTypes.number,
+    hand: PropTypes.array.isRequired
+  };
+
+  toggleEmoting = () => {
     this.setState(({ emoting }) => ({ emoting: !emoting }));
   };
 
@@ -23,27 +23,57 @@ class Control extends PureComponent {
     this.setState(({ bidding }) => ({ bidding: !bidding }));
   };
 
+  handleBidChange = value => {
+    this.setState(({ bid }) => ({ bid: bid + value }));
+  };
+
   render() { 
-    const { hand, emoting, bidding } = this.state;
-    return (
-      <section className={styles.control}>
-        {emoting && <Emotes toggle={this.toggleEmoting}/>}
-        {bidding && <Bids toggle={this.toggleBidding}/>}
-        {!emoting && !bidding &&
-          <Fragment>
-            <div>
-              <button onClick={this.toggleEmoting}>Emote</button>
-              <button onClick={this.toggleBidding}>Bid</button>
-            </div>
-            <div className="hand">
-              {hand.map((card, i) => (
-                <Card key={i} card={card}/>
-              ))}
-            </div>
-          </Fragment>
-        }
-      </section>
-    );
+    const { emoting, bidding, bid } = this.state;
+    const { hand, phase } = this.props;
+
+    switch(phase) {
+      case 1:
+        return (
+          <section className={styles.control}>
+            {emoting && <Emotes toggle={this.toggleEmoting}/>}
+            {bidding && 
+              <Bids 
+                toggle={this.toggleBidding} 
+                bid={bid}
+                changeBid={this.handleBidChange}
+                phase={phase}
+              />}
+            {!emoting && !bidding &&
+              <Fragment>
+                <div>
+                  <button onClick={this.toggleEmoting}>Emote</button>
+                  <button onClick={this.toggleBidding}>Bid</button>
+                </div>
+                <div className="hand">
+                  {hand.map((card, i) => (
+                    <Card key={i} card={card}/>
+                  ))}
+                </div>
+              </Fragment>
+            }
+          </section>
+        );
+      default: 
+        return (
+          <section className={styles.control}>
+            {emoting && <Emotes toggle={this.toggleEmoting}/>}
+            {!emoting &&
+              <Bids 
+                toggle={this.toggleBidding} 
+                bid={bid}
+                changeBid={this.handleBidChange}
+                phase={phase}
+                emoteToggle={this.toggleEmoting}
+              />
+            }
+          </section>
+        );
+    }
   }
 }
  
@@ -73,12 +103,63 @@ class Emotes extends PureComponent {
 class Bids extends PureComponent {
 
   static propTypes = {
-    toggle: PropTypes.func.isRequired
+    toggle: PropTypes.func,
+    changeBid: PropTypes.func.isRequired,
+    bid: PropTypes.number.isRequired,
+    phase: PropTypes.number,
+    emoteToggle: PropTypes.func
   };
 
   render() { 
-    return (
-      <h1>bids</h1>
-    );
+    const { toggle, bid, changeBid, phase, emoteToggle } = this.props;
+
+    switch(phase) {
+      case 1:
+        return (
+          <div className="bids">
+            <i onClick={toggle} className="fas fa-times"></i>
+            {bid <= 1 ? 
+              <i className="fa fa-minus"></i>
+              : <i className="fa fa-minus" onClick={() => changeBid(-1)}></i>
+            }
+            <p>{bid}</p>
+            {bid >= 8 ?
+              <i className="fa fa-plus"></i>
+              : <i className="fa fa-plus" onClick={() => changeBid(+1)}></i>
+            }
+            <button>Bid</button>
+          </div>
+        );
+      case 2:
+        return (
+          <div className="bids">
+            <button onClick={emoteToggle}>Emote</button>
+            <button>Pass</button>
+            {bid <= 1 ? 
+              <i className="fa fa-minus"></i>
+              : <i className="fa fa-minus" onClick={() => changeBid(-1)}></i>
+            }
+            <p>{bid}</p>
+            {bid >= 8 ?
+              <i className="fa fa-plus"></i>
+              : <i className="fa fa-plus" onClick={() => changeBid(+1)}></i>
+            }
+            <button>Bid</button>
+          </div>
+        );
+      case 3:
+        return (
+          <div className="bids">
+            <button onClick={emoteToggle}>Emote</button>
+            <h4>Flip {bid} squirrels</h4>
+          </div>
+        );
+      default:
+        return (
+          <div className="bids">
+            <h6>The game is not happening right now!</h6>
+          </div>
+        );
+    }
   }
 }

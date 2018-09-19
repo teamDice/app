@@ -4,7 +4,7 @@ import PlayerDisplay from './PlayerDisplay';
 import QueueForm from './QueueForm';
 import Chatroom from './Chatroom';
 import { connect } from 'react-redux';
-import { getGames, getStats } from './reducers';
+import { getStats, getGames } from './reducers';
 import { getUser } from '../auth/reducers';
 import { requestGame, getStatsById, loadChatroom } from './actions';
 import styles from './Lobby.css';
@@ -32,6 +32,13 @@ export class Lobby extends Component {
     history.push({
       pathname: `/games/${games}`
     });
+  }
+
+  componentWillUnmount() {
+    const { requestGame } = this.props;
+    requestGame(true, 'queue2');
+    requestGame(true, 'queue3');
+    requestGame(true, 'queue4');
   }
 
   render() { 
