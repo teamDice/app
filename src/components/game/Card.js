@@ -23,20 +23,24 @@ class Card extends PureComponent {
   render() { 
     const { card, cards } = this.props;
     return (
-      <Fragment>
+      <div className={styles.card}>
         {cards && 
           <div>{cards}</div>
         }
         
-        <img onClick={this.handleClick} className={styles.card} src={
+        
+        <img onClick={this.handleClick} src={
           card
             ? card.type === 1
               ? squirrel
               : snake
             : back
-        }/>
+        }></img>
 
-      </Fragment>
+        
+
+
+      </div>
     );
   }
 }
