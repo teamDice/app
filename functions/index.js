@@ -287,7 +287,10 @@ exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, conte
           const card = hand.find(card => card.order === move.order);
           card.selected = true;
 
-          return handsRef.child(move.playerId).child('hand').set(hand);
+          return Promise.all([
+            handsRef.child(move.playerId).child('hand').set(hand),
+            userMoveRef.child(uid).remove()
+          ]);
         });
       }
       return null;
@@ -349,8 +352,10 @@ exports.updateGame = functions.database.ref('/hands/{uid}').onUpdate((change, co
         gamesRef.child(gameId).set(game),
       ]);
     }
+  
     return null;
   });
+
 });
 
 
