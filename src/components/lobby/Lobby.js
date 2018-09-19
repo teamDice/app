@@ -51,8 +51,6 @@ export class Lobby extends Component {
         <QueueForm onClick={requestGame}/>
         <Avatar avatar={user.profile.avatar}/>
         <Chatroom user={user}/>
-        {/* <PlayerDisplay/> */}
-        {/* {user && <button onClick={requestGame}>PLAY GORTS</button>} */}
       </div>
     );
   }

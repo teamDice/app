@@ -9,17 +9,15 @@ class QueueForm extends Component {
     onClick: PropTypes.func.isRequired
   };
 
-
-
   render() { 
     const { onClick } = this.props;
 
     return (
       <div className={styles.queueForm}>
         <section>
-          <QueueItem playersWaiting="1" onClick={onClick} queueType="2"/>
-          <QueueItem playersWaiting="0" onClick={onClick} queueType="3"/>
-          <QueueItem playersWaiting="3" onClick={onClick} queueType="4"/>
+          <QueueItem onClick={onClick} queueType="2"/>
+          <QueueItem onClick={onClick} queueType="3"/>
+          <QueueItem onClick={onClick} queueType="4"/>
         </section>
       </div>
     );

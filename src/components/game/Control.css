@@ -1,4 +1,5 @@
 :local(.control) {
+
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -13,8 +14,9 @@
     height: 40px;
   }
 
-  img {
+  div {
     cursor: pointer;
+    display: inline;
   }
 
   i {
