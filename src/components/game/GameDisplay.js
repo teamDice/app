@@ -16,7 +16,7 @@ class Game extends PureComponent {
 
   render() { 
     const { game, hand, postMove } = this.props;
-    const { players, phase, turn } = game;
+    const { players } = game;
 
     return (
       <section>
@@ -28,9 +28,8 @@ class Game extends PureComponent {
         }
         
         <Control 
-          hand={hand} 
-          phase={phase} 
-          turn={turn}
+          hand={hand}
+          game={game} 
           postMove={postMove}
         />
       </section>

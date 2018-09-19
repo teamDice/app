@@ -7,15 +7,13 @@ import { getUser } from '../auth/reducers';
 
 class Control extends PureComponent {
   state = {
-    bid: 3,
     emoting: false,
     bidding: false
   };
 
   static propTypes = {
-    phase: PropTypes.number,
+    game: PropTypes.object.isRequired,
     hand: PropTypes.array.isRequired,
-    turn: PropTypes.string,
     user: PropTypes.object,
     postMove: PropTypes.func
   };
@@ -28,13 +26,16 @@ class Control extends PureComponent {
     this.setState(({ bidding }) => ({ bidding: !bidding }));
   };
 
-  handleBidChange = value => {
-    this.setState(({ bid }) => ({ bid: bid + value }));
-  };
-
   render() { 
     const { emoting, bidding, bid } = this.state;
-    const { hand, phase, turn, user, postMove } = this.props;
+    const { hand, game, user, postMove } = this.props;
+    const { phase, turn, players } = game;
+    let totalPlayed;
+    if(players && players[0].played) {
+      totalPlayed = players.reduce(((acc, cur) => acc + cur.played.length), 0);
+      console.log('totalPlayed', totalPlayed);
+    }
+
 
     if(user.profile._id !== turn) {
       return (
@@ -64,9 +65,10 @@ class Control extends PureComponent {
             {bidding && 
               <Bids 
                 toggle={this.toggleBidding} 
-                bid={bid}
-                changeBid={this.handleBidChange}
+                minBid={1}
+                maxBid={totalPlayed}
                 phase={phase}
+                postMove={postMove}
               />}
             {!emoting && !bidding &&
               <Fragment>
@@ -89,13 +91,17 @@ class Control extends PureComponent {
         );
 
       case 2:
+        // const highestBid = Math.max(...players.map(player => player.bid));
+        // console.log('Highbid', highestBid);
         return (
           <section className={styles.control}>
             {emoting && <Emotes toggle={this.toggleEmoting}/>}
             {!emoting &&
               <Bids 
                 emoteToggle={this.toggleEmoting} 
-                bid={bid}
+                bid={
+                  bid
+                }
                 changeBid={this.handleBidChange}
                 phase={phase}
               />}
@@ -166,32 +172,54 @@ class Emotes extends PureComponent {
  
 class Bids extends PureComponent {
 
+  state = {
+    bid: 0
+  };
+
   static propTypes = {
     toggle: PropTypes.func,
-    changeBid: PropTypes.func.isRequired,
-    bid: PropTypes.number.isRequired,
+    minBid: PropTypes.number.isRequired,
+    maxBid: PropTypes.number.isRequired,
     phase: PropTypes.number,
-    emoteToggle: PropTypes.func
+    emoteToggle: PropTypes.func,
+    postMove: PropTypes.func.isRequired
+  };
+
+  componentDidMount() {
+    this.setState({ bid: this.props.minBid });
+  }
+
+  handleIncrement = () => {
+    this.setState(({ bid }) => ({ bid: bid + 1 }));
+  };
+
+  handleDecrement = () => {
+    this.setState(({ bid }) => ({ bid: bid - 1 }));
+  };
+
+  handleBid = () => {
+    this.props.postMove(this.state);
   };
 
   render() { 
-    const { toggle, bid, changeBid, phase, emoteToggle } = this.props;
+    const { toggle, minBid, maxBid, phase, emoteToggle } = this.props;
+    const { bid } = this.state;
 
     switch(phase) {
       case 1:
         return (
           <div className="bids">
             <i onClick={toggle} className="fas fa-times"></i>
-            {bid <= 1 ? 
+            {bid <= minBid ? 
               <i className="fa fa-minus"></i>
-              : <i className="fa fa-minus" onClick={() => changeBid(-1)}></i>
+              : <i className="fa fa-minus" onClick={this.handleDecrement}></i>
             }
             <p>{bid}</p>
-            {bid >= 8 ?
+            {bid >= maxBid ?
               <i className="fa fa-plus"></i>
-              : <i className="fa fa-plus" onClick={() => changeBid(+1)}></i>
+              : <i className="fa fa-plus" onClick={this.handleIncrement}></i>
             }
-            <button>Bid</button>
+            <button onClick={this.handleBid}>Bid</button>
           </div>
         );
       case 2:
