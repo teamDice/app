@@ -24,8 +24,8 @@ class Control extends PureComponent {
   componentDidUpdate() {
     const { bidding } = this.state;
     const { game } = this.props;
-    if(bidding || game.phase !== 2) return;
-    this.setState({ bidding: true });
+    if(!bidding && game.phase === 2) this.setState({ bidding: true });
+    
   }
 
   toggleEmoting = () => {
