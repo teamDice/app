@@ -25,7 +25,6 @@ class Game extends PureComponent {
     startGame(gameKey);
     loadHand();
 
-    db.ref('startTimerRequest').set(true);
   }
 
   postMove = move => {

@@ -13,12 +13,12 @@ const movesRef = db.ref('moves');
 const handsRef = db.ref('hands');
 const timerRef = db.ref('timer');
 
-db.remove();
 
 // TURN TIMER SET TO 5 SECONDS
 timerRef.child('timeInMs').set(5000);
 
-exports.myCloudTimer = functions.database.ref('/startTimerRequest/').onCreate((snapshot, context) => {
+exports.myCloudTimer = functions.database.ref('/startTimerRequest/{gameId}').onCreate((snapshot, context) => {
+  const { gameId } = context.params;
   return db.ref('timer/timeInMs').once('value', snap => {
       if (!snap.exists()) {
           return Promise.reject(Error('time is not defined in the database.'));
@@ -29,7 +29,7 @@ exports.myCloudTimer = functions.database.ref('/startTimerRequest/').onCreate((s
 
       return functionTimer(timeInSeconds,
           elapsedTime => {
-              db.ref('cloudTimer/observableTime').set(elapsedTime);
+              db.ref('cloudTimer').child(gameId).set(elapsedTime);
           })
           .then(totalTime => {
               console.log('Timer of ' + totalTime + ' has finished.');
@@ -97,7 +97,6 @@ const createNewGame = (users, queue) => {
 
   return {
     players,
-    turn: players[0].userId,
     phase: 0,
     challenger: null
   };
@@ -215,9 +214,17 @@ exports.playerQueue4 = functions.database.ref('/queue4/{uid}').onCreate((snapsho
     });
 });
 
+
+// USERS POSTING MOVES
 exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, context) => {
   const { uid } = context.params;
   const move = snapshot.val();
+  const { gameId } = move;
+
+
+  db.ref('startTimerRequest').child(gameId).remove();
+  db.ref('timer').child(gameId).remove();
+
   const userMoveRef = snapshot.ref.parent;
   const playerHandRef = handsRef.child(uid).child('hand');
 
@@ -274,7 +281,13 @@ exports.moveToPhase1 = functions.database.ref('/games/{gameId}').onCreate((snaps
   const { gameId } = context.params;
 
   setTimeout(() => {
-    return gamesRef.child(gameId).child('phase').set(1);
+    return gamesRef.child(gameId).once('value').then(snapshot => {
+      const { players } = snapshot.val();
+      return Promise.all([
+        gamesRef.child(gameId).child('phase').set(1),
+        gamesRef.child(gameId).child('turn').set(players[0].userId)
+      ]);
+    });
   }, 5000);
 });
 
@@ -309,4 +322,16 @@ exports.updateGame = functions.database.ref('/hands/{uid}').onUpdate((change, co
     }
     return null;
   });
+});
+
+
+// ON TURN CHANGE, START A TURN TIMER
+exports.firstTurnTimer = functions.database.ref('/games/{gameId}/turn').onCreate((snapshot, context) => {
+  const { gameId } = context.params;
+  return db.ref('startTimerRequest').set({ [gameId]: true });
+});
+
+exports.turnTimer = functions.database.ref('/games/{gameId}/turn').onUpdate((snapshot, context) => {
+  const { gameId } = context.params;
+  return db.ref('startTimerRequest').set({ [gameId]: true });
 });
