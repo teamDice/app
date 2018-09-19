@@ -22,7 +22,7 @@ class Game extends PureComponent {
         {
           players &&
             players.map(player => (
-              <Player key={player.id} player={player}/>
+              <Player key={player.userId} player={player}/>
             ))
         }
         

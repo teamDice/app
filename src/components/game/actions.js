@@ -38,17 +38,10 @@ export const loadHand = () => {
   };
 };
 
-// export const clearAllEmotes = gameKey => {
+export const clearEmotes = gameKey => {
+  gamesRef.child(gameKey).child('phase').set(1);
 
-//   return (dispatch, getState) => {
-//     gamesRef.child(gameKey).on('value', snapshot => {
-//       const game = snapshot.val();
-//       game.players.map(player => player.child(emote).remove());
-//     });
-//   };
-
-//   // { type: EMOTE_CLEAR_ALL }
-// };
+};
 
 
 // export const clearEmote = () => ({ type: EMOTE_CLEAR });
