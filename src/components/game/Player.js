@@ -23,7 +23,7 @@ class Player extends PureComponent {
 
     return (
       <section className={styles.player}>
-        <Avatar/>
+        <Avatar avatar={player.avatar}/>
         <h2>{emote}</h2>
         <h2>{name}</h2>
         <div className="hand">
