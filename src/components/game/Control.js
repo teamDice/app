@@ -46,7 +46,6 @@ class Control extends PureComponent {
     const { phase, turn, players, challenger } = game;
     const uid = user.profile._id;
     
-    const isChallenger = challenger === uid;
     const isTurn = turn === uid;
     
     return (
@@ -58,8 +57,8 @@ class Control extends PureComponent {
             <button onClick={this.toggleEmoting}>Emote</button>
             {phase > 2
               ? <section>
-                {isChallenger &&
-                  <p>Flip {game.challenger.bid} squirrels!</p>
+                {challenger.userId === uid &&
+                  <p>Flip {challenger.bid} squirrels!</p>
                 }
               </section>
               : <Fragment>
@@ -72,7 +71,7 @@ class Control extends PureComponent {
                     postMove={postMove}
                   />
                   : <Fragment>
-                    {phase === 1 && !bidding && isTurn && hand.filter(card => card.order > 0).length && <button onClick={this.toggleBidding}>Bid</button>}
+                    {phase === 1 && !bidding && isTurn && hand.filter(card => card.order > 0).length > 0 && <button onClick={this.toggleBidding}>Bid</button>}
                     <div className="hand">
                       {hand
                         .filter(card => card.order === 0)
