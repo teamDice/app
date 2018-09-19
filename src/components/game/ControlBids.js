@@ -50,7 +50,7 @@ class Bids extends PureComponent {
    
     return (
       <div className="bids">
-        <i onClick={toggle} className="fas fa-times"></i>
+        {phase === 1 && <i onClick={toggle} className="fas fa-times"></i>}
         {phase === 2 && <button>PASS</button>}
         {bid > minBid && <i className="fa fa-minus" onClick={this.handleDecrement}></i>}
         <p>{bid}</p>

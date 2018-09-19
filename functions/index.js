@@ -227,7 +227,7 @@ exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, conte
     .then(snapshot => {
       const game = snapshot.val();
       // Prevent out of turn Plays
-      if(game.turn !== uid) return null;
+      if(game.turn !== uid) return userMoveRef.child(uid).remove();
 
       // Clear timers
       db.ref('startTimerRequest').child(gameId).remove();
@@ -276,7 +276,7 @@ exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, conte
 
         return Promise.all([
           gamesRef.child(gameId).set(game),
-          userMoveRef.remove()
+          userMoveRef.child(uid).remove()
         ]);
 
       }
