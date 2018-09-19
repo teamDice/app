@@ -19,12 +19,12 @@ class Player extends PureComponent {
 
   render() {
     const { player } = this.props;
-    const { hand, played, name, emote } = player;
+    const { hand, played, name } = player;
 
     return (
       <section className={styles.player}>
         <Avatar/>
-        <h2>{emote}</h2>
+        {/* <h2>{emote}</h2> */}
         <h2>{name}</h2>
         <div className="hand">
           {[...Array(hand)].map((card, i) => (
