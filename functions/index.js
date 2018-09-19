@@ -41,7 +41,6 @@ const createNewGame = (users, queue) => {
       avatar: queue[user].avatar,
       wins: 0,
       hand: 4,
-      played: 0,
       bid: null
     };
   });
@@ -169,14 +168,12 @@ exports.playerQueue4 = functions.database.ref('/queue4/{uid}').onCreate((snapsho
 exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, context) => {
   const { uid } = context.params;
   const move = snapshot.val();
-  console.log('***MOVE***', move);
   const userMoveRef = snapshot.ref.parent;
   const playerHandRef = handsRef.child(uid).child('hand');
 
   return playerHandRef.once('value').then(snapshot => {
     const hand = snapshot.val();
     const card = hand.find(card => card.type === move.type && card.order === 0);
-    console.log('***CARD***', card);
     if(card) card.order = 1 + hand.filter(card => card.order > 0).length;
 
     return Promise.all([
@@ -188,22 +185,36 @@ exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, conte
 
 
 
-exports.updateHand = functions.database.ref('/hands/{uid}/move').onCreate((snapshot, context) => {
+exports.updateGame = functions.database.ref('/hands/{uid}').onUpdate((change, context) => {
   const { uid } = context.params;
-  const playerHandRef = handsRef.child(uid);
+  const userState = change.after.val();
+  console.log('*** STATE ***', userState);
+  const { gameId, hand } = userState;
+  console.log(gameId, hand);
+  const playedCard = hand.sort((a, b) => b.order - a.order)[0];
 
-  return playerHandRef.once('value').then(snapshot => {
-    const state = snapshot.val();
-    const { move, hand, gameId } = state;
 
-    const card = hand.find(card => card.type = move);
+  return gamesRef.child(gameId).once('value').then(snapshot => {
+    const game = snapshot.val();
+    if(game) {
+      const { players } = game;
+      const currentPlayer = players.find(player => player.userId === uid);
 
-    card.order = 1 + hand.filter(card => card.order > 0).length;
+      if(currentPlayer) {
+        let played = currentPlayer.played;
+        if(played) played.push(playedCard);
+        else currentPlayer.played = [playedCard];
+        currentPlayer.hand = hand.length - currentPlayer.played.length;
+      }
 
-    return Promise.all([
-      playerHandRef.child(hand).set(hand),
-      playerHandRef.child(move).remove()
-    ]);
+      const nextPlayerIndex = (players.indexOf(currentPlayer) + 1) % players.length;
+      game.turn = players[nextPlayerIndex].userId;
+
+      return Promise.all([
+        gamesRef.child(gameId).set(game),
+      ]);
+    }
+    return null;
   });
 });
 
