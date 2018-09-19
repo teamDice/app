@@ -280,6 +280,16 @@ exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, conte
         ]);
 
       }
+
+      if(move.order) {
+        return handsRef.child(move.playerId).child('hand').once('value').then(snapshot => {
+          const hand = snapshot.val();
+          const card = hand.find(card => card.order === move.order);
+          card.selected = true;
+
+          return handsRef.child(move.playerId).child('hand').set(hand);
+        });
+      }
       return null;
     });
   });
