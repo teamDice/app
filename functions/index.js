@@ -32,10 +32,13 @@ const hand = [
   { type: 0, order: 0 }
 ];
 
-const createNewGame = users => {
+const createNewGame = (users, queue) => {
   const players = users.map(user => {
     return {
       userId: user,
+      name: queue[user].name,
+      emote: queue[user].greeting,
+      avatar: queue[user].avatar,
       wins: 0,
       hand: 4,
       played: 0,
@@ -57,15 +60,16 @@ exports.playerQueue2 = functions.database.ref('/queue2/{uid}').onCreate((snapsho
 
   return queue2Ref.once('value')
     .then(snapshot => {
-      if(Object.keys(snapshot.val()) < 2) return null;
+      const queue = snapshot.val();
+      if(Object.keys(queue) < 2) return null;
 
-      const [opponent] = Object.keys(snapshot.val())
+      const [opponent] = Object.keys(queue)
         .filter(key => key !== uid);
 
       const newGameRef = gamesRef.push();
 
       const players = shuffle([uid, opponent]);
-      const newGame = createNewGame(players);
+      const newGame = createNewGame(players, queue);
 
       const gameId = newGameRef.key;
       const startingState = { gameId, hand };
@@ -89,15 +93,19 @@ exports.playerQueue3 = functions.database.ref('/queue3/{uid}').onCreate((snapsho
 
   return queue3Ref.once('value')
     .then(snapshot => {
-      if(Object.keys(snapshot.val()) < 3) return null;
+      const queue = snapshot.val();
+      if(Object.keys(queue) < 3) return null;
 
-      const [opponent1, opponent2] = Object.keys(snapshot.val())
+      const [opponent1, opponent2] = Object.keys(queue)
         .filter(key => key !== uid);
 
         const newGameRef = gamesRef.push();
 
         const players = shuffle([uid, opponent1, opponent2]);
-        const newGame = createNewGame(players);
+        const newGame = createNewGame(players, queue);
+
+        const gameId = newGameRef.key;
+        const startingState = { gameId, hand };
 
         return Promise.all([
           newGameRef.set(newGame),
@@ -122,15 +130,19 @@ exports.playerQueue4 = functions.database.ref('/queue4/{uid}').onCreate((snapsho
 
   return queue4Ref.once('value')
     .then(snapshot => {
-      if(Object.keys(snapshot.val()) < 4) return null;
+      const queue = snapshot.val();
+      if(Object.keys(queue) < 4) return null;
 
-      const [opponent1, opponent2, opponent3] = Object.keys(snapshot.val())
+      const [opponent1, opponent2, opponent3] = Object.keys(queue)
         .filter(key => key !== uid);
 
       const newGameRef = gamesRef.push();
 
       const players = shuffle([uid, opponent1, opponent2, opponent3]);
-      const newGame = createNewGame(players);
+      const newGame = createNewGame(players, queue);
+
+      const gameId = newGameRef.key;
+      const startingState = { gameId, hand };
 
       return Promise.all([
         newGameRef.set(newGame),
@@ -152,6 +164,25 @@ exports.playerQueue4 = functions.database.ref('/queue4/{uid}').onCreate((snapsho
         handsRef.child(opponent3).set(startingState)
       ]);
     });
+});
+
+exports.updateHand = functions.database.ref('/hands/{uid}/move').onCreate((snapshot, context) => {
+  const { uid } = context.params;
+  const playerHandRef = handsRef.child(uid);
+  
+  return playerHandRef.once('value').then(snapshot => {
+    const state = snapshot.val();
+    const { move, hand, gameId } = state;
+
+    const card = hand.find(card => card.type = move);
+
+    card.order = 1 + hand.filter(card => card.order > 0).length;
+
+    return Promise.all([
+      playerHandRef.child(hand).set(hand),
+      playerHandRef.child(move).remove()
+    ]);
+  });
 });
 
 // exports.moveQueue = functions.database.ref('/moves/{gameKey}/{uid}').onCreate((snapshot, context) => {

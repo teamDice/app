@@ -1,4 +1,4 @@
-import { GAME_START, GAME_END, CARD_PLAY, HAND_START, getGame } from './reducers';
+import { GAME_START, GAME_END, CARD_PLAY, HAND_START, EMOTE_CLEAR_ALL, getGame } from './reducers';
 import { getUser } from '../auth/reducers';
 import { gamesRef, handsRef } from '../../services/firebaseRef';
 
@@ -10,6 +10,7 @@ export const startGame = gameKey => {
       const game = snapshot.val();
       game.key = gameKey;
 
+      
       dispatch({
         type: GAME_START,
         payload: game
@@ -37,3 +38,10 @@ export const loadHand = () => {
   };
 };
 
+export const clearEmotes = gameKey => {
+  gamesRef.child(gameKey).child('phase').set(1);
+
+};
+
+
+// export const clearEmote = () => ({ type: EMOTE_CLEAR });

@@ -10,15 +10,22 @@ class Player extends PureComponent {
     player: PropTypes.object.isRequired
   };
 
+  // componentDidMount() {
+  //   setTimeout(() => {
+  //     clearEmote();
+  //   }, 5000);
+
+  // }
 
   render() {
     const { player } = this.props;
-    const { hand, played } = player;
+    const { hand, played, name, emote } = player;
 
     return (
       <section className={styles.player}>
         <Avatar/>
-        <h2>User name</h2>
+        <h2>{emote}</h2>
+        <h2>{name}</h2>
         <div className="hand">
           {[...Array(hand)].map((card, i) => (
             <Card key={i} card={card}/>
