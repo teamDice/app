@@ -48,8 +48,6 @@ export class Lobby extends Component {
       <div className={styles.lobby}>
         <QueueForm onClick={requestGame}/>
         <Chatroom user={user}/>
-        {/* <PlayerDisplay/> */}
-        {/* {user && <button onClick={requestGame}>PLAY GORTS</button>} */}
       </div>
     );
   }

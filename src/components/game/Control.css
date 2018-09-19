@@ -8,18 +8,15 @@
   bottom: 0;
   width: 100%;
   height: 100px;
-
-  div {
-    flex-direction: row;
-  }
   
   button {
     border: 1px solid black;
     height: 40px;
   }
 
-  img {
+  div {
     cursor: pointer;
+    display: inline;
   }
 
   i {
