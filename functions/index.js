@@ -166,10 +166,32 @@ exports.playerQueue4 = functions.database.ref('/queue4/{uid}').onCreate((snapsho
     });
 });
 
+exports.moves = functions.database.ref('/moves/{uid}').onCreate((snapshot, context) => {
+  const { uid } = context.params;
+  const move = snapshot.val();
+  console.log('***MOVE***', move);
+  const userMoveRef = snapshot.ref.parent;
+  const playerHandRef = handsRef.child(uid).child('hand');
+
+  return playerHandRef.once('value').then(snapshot => {
+    const hand = snapshot.val();
+    const card = hand.find(card => card.type === move.type && card.order === 0);
+    console.log('***CARD***', card);
+    if(card) card.order = 1 + hand.filter(card => card.order > 0).length;
+
+    return Promise.all([
+      playerHandRef.set(hand),
+      userMoveRef.remove()
+    ]);
+  });
+});
+
+
+
 exports.updateHand = functions.database.ref('/hands/{uid}/move').onCreate((snapshot, context) => {
   const { uid } = context.params;
   const playerHandRef = handsRef.child(uid);
-  
+
   return playerHandRef.once('value').then(snapshot => {
     const state = snapshot.val();
     const { move, hand, gameId } = state;
