@@ -27,9 +27,7 @@ class Player extends PureComponent {
         {/* <h2>{emote}</h2> */}
         <h2>{name}</h2>
         <div className="hand">
-          {[...Array(hand)].map((card, i) => (
-            <Card key={i} card={card}/>
-          ))}
+          <Card cards={player.hand}/>
         </div>
         {played && 
           <div className="played">
