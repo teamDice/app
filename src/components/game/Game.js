@@ -24,7 +24,6 @@ class Game extends PureComponent {
 
   render() { 
     const { game, hand } = this.props;
-
     return (
       <section>
         {game && hand &&

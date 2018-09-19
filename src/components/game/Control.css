@@ -36,4 +36,10 @@
     justify-content: space-around;
     font-size: 3em;
   }
+
+  .disabled {
+    opacity: 0.6;
+    filter: grayscale(100%);
+  }
+  
 }
