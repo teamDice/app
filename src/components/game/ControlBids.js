@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 class Bids extends PureComponent {
 
   state = {
-    minBid: null
+    minBid: null,
     bid: 0,
     maxBid: null
   };
