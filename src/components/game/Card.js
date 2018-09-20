@@ -12,7 +12,8 @@ class Card extends PureComponent {
     postMove: PropTypes.func,
     setProcessing: PropTypes.func,
     order: PropTypes.number,
-    playerId: PropTypes.string
+    playerId: PropTypes.string,
+    isLastCard: PropTypes.bool
   };
 
   handleClick = () => {
@@ -25,12 +26,12 @@ class Card extends PureComponent {
   };
 
   render() { 
-    const { card, cards, postMove } = this.props;
+    const { card, postMove, isLastCard } = this.props;
     return (
       <div className={styles.card}>
 
         
-        <img onClick={postMove ? this.handleClick : null} src={
+        <img className={isLastCard ? 'clickable' : null} onClick={postMove && isLastCard ? this.handleClick : null} src={
           card.type > -1
             ? card.type === 1
               ? squirrel

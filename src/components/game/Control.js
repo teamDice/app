@@ -78,7 +78,7 @@ class Control extends PureComponent {
                         .filter(card => card.order === 0 && !card.removed)
                         .map((card, i) => (
                           <Card 
-                            
+                            isLastCard={true}
                             key={i} 
                             card={card}
                             postMove={isTurn ? postCard : null}
