@@ -6,7 +6,6 @@ import { startGame, loadHand, clearEmotes, endGame } from './actions';
 import { getGame, getHand } from './reducers';
 import { getUser } from '../auth/reducers';
 import { db } from '../../services/firebase';
-import { movesRef } from '../../services/firebaseRef';
 
 class Game extends PureComponent {
 
@@ -27,11 +26,31 @@ class Game extends PureComponent {
 
   }
 
-  postMove = move => {
+  postCard = move => {
     const { user, match } = this.props;
     const { gameKey } = match.params;
     
-    movesRef.child(user.profile._id).set({
+    db.ref('cardMove').child(user.profile._id).set({
+      gameId: gameKey,
+      ...move
+    });
+  };
+
+  postBid = move => {
+    const { user, match } = this.props;
+    const { gameKey } = match.params;
+    
+    db.ref('bidMove').child(user.profile._id).set({
+      gameId: gameKey,
+      ...move
+    });
+  };
+
+  postFlip = move => {
+    const { user, match } = this.props;
+    const { gameKey } = match.params;
+    
+    db.ref('flipMove').child(user.profile._id).set({
       gameId: gameKey,
       ...move
     });
@@ -46,7 +65,9 @@ class Game extends PureComponent {
           <GameDisplay
             game={game}
             hand={hand}
-            postMove={this.postMove}
+            postCard={this.postCard}
+            postBid={this.postBid}
+            postFlip={this.postFlip}
           />
         }
       </section>

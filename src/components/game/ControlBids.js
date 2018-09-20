@@ -14,15 +14,15 @@ class Bids extends PureComponent {
     toggle: PropTypes.func,
     players: PropTypes.array.isRequired,
     phase: PropTypes.number.isRequired,
-    postMove: PropTypes.func.isRequired
+    postBid: PropTypes.func.isRequired,
+    challenger: PropTypes.object
   };
 
   componentDidMount() {
-    const { players, phase } = this.props;
+    const { players, phase, challenger } = this.props;
     if(players) {
-      const previousBid = Math.max(...players.map(player => player.bid));
       const totalPlayed = players.reduce(((acc, cur) => acc + cur.played.length), 0);
-      const startingBid = phase === 1 ? 1 : previousBid + 1;
+      const startingBid = phase === 1 ? 1 : challenger.bid + 1;
       this.setState({
         minBid: startingBid,
         bid: startingBid,
@@ -41,7 +41,7 @@ class Bids extends PureComponent {
   };
 
   handleBid = () => {
-    this.props.postMove(this.state);
+    this.props.postBid(this.state);
   };
 
   render() { 
@@ -50,7 +50,7 @@ class Bids extends PureComponent {
    
     return (
       <div className="bids">
-        <i onClick={toggle} className="fas fa-times"></i>
+        {phase === 1 && <i onClick={toggle} className="fas fa-times"></i>}
         {phase === 2 && <button>PASS</button>}
         {bid > minBid && <i className="fa fa-minus" onClick={this.handleDecrement}></i>}
         <p>{bid}</p>

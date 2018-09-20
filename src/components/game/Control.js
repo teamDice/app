@@ -18,7 +18,8 @@ class Control extends PureComponent {
     game: PropTypes.object.isRequired,
     hand: PropTypes.array.isRequired,
     user: PropTypes.object,
-    postMove: PropTypes.func
+    postCard: PropTypes.func,
+    postBid: PropTypes.func
   };
 
   componentDidUpdate() {
@@ -42,43 +43,11 @@ class Control extends PureComponent {
 
   render() { 
     const { emoting, bidding, processing } = this.state;
-    const { hand, game, user, postMove } = this.props;
-    const { phase, turn, players } = game;
+    const { hand, game, user, postCard, postBid } = this.props;
+    const { phase, turn, players, challenger } = game;
     const uid = user.profile._id;
     
-    const isChallenger = game.challenger === uid;
     const isTurn = turn === uid;
-
-    // if(user.profile._id !== turn) {
-    //   return (
-    //     <section className={styles.control}>
-    //       {emoting && <Emotes toggle={this.toggleEmoting}/>}
-    //       {!emoting &&
-    //       <Fragment>
-    //         <div>
-    //           <button onClick={this.toggleEmoting}>Emote</button>
-    //         </div>
-    //         <div className="disabled">
-    //           {hand.filter(card => card.order === 0).map((card, i) => (
-    //             <Card key={i} card={card}/>
-    //           ))}
-    //         </div>
-    //       </Fragment>
-    //       }
-    //     </section>
-    //   );
-    // }
-
-    if(phase === 3) {
-      return (
-        <section className={styles.control}>
-          {emoting && <Emotes toggle={this.toggleEmoting}/>}
-          {!emoting && isChallenger &&
-            <p>Flip {game.challenger.bid} squirrels!</p>
-          }
-        </section>
-      );
-    }
     
     return (
       <section className={styles.control}>
@@ -89,8 +58,8 @@ class Control extends PureComponent {
             <button onClick={this.toggleEmoting}>Emote</button>
             {phase > 2
               ? <section>
-                {isChallenger &&
-                  <p>Flip {game.challenger.bid} squirrels!</p>
+                {challenger.userId === uid &&
+                  <p>Flip {challenger.bid} squirrels!</p>
                 }
               </section>
               : <Fragment>
@@ -98,11 +67,12 @@ class Control extends PureComponent {
                   ? <Bids 
                     toggle={this.toggleBidding}
                     players={players}
+                    challenger={challenger}
                     phase={phase}
-                    postMove={postMove}
+                    postBid={postBid}
                   />
                   : <Fragment>
-                    {phase === 1 && !bidding && isTurn && <button onClick={this.toggleBidding}>Bid</button>}
+                    {phase === 1 && !bidding && isTurn && hand.filter(card => card.order > 0).length > 0 && <button onClick={this.toggleBidding}>Bid</button>}
                     <div className="hand">
                       {hand
                         .filter(card => card.order === 0)
@@ -111,7 +81,7 @@ class Control extends PureComponent {
                             className={isTurn ? null : 'disabled'} 
                             key={i} 
                             card={card}
-                            postMove={postMove}
+                            postMove={postCard}
                             setProcessing={this.toggleProcessing}
                           />
                         ))

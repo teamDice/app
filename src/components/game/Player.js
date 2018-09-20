@@ -9,6 +9,8 @@ class Player extends PureComponent {
   static propTypes = {
     player: PropTypes.object.isRequired,
     turn: PropTypes.string,
+    phase: PropTypes.number,
+    postFlip: PropTypes.func
   };
 
   // componentDidMount() {
@@ -19,15 +21,12 @@ class Player extends PureComponent {
   // }
 
   render() {
-    const { player, turn } = this.props;
+    const { player, turn, phase, postFlip } = this.props;
     const { hand, played, name } = player;
 
     return (
       <section className={styles.player} 
-      
         style={{ backgroundColor: turn === player.userId ? '#ff0000' : null }}
-      
-      
       >
         <Avatar/>
         {/* <h2>{emote}</h2> */}
@@ -37,8 +36,8 @@ class Player extends PureComponent {
         </div>
         {played && 
           <div className="played">
-            {[...Array(played.length)].map((card, i) => (
-              <Card key={i}/>
+            {played.map((card, i) => (
+              <Card key={i} card={card} postMove={phase === 3 ? postFlip : null} playerId={player.userId}/>
             ))}
           </div>
         }

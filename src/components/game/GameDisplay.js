@@ -11,26 +11,35 @@ class Game extends PureComponent {
   static propTypes = {
     hand: PropTypes.array.isRequired,
     game: PropTypes.object.isRequired,
-    postMove: PropTypes.func.isRequired
+    postCard: PropTypes.func.isRequired,
+    postBid: PropTypes.func.isRequired,
+    postFlip: PropTypes.func.isRequired
   };
 
   render() { 
-    const { game, hand, postMove } = this.props;
-    const { players, turn } = game;
+    const { game, hand, postCard, postBid, postFlip } = this.props;
+    const { players, turn, phase } = game;
 
     return (
       <section>
         {
           players &&
             players.map(player => (
-              <Player key={player.userId} player={player} turn={turn}/>
+              <Player
+                key={player.userId}
+                player={player}
+                turn={turn}
+                phase={phase}
+                postFlip={postFlip}
+              />
             ))
         }
         
         <Control 
           hand={hand}
           game={game} 
-          postMove={postMove}
+          postCard={postCard}
+          postBid={postBid}
         />
       </section>
     );
