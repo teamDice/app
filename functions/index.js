@@ -13,8 +13,8 @@ const handsRef = db.ref('hands');
 const timerRef = db.ref('timer');
 
 
-// TURN TIMER SET TO 5 SECONDS
-timerRef.child('timeInMs').set(5000);
+// TURN TIMER SET TO 10 SECONDS
+timerRef.child('timeInMs').set(10000);
 
 exports.myCloudTimer = functions.database.ref('/startTimerRequest/{gameId}').onCreate((snapshot, context) => {
   const { gameId } = context.params;
@@ -325,11 +325,9 @@ exports.flipMove = functions.database.ref('/flipMove/{uid}').onCreate((snapshot,
       const player = game.players.find(player => player.userId === move.playerId);
       const selectedCard = player.played.find(card => card.order === move.order);
 
-      console.log('** SELECTED **', selectedCard);
 
       selectedCard.type = type;
-      player.bid--;
-      game.challenger.bid--;
+      
 
       return Promise.all([
         gamesRef.child(gameId).set(game),
@@ -338,16 +336,49 @@ exports.flipMove = functions.database.ref('/flipMove/{uid}').onCreate((snapshot,
     });
 });
 
-  
-     
+exports.evaluateFlip = functions.database.ref('/games/{gameId}/players/{playerIndex}/played/{cardIndex}/type').onCreate((snapshot, context) => {
+  const { gameId, playerIndex, cardIndex } = context.params;
+
+  const type = snapshot.val();
+  let game, currentPlayer, currentPlayerHandRef;
+  return gamesRef.child(gameId).once('value')
+    .then(snapshot => {
+      game = snapshot.val();
+      const { players, challenger } = game;
+      currentPlayer = players.find(player => player.userId === challenger.userId);
+      currentPlayerHandRef = handsRef.child(currentPlayer.userId).child('hand');
+      return currentPlayerHandRef.once('value');
+    })
+    .then(snapshot => {
+      const hand = snapshot.val();
+
+      if(type === 1) {
+        currentPlayer.bid--;
+        game.challenger.bid = currentPlayer.bid;
+
+        if(currentPlayer.bid === 0) currentPlayer.wins++;
+        return gamesRef.child(gameId).set(game);
+      }
+
+      if(type === 0) {
+        delete hand[Math.floor(Math.random() * hand.length)];
+        return currentPlayerHandRef.set(hand);
+      }
+
+      return null;
+    });
+
       
       
+});
 
 
-      
   
-          
+
   
+
+
+
 
 exports.moveToPhase1 = functions.database.ref('/games/{gameId}').onCreate((snapshot, context) => {
   const { gameId } = context.params;
@@ -361,7 +392,7 @@ exports.moveToPhase1 = functions.database.ref('/games/{gameId}').onCreate((snaps
         gamesRef.child(gameId).child('turn').set(firstPlayer)
       ]);
     });
-  }, 5000);
+  }, 3000);
 });
 
 
@@ -369,6 +400,11 @@ exports.moveToPhase1 = functions.database.ref('/games/{gameId}').onCreate((snaps
 exports.updateGame = functions.database.ref('/hands/{uid}').onUpdate((change, context) => {
   const { uid } = context.params;
   const userState = change.after.val();
+
+  const previousState = change.before.val();
+
+  if(userState.hand.length !== previousState.hand.length) return null;
+
   const { gameId, hand } = userState;
   const playedCard = hand.sort((a, b) => b.order - a.order)[0];
   delete playedCard.type;
