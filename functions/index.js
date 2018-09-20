@@ -10,7 +10,7 @@ const queue4Ref = db.ref('queue4');
 
 const gamesRef = db.ref('games');
 const handsRef = db.ref('hands');
-const timerRef = db.ref('timer');
+const stackRef = db.ref('stack');
 
 
 // TURN TIMER SET TO 10 SECONDS
@@ -390,6 +390,7 @@ exports.onWin = functions.database.ref('/games/{gameId}/players/{playerIndex}/wi
       if(wins === 2) {
         game.winner = game.challenger.userId;
         game.phase = 4;
+
       }
       else {
         game.phase = 1;
@@ -399,13 +400,25 @@ exports.onWin = functions.database.ref('/games/{gameId}/players/{playerIndex}/wi
           player.bid = 0;
         });
         game.challenger = null;
+
       }
+      
       return gamesRef.child(gameId).set(game);
     });
 });
   
+// exports.endGame = functions.database.ref('/stack/{gameId}/endGame').onCreate((snapshot, context) => {
+//   const { gameId } = context.params;
 
-  
+//   return gamesRef(gameId).child('players').once('value')
+//     .then(snapshot => {
+//       const players = snapshot.val().map(player => player.userId);
+
+//       return players.forEach(playerId => {
+//         return handsRef.child(playerId).remove();
+//       });
+//     });
+// });
 
 
 
