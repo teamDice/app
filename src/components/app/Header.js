@@ -22,17 +22,18 @@ class Header extends Component {
     return (
       <header className={styles.header}>
         <section>
-          {user && <span>Logged in as {user.profile.name}</span>}
-          <h1><NavLink exact to="/">Snakes & Squirrels</NavLink></h1>
+          {/* <h1>Snakes & Squirrels</h1> */}
           <nav>
             <ul>
+              <li>
+                <NavLink exact to="/">
+                  <i className="fas fa-home"></i>
+                </NavLink>
+              </li>
               { user &&
                 <li>
-                  <NavLink
-                    activeStyle={{ borderBottom: '2px solid black' }}
-                    exact to="/lobby"
-                  >
-                    Play
+                  <NavLink exact to="/lobby">
+                    <i className="fas fa-home">Play</i>
                   </NavLink>
                 </li>
               }
@@ -41,7 +42,7 @@ class Header extends Component {
                   activeStyle={{ borderBottom: '2px solid black' }}
                   exact to="/leaderboard"
                 >
-                  Leaderboard
+                  <i className="fas fa-list-ol"></i>
                 </NavLink>
               </li>
               <li>
@@ -49,13 +50,13 @@ class Header extends Component {
                   activeStyle={{ borderBottom: '2px solid black' }}
                   exact to="/profile"
                 >
-                  Profile
+                  <i className="fas fa-user"></i>
                 </NavLink>
               </li>
               <li>
                 { user
-                  ? <NavLink to="/" onClick={logout}>Logout</NavLink>
-                  : <NavLink to="/auth">Login</NavLink>
+                  ? <NavLink to="/" onClick={logout}><i className="fas fa-sign-out-alt"></i></NavLink>
+                  : <NavLink to="/auth"><i className="fas fa-sign-in-alt"></i></NavLink>
                 }
               </li>
             </ul>
