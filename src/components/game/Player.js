@@ -22,13 +22,13 @@ class Player extends PureComponent {
 
   render() {
     const { player, turn, phase, postFlip } = this.props;
-    const { hand, played, name } = player;
+    const { hand, played, name, avatar, bid } = player;
 
     return (
       <section className={styles.player} 
         style={{ backgroundColor: turn === player.userId ? '#ff0000' : null }}
       >
-        <Avatar/>
+        <Avatar avatar={avatar} bid={bid}/>
         {/* <h2>{emote}</h2> */}
         <h2>{name}</h2>
         <div className="hand">
