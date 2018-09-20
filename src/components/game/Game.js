@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import GameDisplay from './GameDisplay';
-import { startGame, loadHand, clearEmotes, endGame } from './actions';
+import { startGame, loadHand, clearEmotes, endGame, unloadGame } from './actions';
 import { getGame, getHand } from './reducers';
 import { getUser } from '../auth/reducers';
 import { db } from '../../services/firebase';
@@ -11,7 +11,9 @@ class Game extends PureComponent {
 
   static propTypes = {
     match: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
     startGame: PropTypes.func.isRequired,
+    unloadGame: PropTypes.func.isRequired,
     loadHand: PropTypes.func.isRequired,
     game: PropTypes.object,
     hand: PropTypes.array,
@@ -23,9 +25,19 @@ class Game extends PureComponent {
     const { gameKey } = match.params;
     startGame(gameKey);
     loadHand();
+  }
 
+  componentDidUpdate() {
+    const { game, history } = this.props;
+    if(game !== null) return;
+    history.push({
+      pathname: '/lobby'
+    });
+  }
 
-
+  componentWillUnmount() {
+    const { match, unloadGame } = this.props;
+    unloadGame(match.params.gameKey);
   }
 
   // postEmote = emote => {
@@ -90,5 +102,5 @@ export default connect(
     hand: getHand(state),
     user: getUser(state)
   }),
-  { startGame, loadHand, endGame }
+  { startGame, loadHand, endGame, unloadGame }
 )(Game);
