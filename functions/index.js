@@ -397,11 +397,12 @@ exports.updateGame = functions.database.ref('/hands/{uid}/hand/{index}/order').o
   const { uid, index } = context.params;
   const order = change.after.val();
   if(order === 0 || !order) return null;
-  let gameId;
+  let gameId, hand;
   return handsRef.child(uid).once('value')
     .then(snapshot => {
       const state = snapshot.val();
       if(!state) return null;
+      hand = state.hand;
 
       gameId = state.gameId;
       return gamesRef.child(gameId).once('value');
