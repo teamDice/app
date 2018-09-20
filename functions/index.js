@@ -362,8 +362,9 @@ exports.evaluateFlip = functions.database.ref('/games/{gameId}/players/{playerIn
       }
 
       if(type === 0) {
-        delete hand[Math.floor(Math.random() * hand.length)];
-        return currentPlayerHandRef.set(hand);
+        const random = Math.floor(Math.random() * hand.length);
+        const newHand = hand.filter(card => hand[random] !== card);
+        return currentPlayerHandRef.set(newHand);
       }
 
       return null;
@@ -428,7 +429,7 @@ exports.updateGame = functions.database.ref('/hands/{uid}/hand/{index}/order').o
 
 });
 
-exports.snakeAttack = functions.database.ref('/hands/{uid}/hand/{index}').onDelete((snapshot, context) => {
+exports.snakeAttack = functions.database.ref('/hands/{uid}/hand/{index}/').onDelete((snapshot, context) => {
   const { uid } = context.params;
   const playerHandRef = snapshot.ref.parent.parent;
   let hand, gameId;
