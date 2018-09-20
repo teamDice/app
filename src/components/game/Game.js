@@ -78,12 +78,13 @@ class Game extends PureComponent {
 
 
   render() { 
-    const { game, hand } = this.props;
+    const { game, hand, user } = this.props;
     return (
       <section>
         {game && hand &&
           <GameDisplay
             game={game}
+            profile={user.profile}
             hand={hand}
             postCard={this.postCard}
             postBid={this.postBid}

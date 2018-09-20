@@ -11,8 +11,10 @@ class Player extends PureComponent {
   static propTypes = {
     player: PropTypes.object.isRequired,
     turn: PropTypes.string,
+    profile: PropTypes.object.isRequired,
     phase: PropTypes.number,
-    postFlip: PropTypes.func
+    postFlip: PropTypes.func,
+    challenger: PropTypes.object
   };
 
   // componentDidMount() {
@@ -24,8 +26,11 @@ class Player extends PureComponent {
   // }
 
   render() {
-    const { player, turn, phase, postFlip } = this.props;
+    const { player, turn, challenger, profile, phase, postFlip } = this.props;
+    const challengerId = challenger.userId;
     const { hand, played, name, avatar, bid } = player;
+    const notFlippedCards = played.filter(card => !card.type);
+    const lastCard = notFlippedCards[notFlippedCards.length - 1];
     // const order = played.map(card => card.order);
     // const highestOrder = Math.max(...order);
 
@@ -47,7 +52,12 @@ class Player extends PureComponent {
         {played && 
           <div className="played">
             {played.map((card, i) => (
-              <Card key={i} card={card} postMove={phase === 3 ? postFlip : null}  playerId={player.userId}/>
+              <Card
+                key={i}
+                card={card}
+                postMove={postFlip}
+                isLastCard={card === lastCard}
+                playerId={player.userId}/>
             ))}
           </div>
         }
