@@ -10,7 +10,7 @@ class Player extends PureComponent {
     player: PropTypes.object.isRequired,
     turn: PropTypes.string,
     phase: PropTypes.number,
-    postMove: PropTypes.func
+    postFlip: PropTypes.func
   };
 
   // componentDidMount() {
@@ -21,7 +21,7 @@ class Player extends PureComponent {
   // }
 
   render() {
-    const { player, turn, phase, postMove } = this.props;
+    const { player, turn, phase, postFlip } = this.props;
     const { hand, played, name } = player;
 
     return (
@@ -37,7 +37,7 @@ class Player extends PureComponent {
         {played && 
           <div className="played">
             {played.map((card, i) => (
-              <Card key={i} order={card.order} postMove={phase === 3 ? postMove : null} playerId={player.userId}/>
+              <Card key={i} order={card.order} postMove={phase === 3 ? postFlip : null} playerId={player.userId}/>
             ))}
           </div>
         }

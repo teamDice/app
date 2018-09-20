@@ -14,7 +14,7 @@ class Bids extends PureComponent {
     toggle: PropTypes.func,
     players: PropTypes.array.isRequired,
     phase: PropTypes.number.isRequired,
-    postMove: PropTypes.func.isRequired,
+    postBid: PropTypes.func.isRequired,
     challenger: PropTypes.object
   };
 
@@ -41,7 +41,7 @@ class Bids extends PureComponent {
   };
 
   handleBid = () => {
-    this.props.postMove(this.state);
+    this.props.postBid(this.state);
   };
 
   render() { 

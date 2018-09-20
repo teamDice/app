@@ -18,7 +18,8 @@ class Control extends PureComponent {
     game: PropTypes.object.isRequired,
     hand: PropTypes.array.isRequired,
     user: PropTypes.object,
-    postMove: PropTypes.func
+    postCard: PropTypes.func,
+    postBid: PropTypes.func
   };
 
   componentDidUpdate() {
@@ -42,7 +43,7 @@ class Control extends PureComponent {
 
   render() { 
     const { emoting, bidding, processing } = this.state;
-    const { hand, game, user, postMove } = this.props;
+    const { hand, game, user, postCard, postBid } = this.props;
     const { phase, turn, players, challenger } = game;
     const uid = user.profile._id;
     
@@ -68,7 +69,7 @@ class Control extends PureComponent {
                     players={players}
                     challenger={challenger}
                     phase={phase}
-                    postMove={postMove}
+                    postBid={postBid}
                   />
                   : <Fragment>
                     {phase === 1 && !bidding && isTurn && hand.filter(card => card.order > 0).length > 0 && <button onClick={this.toggleBidding}>Bid</button>}
@@ -80,7 +81,7 @@ class Control extends PureComponent {
                             className={isTurn ? null : 'disabled'} 
                             key={i} 
                             card={card}
-                            postMove={postMove}
+                            postMove={postCard}
                             setProcessing={this.toggleProcessing}
                           />
                         ))

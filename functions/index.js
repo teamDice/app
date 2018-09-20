@@ -9,7 +9,6 @@ const queue3Ref = db.ref('queue3');
 const queue4Ref = db.ref('queue4');
 
 const gamesRef = db.ref('games');
-const movesRef = db.ref('moves');
 const handsRef = db.ref('hands');
 const timerRef = db.ref('timer');
 
@@ -109,7 +108,7 @@ exports.playerQueue2 = functions.database.ref('/queue2/{uid}').onCreate((snapsho
   return queue2Ref.once('value')
     .then(snapshot => {
       const queue = snapshot.val();
-      if(Object.keys(queue) < 2) return null;
+      if(Object.keys(queue).length < 2) return null;
 
       const [opponent] = Object.keys(queue)
         .filter(key => key !== uid);
@@ -142,7 +141,7 @@ exports.playerQueue3 = functions.database.ref('/queue3/{uid}').onCreate((snapsho
   return queue3Ref.once('value')
     .then(snapshot => {
       const queue = snapshot.val();
-      if(Object.keys(queue) < 3) return null;
+      if(Object.keys(queue).length < 3) return null;
 
       const [opponent1, opponent2] = Object.keys(queue)
         .filter(key => key !== uid);
@@ -179,7 +178,7 @@ exports.playerQueue4 = functions.database.ref('/queue4/{uid}').onCreate((snapsho
   return queue4Ref.once('value')
     .then(snapshot => {
       const queue = snapshot.val();
-      if(Object.keys(queue) < 4) return null;
+      if(Object.keys(queue).length < 4) return null;
 
       const [opponent1, opponent2, opponent3] = Object.keys(queue)
         .filter(key => key !== uid);
@@ -234,7 +233,7 @@ exports.cardMove = functions.database.ref('/cardMove/{uid}').onCreate((snapshot,
       db.ref('timer').child(gameId).remove();
   
 
-      return playerHandRef.once('value')
+      return playerHandRef.once('value');
     })
     .then(snapshot => {
       const hand = snapshot.val();
@@ -352,10 +351,11 @@ exports.moveToPhase1 = functions.database.ref('/games/{gameId}').onCreate((snaps
 
   setTimeout(() => {
     return gamesRef.child(gameId).once('value').then(snapshot => {
-      const { players } = snapshot.val();
+      const game = snapshot.val();
+      const firstPlayer = game.players[0].userId;
       return Promise.all([
         gamesRef.child(gameId).child('phase').set(1),
-        gamesRef.child(gameId).child('turn').set(players[0].userId)
+        gamesRef.child(gameId).child('turn').set(firstPlayer)
       ]);
     });
   }, 5000);
