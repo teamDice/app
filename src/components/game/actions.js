@@ -5,7 +5,6 @@ import { postRecord } from '../../services/api';
 
 
 export const startGame = gameKey => {
-
   return (dispatch, getState) => {
     gamesRef.child(gameKey).on('value', snapshot => {
       const game = snapshot.val();

@@ -3,7 +3,7 @@ html {
   overflow: hidden;
   background: #f6c243;
   background-image: linear-gradient(#0eee46, #88fa06);
-  background: url('../assets/background.png');
+  background: url('../assets/background-dark.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

@@ -8,7 +8,6 @@ import { getStats, getGames } from './reducers';
 import { getUser } from '../auth/reducers';
 import { requestGame, removeGame, getStatsById, loadChatroom } from './actions';
 import styles from './Lobby.css';
-import Avatar from '../game/Avatar';
 
 export class Lobby extends Component {
 
