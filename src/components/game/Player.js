@@ -57,8 +57,7 @@ class Player extends PureComponent {
               <Card
                 key={i}
                 card={card}
-                postMove={postFlip}
-                isLastCard={card === lastCard}
+                postFlip={card === lastCard ? postFlip : null}
                 playerId={player.userId}/>
             ))}
           </div>

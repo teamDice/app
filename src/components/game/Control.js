@@ -81,7 +81,7 @@ class Control extends PureComponent {
                             isLastCard={true}
                             key={i} 
                             card={card}
-                            postMove={isTurn ? postCard : null}
+                            postCard={isTurn ? postCard : null}
                             setProcessing={this.toggleProcessing}
                           />
                         ))

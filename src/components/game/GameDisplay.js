@@ -17,6 +17,8 @@ class Game extends PureComponent {
   render() { 
     const { game, hand, profile, postCard, postBid, postFlip } = this.props;
     const { players, turn, phase, challenger } = game;
+    const currentChallenger = players && challenger ? players.find(player => player.userId === challenger.userId) : null;
+    const allFlipped = currentChallenger ? currentChallenger.played.filter(card => !card.type).length === 0 : null;
 
     return (
       <section>
@@ -30,8 +32,20 @@ class Game extends PureComponent {
                 phase={phase}
                 challenger={challenger}
                 profile={profile}
-                postFlip={postFlip}
-                // phase === 3 && challengerId === profile._id
+                postFlip={
+                  phase === 3 && challenger.userId === profile._id // is this phase 3 and are you the challenger?
+                    ? challenger.userId === player.userId //is this you?
+                      ? allFlipped //are your cards flipped?
+                        ? null
+                        : postFlip
+                      : allFlipped // if not you, have you flipped all your cards?
+                        ? postFlip
+                        : null
+                    : null
+                
+                
+                }
+                // 
                  
                 // ? challengerId === player.userId && notFlippedCards.length > 0
                 //   ? notFlippedCards[notFlippedCards.length - 1]
