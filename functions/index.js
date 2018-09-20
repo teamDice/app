@@ -400,9 +400,9 @@ exports.moveToPhase1 = functions.database.ref('/games/{gameId}').onCreate((snaps
 exports.updateGame = functions.database.ref('/hands/{uid}').onUpdate((change, context) => {
   const { uid } = context.params;
   const userState = change.after.val();
-
   const previousState = change.before.val();
-
+  console.log('before', previousState);
+  console.log('after', userState);
   if(userState.hand.length !== previousState.hand.length) return null;
 
   const { gameId, hand } = userState;
@@ -438,11 +438,14 @@ exports.updateGame = functions.database.ref('/hands/{uid}').onUpdate((change, co
 exports.snakeAttack = functions.database.ref('/hands/{uid}/hand/{index}').onDelete((snapshot, context) => {
   const { uid } = context.params;
   const playerHandRef = snapshot.ref.parent.parent;
-  if(!playerHandRef.parent.child(uid).exists()) return null;
   let hand;
   return handsRef.child(uid).once('value')
     .then(snapshot => {
       const playerState = snapshot.val();
+
+      // GUARD CLAUSE FOR GAME END
+      if(!playerState) return null;
+
       const { gameId } = playerState;
       hand = playerState.hand;
       return gamesRef.child(gameId).once('value');
@@ -454,7 +457,7 @@ exports.snakeAttack = functions.database.ref('/hands/{uid}/hand/{index}').onDele
       loser.hand--;
       if(!hand) {
         delete game.players[loserIndex];
-      };
+      }
       game.phase = 1;
       game.players.forEach(player => {
         player.hand = player.hand + played.length;
