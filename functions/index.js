@@ -399,6 +399,35 @@ exports.updateGame = functions.database.ref('/hands/{uid}').onUpdate((change, co
 
 });
 
+exports.snakeAttack = functions.database.ref('/hands/{uid}/hand/{index}').onDelete((snapshot, context) => {
+  const { uid } = context.params;
+  const playerHandRef = snapshot.ref.parent.parent;
+  if(!playerHandRef.parent.child(uid).exists()) return null;
+  
+  return handsRef.child(uid).once('value')
+    .then(snapshot => {
+      const playerState = snapshot.val();
+      const { gameId, hand } = playerState;
+      return gamesRef.child(gameId).once('value');
+    })
+    .then(snapshot => {
+      const game = snapshot.val();
+      const loser = game.players.find(player => player.userId === uid);
+      const loserIndex = game.players.indexOf(loser);
+      loser.hand--;
+      if(!hand) {
+        delete game.players[loserIndex];
+      };
+      game.phase = 1;
+      game.players.forEach(player => {
+        player.hand = player.hand + played.length;
+        delete player.played;
+      });
+      game.challenger = null;
+      return gamesRef.child(gameId).set(game);
+    });
+});
+
 
 // ON TURN CHANGE, START A TURN TIMER
 exports.firstTurnTimer = functions.database.ref('/games/{gameId}/turn').onCreate((snapshot, context) => {
