@@ -1,6 +1,7 @@
 import { GAME_LOAD, GAME_END, CARD_PLAY, HAND_START, EMOTE_CLEAR_ALL, getGame } from './reducers';
 import { getUser } from '../auth/reducers';
 import { gamesRef, handsRef } from '../../services/firebaseRef';
+import { postRecord } from '../../services/api';
 
 
 export const startGame = gameKey => {
@@ -8,9 +9,17 @@ export const startGame = gameKey => {
   return (dispatch, getState) => {
     gamesRef.child(gameKey).on('value', snapshot => {
       const game = snapshot.val();
-      if(game) {
-        game.key = gameKey;
-
+      game.key = gameKey;
+      if(game.winner) {
+        const { profile } = getUser(getState());
+        dispatch({
+          type: GAME_END,
+          payload: game.winner === profile._id ? postRecord(game) : null
+        });
+        gamesRef.child(gameKey).remove();
+        gamesRef.child(gameKey).off('value');
+      }
+      else {
         dispatch({
           type: GAME_LOAD,
           payload: game
@@ -18,12 +27,9 @@ export const startGame = gameKey => {
       }
     });
   };
-
-
 };
 
 export const loadHand = () => {
-
   return (dispatch, getState) => {
     const { profile } = getUser(getState());
     handsRef.child(profile._id).on('value', snapshot => {
@@ -38,6 +44,14 @@ export const loadHand = () => {
       }
     });
 
+  };
+};
+
+export const unloadGame = gameKey => {
+  gamesRef.child(gameKey).off('value');
+  return {
+    type: GAME_END,
+    payload: null
   };
 };
 
