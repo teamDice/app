@@ -24,7 +24,15 @@ class Game extends PureComponent {
     startGame(gameKey);
     loadHand();
 
+
+
   }
+
+  // postEmote = emote => {
+  //   const { game, user } = this.props;
+
+  //   return db.ref('games').child()
+  // };
 
   postCard = move => {
     const { user, match } = this.props;

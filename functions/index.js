@@ -362,9 +362,13 @@ exports.evaluateFlip = functions.database.ref('/games/{gameId}/players/{playerIn
       }
 
       if(type === 0) {
-        const random = Math.floor(Math.random() * hand.length);
-        const newHand = hand.filter(card => hand[random] !== card);
-        return currentPlayerHandRef.set(newHand);
+        const newHand = hand.filter(card => !card.removed);
+        const randomIndex = Math.floor(Math.random() * newHand.length);
+        newHand[randomIndex].removed = true;
+
+        console.log('*** HAND ***', hand);
+        
+        return currentPlayerHandRef.set(hand);
       }
 
       return null;
@@ -395,8 +399,13 @@ exports.moveToPhase1 = functions.database.ref('/games/{gameId}').onCreate((snaps
 
 exports.updateGame = functions.database.ref('/hands/{uid}/hand/{index}/order').onUpdate((change, context) => {
   const { uid, index } = context.params;
+  const oldOrder = change.before.val();
   const order = change.after.val();
+  console.log('*** OLD ORDER ***', oldOrder);
+  console.log('*** NEW ORDER ***', order);
+
   if(order === 0 || !order) return null;
+
   let gameId, hand;
   return handsRef.child(uid).once('value')
     .then(snapshot => {
@@ -404,12 +413,16 @@ exports.updateGame = functions.database.ref('/hands/{uid}/hand/{index}/order').o
       if(!state) return null;
       hand = state.hand;
 
+      console.log('*** HAND ***', hand);
+
       gameId = state.gameId;
       return gamesRef.child(gameId).once('value');
     })
     .then(snapshot => {
       const game = snapshot.val();
       if(!game) return null;
+
+      console.log('*** GAME ***', game);
 
       const { players } = game;
       const currentPlayer = players.find(player => player.userId === uid);
@@ -435,7 +448,7 @@ exports.updateGame = functions.database.ref('/hands/{uid}/hand/{index}/order').o
 
 });
 
-exports.snakeAttack = functions.database.ref('/hands/{uid}/hand/{index}/').onDelete((snapshot, context) => {
+exports.snakeAttack = functions.database.ref('/hands/{uid}/hand/{index}/removed').onCreate((snapshot, context) => {
   const { uid } = context.params;
   const playerHandRef = snapshot.ref.parent.parent;
   let hand, gameId;
