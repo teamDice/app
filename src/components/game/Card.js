@@ -32,7 +32,7 @@ class Card extends PureComponent {
           <div>{cards}</div>
         }
         
-        {cards 
+        {cards > -1
           ? <img src={back}/>
           : <img onClick={postMove ? this.handleClick : null} src={
             card.type > -1
