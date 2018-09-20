@@ -1,21 +1,26 @@
 :local(.home) {
 
 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  display: grid;
+  height: 100vh;
+  grid-template: 40vh auto / 100%;
+  justify-content: center;
   align-items: center;
-  padding: 80px 0px;
-  color: #F30E5C;
-  color: black;
+  color: white;
   text-align: center;
-  padding: 30px;
-  height: 90vh;
+
+  hgroup {
+    width: 50%;
+    justify-self: center;
+    align-self: center;
+
+  }
 
   h1 {
+    width: auto;
     border-top: 2px solid white;
     border-bottom: 2px solid white;
-    padding: 20px 0px;
+    padding: 20px 20px;
     letter-spacing: .2em;
     font-size: 2em;
   }
@@ -29,5 +34,28 @@
 
   li {
     text-align: left;
+  }
+  .buttons {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  button {
+    margin: 10px;
+    border: 1px solid white;
+    border-radius: 5%;
+    background: none;
+    color: white;
+    font-size: 2em;
+    padding: .2em;
+    width: 7.5em;
+    transition: all .3s ease;
+  }
+
+  button:hover {
+    background: #94A35F;
+    background: #FF6138;
   }
 }

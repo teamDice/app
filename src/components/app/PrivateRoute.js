@@ -13,8 +13,8 @@ const PrivateRoute = ({ user, component: Component, render, ...rest }) => {
       }}
     />;
 
-    if(Component) return <Component {...props}/>
-    if(render) return render(props)
+    if(Component) return <Component {...props}/>;
+    if(render) return render(props);
     return null;
 
   }}/>;

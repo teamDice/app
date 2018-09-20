@@ -5,7 +5,7 @@ import PrivateRoute from './PrivateRoute';
 import { connect } from 'react-redux';
 import { tryLoadUser } from '../auth/actions';
 import { getCheckedAuth } from '../auth/reducers';
-import Header from './Header';
+// import Header from './Header';
 import Home from './Home';
 import Game from '../game/Game';
 import Auth from '../auth/Auth';
@@ -31,7 +31,7 @@ class App extends Component {
     return (
       <Router>
         <div className={styles.app}>
-          <Header/>
+          {/* <Header/> */}
 
           <main>
             {checkedAuth &&
