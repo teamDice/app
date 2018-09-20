@@ -237,6 +237,7 @@ exports.cardMove = functions.database.ref('/cardMove/{uid}').onCreate((snapshot,
     })
     .then(snapshot => {
       const hand = snapshot.val();
+      console.log('*** HAND ***', hand);
       const card = hand.find(card => card.type === move.type && card.order === 0);
       if(card) card.order = 1 + hand.filter(card => card.order > 0).length;
 
