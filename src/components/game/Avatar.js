@@ -2,24 +2,32 @@ import React, { PureComponent } from 'react';
 
 import PropTypes from 'prop-types';
 import styles from './Avatar.css';
-// import avatarImage from './avatar2.png';
+import avatarImage from '../../assets/dolphin.png';
 
 class Avatar extends PureComponent {
 
   static propTypes = {
-    avatar: PropTypes.string.isRequired
+    avatar: PropTypes.string.isRequired,
+    bid: PropTypes.any
   };
 
   
   render() { 
 
-    const { avatar } = this.props;
-    // const { avatar } = player;
+    const { avatar, bid } = this.props;
+
+    const overlay =
+      !bid
+        ? null
+        : bid > 0 
+          ? bid
+          : 'PASS';
     return (
-      <div>
+      <div className={styles.avatar}>
+        <p>{overlay}</p>
         {
           avatar &&
-        <img className={styles.avatar} src="https://firebasestor...f-a1fe-9a9a6e721345" />
+          <img src={avatarImage} />
         }
       </div>
       
