@@ -403,11 +403,12 @@ exports.snakeAttack = functions.database.ref('/hands/{uid}/hand/{index}').onDele
   const { uid } = context.params;
   const playerHandRef = snapshot.ref.parent.parent;
   if(!playerHandRef.parent.child(uid).exists()) return null;
-  
+  let hand;
   return handsRef.child(uid).once('value')
     .then(snapshot => {
       const playerState = snapshot.val();
-      const { gameId, hand } = playerState;
+      const { gameId } = playerState;
+      hand = playerState.hand;
       return gamesRef.child(gameId).once('value');
     })
     .then(snapshot => {
