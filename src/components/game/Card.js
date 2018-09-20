@@ -28,25 +28,15 @@ class Card extends PureComponent {
     const { card, cards, postMove } = this.props;
     return (
       <div className={styles.card}>
-        {cards && 
-          <div>{cards}</div>
-        }
-        
-        {cards > -1
-          ? <img src={back}/>
-          : <img onClick={postMove ? this.handleClick : null} src={
-            card.type > -1
-              ? card.type === 1
-                ? squirrel
-                : snake
-              : back
-          }/>
-        }
-        
 
         
-
-
+        <img onClick={postMove ? this.handleClick : null} src={
+          card.type > -1
+            ? card.type === 1
+              ? squirrel
+              : snake
+            : back
+        }/> 
       </div>
     );
   }

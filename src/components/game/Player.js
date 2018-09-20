@@ -1,8 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from './Avatar';
 import { db } from '../../services/firebase';
 import Card from './Card';
+import back from '../../assets/back.png';
 import styles from './Player.css';
 
 class Player extends PureComponent {
@@ -37,7 +38,10 @@ class Player extends PureComponent {
         <h2>{name}</h2>
         <div className="hand">
           {hand > 0 && 
-            <Card cards={hand}/>
+          <Fragment>
+            <div className='handDisplay'>{hand}</div>
+            <img className='handImage' src={back}/>
+          </Fragment>
           }
         </div>
         {played && 
