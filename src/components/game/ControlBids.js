@@ -41,7 +41,12 @@ class Bids extends PureComponent {
   };
 
   handleBid = () => {
-    this.props.postBid(this.state);
+    const { bid } = this.state;
+    this.props.postBid({ bid });
+  };
+
+  handlePass = () => {
+    this.props.postBid({ bid: -1 });
   };
 
   render() { 
@@ -51,7 +56,7 @@ class Bids extends PureComponent {
     return (
       <div className="bids">
         {phase === 1 && <i onClick={toggle} className="fas fa-times"></i>}
-        {phase === 2 && <button>PASS</button>}
+        {phase === 2 && <button onClick={this.handlePass}>PASS</button>}
         {bid > minBid && <i className="fa fa-minus" onClick={this.handleDecrement}></i>}
         <p>{bid}</p>
         {bid < maxBid && <i className="fa fa-plus" onClick={this.handleIncrement}></i>}
