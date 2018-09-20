@@ -433,7 +433,7 @@ exports.updateGame = functions.database.ref('/hands/{uid}/hand/{index}/order').o
       let played = currentPlayer.played;
       if(played) played.push(playedCard);
       else currentPlayer.played = [playedCard];
-      currentPlayer.hand = hand.length - currentPlayer.played.length;
+      currentPlayer.hand = hand.filter(card => !card.removed).length - currentPlayer.played.length;
       
       let nextPlayerIndex = (players.indexOf(currentPlayer) + 1) % players.length;
 
