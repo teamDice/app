@@ -26,11 +26,13 @@ class Player extends PureComponent {
   // }
 
   render() {
-    const { player, turn, challenger, profile, phase, postFlip } = this.props;
-    const challengerId = challenger.userId;
+    const { player, turn, postFlip } = this.props;
     const { hand, played, name, avatar, bid } = player;
-    const notFlippedCards = played.filter(card => !card.type);
-    const lastCard = notFlippedCards[notFlippedCards.length - 1];
+    let lastCard;
+    if(played) {
+      const notFlippedCards = played.filter(card => !card.type);
+      lastCard = notFlippedCards[notFlippedCards.length - 1];
+    }
     // const order = played.map(card => card.order);
     // const highestOrder = Math.max(...order);
 
