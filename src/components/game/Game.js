@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import GameDisplay from './GameDisplay';
-import { startGame, loadHand, clearEmotes, endGame, unloadGame } from './actions';
+import { startGame, loadHand, endGame, unloadGame } from './actions';
 import { getGame, getHand } from './reducers';
 import { getUser } from '../auth/reducers';
 import { db } from '../../services/firebase';
