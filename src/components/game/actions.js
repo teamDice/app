@@ -12,10 +12,13 @@ export const startGame = gameKey => {
       game.key = gameKey;
       if(game.winner) {
         const { profile } = getUser(getState());
+        
         dispatch({
           type: GAME_END,
           payload: game.winner === profile._id ? postRecord(game) : null
         });
+        handsRef.child(profile._id).remove();
+        handsRef.child(profile._id_).off('value');
         gamesRef.child(gameKey).remove();
         gamesRef.child(gameKey).off('value');
       }
