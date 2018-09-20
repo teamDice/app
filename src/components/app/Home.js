@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import styles from './Home.css';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { getUser } 
 import { NavLink } from 'react-router-dom';
+import styles from './Home.css';
 
 export class Home extends Component {
   state = {
@@ -43,7 +46,7 @@ export class Home extends Component {
             <NavLink exact to="/leaderboard">
               <button>Leaderboard</button>
             </NavLink>
-            <NavLink to="/profile">
+            <NavLink exact to="/profile">
               <button>Profile</button>
             </NavLink>
             <NavLink to="/auth">
@@ -58,4 +61,9 @@ export class Home extends Component {
   }
 }
  
-export default Home;
+export default connect(
+  state => ({
+    user: getUser(state)
+  }),
+  null
+)(Home);
