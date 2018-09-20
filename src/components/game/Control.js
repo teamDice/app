@@ -73,15 +73,15 @@ class Control extends PureComponent {
                   />
                   : <Fragment>
                     {phase === 1 && !bidding && isTurn && hand.filter(card => card.order > 0).length > 0 && <button onClick={this.toggleBidding}>Bid</button>}
-                    <div className="hand">
+                    <div className={isTurn ? null : 'disabled'}>
                       {hand
                         .filter(card => card.order === 0)
                         .map((card, i) => (
                           <Card 
-                            className={isTurn ? null : 'disabled'} 
+                            
                             key={i} 
                             card={card}
-                            postMove={postCard}
+                            postMove={isTurn ? postCard : null}
                             setProcessing={this.toggleProcessing}
                           />
                         ))
