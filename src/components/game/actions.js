@@ -18,7 +18,7 @@ export const startGame = gameKey => {
           payload: game.winner === profile._id ? postRecord(game) : null
         });
         handsRef.child(profile._id).remove();
-        handsRef.child(profile._id_).off('value');
+        handsRef.child(profile._id).off('value');
         gamesRef.child(gameKey).remove();
         gamesRef.child(gameKey).off('value');
       }

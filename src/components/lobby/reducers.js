@@ -4,6 +4,7 @@ export const GAMES_LOAD = 'GAMES_LOAD';
 export const STATS_LOAD = 'STATS_LOAD';
 export const LEADERS_LOAD = 'LEADERS_LOAD';
 export const CHAT_LOAD = 'CHAT_LOAD';
+export const GAMES_REMOVE = 'GAMES_REMOVE';
 
 export const getGames = state => state.games;
 export const getStats = state => state.stats;
@@ -14,8 +15,8 @@ export function games(state = '', { type, payload }) {
   switch(type) {
     case GAMES_LOAD:
       return payload;
-    // case GAME_END:
-    //   return '';
+    case GAMES_REMOVE:
+      return '';
     default:
       return state;
   }
