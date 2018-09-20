@@ -303,10 +303,10 @@ exports.flipMove = functions.database.ref('/flipMove/{uid}').onCreate((snapshot,
   const { gameId } = move;
   const userMoveRef = snapshot.ref.parent;
   const playerHandRef = handsRef.child(move.playerId).child('hand');
-
+  let game;
   return gamesRef.child(gameId).once('value')
     .then(snapshot => {
-      const game = snapshot.val();
+      game = snapshot.val();
       // Prevent out of turn Plays
       if(game.turn !== uid) return userMoveRef.child(uid).remove();
 

@@ -37,7 +37,7 @@ class Player extends PureComponent {
         {played && 
           <div className="played">
             {played.map((card, i) => (
-              <Card key={i} order={card.order} postMove={phase === 3 ? postFlip : null} playerId={player.userId}/>
+              <Card key={i} card={card} postMove={phase === 3 ? postFlip : null} playerId={player.userId}/>
             ))}
           </div>
         }
