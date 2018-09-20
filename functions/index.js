@@ -13,53 +13,53 @@ const handsRef = db.ref('hands');
 const timerRef = db.ref('timer');
 
 
-// TURN TIMER SET TO 5 SECONDS
-timerRef.child('timeInMs').set(5000);
+// TURN TIMER SET TO 10 SECONDS
+// timerRef.child('timeInMs').set(10000);
 
-exports.myCloudTimer = functions.database.ref('/startTimerRequest/{gameId}').onCreate((snapshot, context) => {
-  const { gameId } = context.params;
-  return db.ref('timer/timeInMs').once('value', snap => {
-      if (!snap.exists()) {
-          return Promise.reject(Error('time is not defined in the database.'));
-      }
+// exports.myCloudTimer = functions.database.ref('/startTimerRequest/{gameId}').onCreate((snapshot, context) => {
+//   const { gameId } = context.params;
+//   return db.ref('timer/timeInMs').once('value', snap => {
+//       if (!snap.exists()) {
+//           return Promise.reject(Error('time is not defined in the database.'));
+//       }
 
-      let timeInSeconds = snap.val() / 1000;
-      console.log('Cloud Timer was Started: ' + timeInSeconds);
+//       let timeInSeconds = snap.val() / 1000;
+//       console.log('Cloud Timer was Started: ' + timeInSeconds);
 
-      return functionTimer(timeInSeconds,
-          elapsedTime => {
-              db.ref('cloudTimer').child(gameId).set(elapsedTime);
-          })
-          .then(totalTime => {
-              console.log('Timer of ' + totalTime + ' has finished.');
-              return new Promise(resolve => setTimeout(resolve, 1000));
-          })
-          .then(() => snapshot.ref.remove())
-          .catch(error => console.error(error));
-  });
-});
+//       return functionTimer(timeInSeconds,
+//           elapsedTime => {
+//               db.ref('cloudTimer').child(gameId).set(elapsedTime);
+//           })
+//           .then(totalTime => {
+//               console.log('Timer of ' + totalTime + ' has finished.');
+//               return new Promise(resolve => setTimeout(resolve, 1000));
+//           })
+//           .then(() => snapshot.ref.remove())
+//           .catch(error => console.error(error));
+//   });
+// });
 
-function functionTimer (seconds, call) {
-  return new Promise((resolve, reject) => {
-      if (seconds > 300) {
-          reject(Error('execution would take too long...'));
-          return;
-      }
-      let interval = setInterval(onInterval, 1000);
-      let elapsedSeconds = 0;
+// function functionTimer (seconds, call) {
+//   return new Promise((resolve, reject) => {
+//       if (seconds > 300) {
+//           reject(Error('execution would take too long...'));
+//           return;
+//       }
+//       let interval = setInterval(onInterval, 1000);
+//       let elapsedSeconds = 0;
 
-      function onInterval () {
-          if (elapsedSeconds >= seconds) {
-              clearInterval(interval);
-              call(0);
-              resolve(elapsedSeconds);
-              return;
-          }
-          call(seconds - elapsedSeconds);
-          elapsedSeconds++;
-      }
-  });
-}
+//       function onInterval () {
+//           if (elapsedSeconds >= seconds) {
+//               clearInterval(interval);
+//               call(0);
+//               resolve(elapsedSeconds);
+//               return;
+//           }
+//           call(seconds - elapsedSeconds);
+//           elapsedSeconds++;
+//       }
+//   });
+// }
 
 // Fisher-Yates Shuffle algorithm
 const shuffle = players => {
@@ -229,14 +229,15 @@ exports.cardMove = functions.database.ref('/cardMove/{uid}').onCreate((snapshot,
       if(game.turn !== uid) return userMoveRef.child(uid).remove();
 
       // Clear timers
-      db.ref('startTimerRequest').child(gameId).remove();
-      db.ref('timer').child(gameId).remove();
+      // db.ref('startTimerRequest').child(gameId).remove();
+      // db.ref('timer').child(gameId).remove();
   
 
       return playerHandRef.once('value');
     })
     .then(snapshot => {
       const hand = snapshot.val();
+      console.log('*** HAND ***', hand);
       const card = hand.find(card => card.type === move.type && card.order === 0);
       if(card) card.order = 1 + hand.filter(card => card.order > 0).length;
 
@@ -260,8 +261,8 @@ exports.bidMove = functions.database.ref('/bidMove/{uid}').onCreate((snapshot, c
       if(game.turn !== uid) return userMoveRef.child(uid).remove();
 
       // Clear timers
-      db.ref('startTimerRequest').child(gameId).remove();
-      db.ref('timer').child(gameId).remove();
+      // db.ref('startTimerRequest').child(gameId).remove();
+      // db.ref('timer').child(gameId).remove();
 
       const { players } = game;
       const currentPlayer = players.find(player => player.userId === uid);
@@ -283,7 +284,7 @@ exports.bidMove = functions.database.ref('/bidMove/{uid}').onCreate((snapshot, c
       else {
         let nextPlayerIndex = (players.indexOf(currentPlayer) + 1) % players.length;
 
-        while(players[nextPlayerIndex].bid < 0) {
+        while(players[nextPlayerIndex].bid < 0 || players[nextPlayerIndex].loser === true) {
           nextPlayerIndex = (nextPlayerIndex + 1) % players.length;
         }
 
@@ -314,8 +315,8 @@ exports.flipMove = functions.database.ref('/flipMove/{uid}').onCreate((snapshot,
       if(game.turn !== uid) return userMoveRef.child(uid).remove();
 
       // Clear timers
-      db.ref('startTimerRequest').child(gameId).remove();
-      db.ref('timer').child(gameId).remove();
+      // db.ref('startTimerRequest').child(gameId).remove();
+      // db.ref('timer').child(gameId).remove();
 
       return playerHandRef.once('value');
     })
@@ -325,11 +326,9 @@ exports.flipMove = functions.database.ref('/flipMove/{uid}').onCreate((snapshot,
       const player = game.players.find(player => player.userId === move.playerId);
       const selectedCard = player.played.find(card => card.order === move.order);
 
-      console.log('** SELECTED **', selectedCard);
 
       selectedCard.type = type;
-      player.bid--;
-      game.challenger.bid--;
+      
 
       return Promise.all([
         gamesRef.child(gameId).set(game),
@@ -338,75 +337,164 @@ exports.flipMove = functions.database.ref('/flipMove/{uid}').onCreate((snapshot,
     });
 });
 
-  
-     
+exports.evaluateFlip = functions.database.ref('/games/{gameId}/players/{playerIndex}/played/{cardIndex}/type').onCreate((snapshot, context) => {
+  const { gameId, playerIndex, cardIndex } = context.params;
+
+  const type = snapshot.val();
+  let game, currentPlayer, currentPlayerHandRef;
+  return gamesRef.child(gameId).once('value')
+    .then(snapshot => {
+      game = snapshot.val();
+      const { players, challenger } = game;
+      currentPlayer = players.find(player => player.userId === challenger.userId);
+      currentPlayerHandRef = handsRef.child(currentPlayer.userId).child('hand');
+      return currentPlayerHandRef.once('value');
+    })
+    .then(snapshot => {
+      const hand = snapshot.val();
+
+      if(type === 1) {
+        currentPlayer.bid--;
+        game.challenger.bid = currentPlayer.bid;
+
+        if(currentPlayer.bid === 0) currentPlayer.wins++;
+        return gamesRef.child(gameId).set(game);
+      }
+
+      if(type === 0) {
+        const random = Math.floor(Math.random() * hand.length);
+        const newHand = hand.filter(card => hand[random] !== card);
+        return currentPlayerHandRef.set(newHand);
+      }
+
+      return null;
+    });
+
       
       
+});
 
 
-      
   
-          
+
   
+
+
+
 
 exports.moveToPhase1 = functions.database.ref('/games/{gameId}').onCreate((snapshot, context) => {
   const { gameId } = context.params;
+  const game = snapshot.val();
+  game.turn = game.players[0].userId;
+  game.phase = 1;
+  return gamesRef.child(gameId).set(game);
 
-  setTimeout(() => {
-    return gamesRef.child(gameId).once('value').then(snapshot => {
-      const game = snapshot.val();
-      const firstPlayer = game.players[0].userId;
-      return Promise.all([
-        gamesRef.child(gameId).child('phase').set(1),
-        gamesRef.child(gameId).child('turn').set(firstPlayer)
-      ]);
-    });
-  }, 5000);
 });
 
 
 
-exports.updateGame = functions.database.ref('/hands/{uid}').onUpdate((change, context) => {
-  const { uid } = context.params;
-  const userState = change.after.val();
-  const { gameId, hand } = userState;
-  const playedCard = hand.sort((a, b) => b.order - a.order)[0];
-  delete playedCard.type;
+exports.updateGame = functions.database.ref('/hands/{uid}/hand/{index}/order').onUpdate((change, context) => {
+  const { uid, index } = context.params;
+  const order = change.after.val();
+  if(order === 0 || !order) return null;
+  let gameId, hand;
+  return handsRef.child(uid).once('value')
+    .then(snapshot => {
+      const state = snapshot.val();
+      if(!state) return null;
+      hand = state.hand;
 
-  return gamesRef.child(gameId).once('value').then(snapshot => {
-    const game = snapshot.val();
-    if(game) {
+      gameId = state.gameId;
+      return gamesRef.child(gameId).once('value');
+    })
+    .then(snapshot => {
+      const game = snapshot.val();
+      if(!game) return null;
+
       const { players } = game;
       const currentPlayer = players.find(player => player.userId === uid);
 
-      if(currentPlayer) {
-        let played = currentPlayer.played;
-        if(played) played.push(playedCard);
-        else currentPlayer.played = [playedCard];
-        currentPlayer.hand = hand.length - currentPlayer.played.length;
+      if(!currentPlayer) return null;
+
+      const playedCard = { order };
+      let played = currentPlayer.played;
+      if(played) played.push(playedCard);
+      else currentPlayer.played = [playedCard];
+      currentPlayer.hand = hand.length - currentPlayer.played.length;
+      
+      let nextPlayerIndex = (players.indexOf(currentPlayer) + 1) % players.length;
+
+      while(players[nextPlayerIndex].loser === true) {
+        nextPlayerIndex = (nextPlayerIndex + 1) % players.length;
       }
 
-      const nextPlayerIndex = (players.indexOf(currentPlayer) + 1) % players.length;
       game.turn = players[nextPlayerIndex].userId;
 
-      return Promise.all([
-        gamesRef.child(gameId).set(game),
-      ]);
-    }
-  
-    return null;
-  });
+      return gamesRef.child(gameId).set(game);
+    });
 
+});
+
+exports.snakeAttack = functions.database.ref('/hands/{uid}/hand/{index}/').onDelete((snapshot, context) => {
+  const { uid } = context.params;
+  const playerHandRef = snapshot.ref.parent.parent;
+  let hand, gameId;
+  return handsRef.child(uid).once('value')
+    .then(snapshot => {
+      const playerState = snapshot.val();
+
+      // GUARD CLAUSE FOR GAME END
+      if(!playerState) return null;
+
+      gameId = playerState.gameId;
+      hand = playerState.hand;
+      return gamesRef.child(gameId).once('value');
+    })
+    .then(snapshot => {
+      const game = snapshot.val();
+      const loser = game.players.find(player => player.userId === uid);
+      loser.hand--;
+      if(!hand) {
+        loser.loser = true;
+      }
+      game.phase = 1;
+      game.players.forEach(player => {
+        player.hand = player.hand + player.played.length;
+        delete player.played;
+        player.bid = 0;
+      });
+      game.challenger = null;
+      return gamesRef.child(gameId).set(game);
+    });
+});
+
+exports.handReset = functions.database.ref('/games/{gameId}/players/{playerIndex}/played').onDelete((change, context) => {
+  const { gameId, playerIndex } = context.params;
+  let uid;
+  return gamesRef.child(gameId).child('players').once('value')
+    .then(snapshot => {
+      const players = snapshot.val();
+      if(!players) return null;
+      uid = players[playerIndex].userId;
+      return handsRef.child(uid).child('hand').once('value');
+    })
+    .then(snapshot => {
+      const hand = snapshot.val();
+      hand.forEach(card => {
+        card.order = 0;
+      });
+      return handsRef.child(uid).child('hand').set(hand);
+    });
 });
 
 
 // ON TURN CHANGE, START A TURN TIMER
-exports.firstTurnTimer = functions.database.ref('/games/{gameId}/turn').onCreate((snapshot, context) => {
-  const { gameId } = context.params;
-  return db.ref('startTimerRequest').set({ [gameId]: true });
-});
+// exports.firstTurnTimer = functions.database.ref('/games/{gameId}/turn').onCreate((snapshot, context) => {
+//   const { gameId } = context.params;
+//   return db.ref('startTimerRequest').set({ [gameId]: true });
+// });
 
-exports.turnTimer = functions.database.ref('/games/{gameId}/turn').onUpdate((snapshot, context) => {
-  const { gameId } = context.params;
-  return db.ref('startTimerRequest').set({ [gameId]: true });
-});
+// exports.turnTimer = functions.database.ref('/games/{gameId}/turn').onUpdate((snapshot, context) => {
+//   const { gameId } = context.params;
+//   return db.ref('startTimerRequest').set({ [gameId]: true });
+// });

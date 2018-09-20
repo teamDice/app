@@ -11,6 +11,10 @@
     font-size: 1em;
   }
 
+  .cardCanBeFlipped {
+    border: 3px solid yellow;
+  }
+
   .hand {
     grid-area: hand;
     display: flex;
@@ -19,6 +23,7 @@
   .played {
     grid-area: played;
     display: flex;
+    flex-direction: row-reverse;
     align-items: center;
   }
 
