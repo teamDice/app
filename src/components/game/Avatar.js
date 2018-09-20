@@ -1,13 +1,28 @@
 import React, { PureComponent } from 'react';
-import avatar from '../../assets/avatar.png';
+
 import PropTypes from 'prop-types';
 import styles from './Avatar.css';
+// import avatarImage from './avatar2.png';
 
 class Avatar extends PureComponent {
-  state = {  }
+
+  static propTypes = {
+    avatar: PropTypes.string.isRequired
+  };
+
+  
   render() { 
+
+    const { avatar } = this.props;
+    // const { avatar } = player;
     return (
-      <img className={styles.avatar} src={avatar}/>
+      <div>
+        {
+          avatar &&
+        <img className={styles.avatar} src="https://firebasestor...f-a1fe-9a9a6e721345" />
+        }
+      </div>
+      
     );
   }
 }

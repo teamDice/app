@@ -7,30 +7,47 @@ import styles from './Card.css';
 
 class Card extends PureComponent {
   static propTypes = {
+    cards: PropTypes.number,
     card: PropTypes.object,
-    postMove: PropTypes.func
+    postMove: PropTypes.func,
+    setProcessing: PropTypes.func,
+    order: PropTypes.number,
+    playerId: PropTypes.string
   };
 
   handleClick = () => {
-    const { postMove, card } = this.props;
-    const { type } = card;
-    postMove({ type });
+    const { postMove, card, playerId } = this.props;
+    
+    // setProcessing();
+    if(card.order) postMove({ order: card.order, playerId });
+    else postMove({ type: card.type });
+
   };
 
   render() { 
-    const { card } = this.props;
+    const { card, cards, postMove } = this.props;
     return (
-      <Fragment>
+      <div className={styles.card}>
+        {cards && 
+          <div>{cards}</div>
+        }
         
-        <img onClick={this.handleClick} className={styles.card} src={
-          card
-            ? card.type === 1
-              ? squirrel
-              : snake
-            : back
-        }/>
+        {cards 
+          ? <img src={back}/>
+          : <img onClick={postMove ? this.handleClick : null} src={
+            card.type > -1
+              ? card.type === 1
+                ? squirrel
+                : snake
+              : back
+          }/>
+        }
+        
 
-      </Fragment>
+        
+
+
+      </div>
     );
   }
 }

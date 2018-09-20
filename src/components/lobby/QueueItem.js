@@ -25,12 +25,11 @@ class QueueItem extends Component {
   };
 
   render() { 
-    const { playersWaiting, queueType } = this.props;
+    const { queueType } = this.props;
     const { searching } = this.state;
 
     return (
       <article>
-        <p>Players: {playersWaiting}</p>
         <div 
           onClick={this.handleClick}
           className={this.state.searching ? 'queueSelected' : 'queue'}

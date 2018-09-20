@@ -8,6 +8,7 @@ import { getStats, getGames } from './reducers';
 import { getUser } from '../auth/reducers';
 import { requestGame, getStatsById, loadChatroom } from './actions';
 import styles from './Lobby.css';
+import Avatar from '../game/Avatar';
 
 export class Lobby extends Component {
 
@@ -43,13 +44,13 @@ export class Lobby extends Component {
 
   render() { 
     const { requestGame, user } = this.props;
+    
 
     return (
       <div className={styles.lobby}>
         <QueueForm onClick={requestGame}/>
+        <Avatar avatar={user.profile.avatar}/>
         <Chatroom user={user}/>
-        {/* <PlayerDisplay/> */}
-        {/* {user && <button onClick={requestGame}>PLAY GORTS</button>} */}
       </div>
     );
   }

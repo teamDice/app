@@ -45,6 +45,14 @@ class Header extends Component {
                 </NavLink>
               </li>
               <li>
+                <NavLink
+                  activeStyle={{ borderBottom: '2px solid black' }}
+                  exact to="/profile"
+                >
+                  Profile
+                </NavLink>
+              </li>
+              <li>
                 { user
                   ? <NavLink to="/" onClick={logout}>Logout</NavLink>
                   : <NavLink to="/auth">Login</NavLink>

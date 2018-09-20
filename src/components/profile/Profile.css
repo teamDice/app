@@ -1,0 +1,27 @@
+:local(.profile) {
+  text-align: center;
+  
+  .profile_avatar {
+    margin-left: auto;
+    margin-right: auto;
+
+
+  }
+
+  .name {
+    font-size: 1.5em
+  }
+    
+  h3 {
+    text-align: center; 
+    font-size: 1.5em;
+  }
+
+  img {
+    height: 200px;
+    width: 200px;
+    background: black;
+    border-radius: 1.6em;
+    margin-bottom: 20px;
+  }
+}  
