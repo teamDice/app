@@ -4,6 +4,7 @@ import { Switch, Route, Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signin, signup } from './actions';
 import { getUser } from './reducers';
+import Header from '../app/Header';
 import Credentials from './Credentials';
 import styles from './Auth.css';
 
@@ -23,17 +24,18 @@ class Auth extends PureComponent {
 
     return (
       <div className={styles.auth}>
+        <Header/>
         <Switch>
           <Route path="/auth/signin" component={() => (
             <section>
-              <p>Not a user?<br/><Link to="/auth/signup">Sign Up</Link></p>
               <Credentials action="Sign In" submit={signin}/>
+              <p>Don&apos;t have an account?<br/><Link to="/auth/signup">Create an account.</Link></p>
             </section>
           )}/>
           <Route path="/auth/signup" render={() => (
             <section>
-              <p>Already have an account?<br/> <Link to="/auth/signin">Sign In</Link></p>
               <Credentials action="Sign Up" submit={signup} allowName={true}/>
+              <p>Already have an account?<br/> <Link to="/auth/signin">Log In</Link></p>
             </section>
           )}/>
           <Redirect to="/auth/signin"/>

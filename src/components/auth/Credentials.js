@@ -45,7 +45,7 @@ class Credentials extends PureComponent {
 
         { allowName &&
           <FormControl label="Retype Password">
-            <input name="matchPassword" value={matchPassword} onChange={this.handleChange}></input>
+            <input name="matchPassword" type="password" value={matchPassword} onChange={this.handleChange}></input>
           </FormControl>
         }
         <button>{action}</button>
