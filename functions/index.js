@@ -418,7 +418,7 @@ exports.snakeAttack = functions.database.ref('/hands/{uid}/hand/{index}').onDele
       loser.hand--;
       if(!hand) {
         delete game.players[loserIndex];
-      };
+      }
       game.phase = 1;
       game.players.forEach(player => {
         player.hand = player.hand + played.length;
