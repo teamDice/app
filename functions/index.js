@@ -382,63 +382,55 @@ exports.evaluateFlip = functions.database.ref('/games/{gameId}/players/{playerIn
 
 exports.moveToPhase1 = functions.database.ref('/games/{gameId}').onCreate((snapshot, context) => {
   const { gameId } = context.params;
+  const game = snapshot.val();
+  game.turn = game.players[0].userId;
+  game.phase = 1;
+  return gamesRef.child(gameId).set(game);
 
-  setTimeout(() => {
-    return gamesRef.child(gameId).once('value').then(snapshot => {
-      const game = snapshot.val();
-      const firstPlayer = game.players[0].userId;
-      return Promise.all([
-        gamesRef.child(gameId).child('phase').set(1),
-        gamesRef.child(gameId).child('turn').set(firstPlayer)
-      ]);
-    });
-  }, 3000);
 });
 
 
 
-exports.updateGame = functions.database.ref('/hands/{uid}').onUpdate((change, context) => {
-  const { uid } = context.params;
-  const userState = change.after.val();
-  const previousState = change.before.val();
-  console.log('before', previousState);
-  console.log('after', userState);
-  if(userState.hand.length !== previousState.hand.length) return null;
+exports.updateGame = functions.database.ref('/hands/{uid}/hand/{index}/order').onUpdate((change, context) => {
+  const { uid, index } = context.params;
+  const order = change.after.val();
+  if(order === 0 || !order) return null;
+  let gameId;
+  return handsRef.child(uid).once('value')
+    .then(snapshot => {
+      const state = snapshot.val();
+      if(!state) return null;
 
-  const { gameId, hand } = userState;
-  const playedCard = hand.sort((a, b) => b.order - a.order)[0];
-  delete playedCard.type;
+      gameId = state.gameId;
+      return gamesRef.child(gameId).once('value');
+    })
+    .then(snapshot => {
+      const game = snapshot.val();
+      if(!game) return null;
 
-  return gamesRef.child(gameId).once('value').then(snapshot => {
-    const game = snapshot.val();
-    if(game) {
       const { players } = game;
       const currentPlayer = players.find(player => player.userId === uid);
 
-      if(currentPlayer) {
-        let played = currentPlayer.played;
-        if(played) played.push(playedCard);
-        else currentPlayer.played = [playedCard];
-        currentPlayer.hand = hand.length - currentPlayer.played.length;
-      }
+      if(!currentPlayer) return null;
 
+      const playedCard = { order };
+      let played = currentPlayer.played;
+      if(played) played.push(playedCard);
+      else currentPlayer.played = [playedCard];
+      currentPlayer.hand = hand.length - currentPlayer.played.length;
+      
       const nextPlayerIndex = (players.indexOf(currentPlayer) + 1) % players.length;
       game.turn = players[nextPlayerIndex].userId;
 
-      return Promise.all([
-        gamesRef.child(gameId).set(game),
-      ]);
-    }
-  
-    return null;
-  });
+      return gamesRef.child(gameId).set(game);
+    });
 
 });
 
 exports.snakeAttack = functions.database.ref('/hands/{uid}/hand/{index}').onDelete((snapshot, context) => {
   const { uid } = context.params;
   const playerHandRef = snapshot.ref.parent.parent;
-  let hand;
+  let hand, gameId;
   return handsRef.child(uid).once('value')
     .then(snapshot => {
       const playerState = snapshot.val();
@@ -446,7 +438,7 @@ exports.snakeAttack = functions.database.ref('/hands/{uid}/hand/{index}').onDele
       // GUARD CLAUSE FOR GAME END
       if(!playerState) return null;
 
-      const { gameId } = playerState;
+      gameId = playerState.gameId;
       hand = playerState.hand;
       return gamesRef.child(gameId).once('value');
     })
@@ -460,11 +452,31 @@ exports.snakeAttack = functions.database.ref('/hands/{uid}/hand/{index}').onDele
       }
       game.phase = 1;
       game.players.forEach(player => {
-        player.hand = player.hand + played.length;
+        player.hand = player.hand + player.played.length;
         delete player.played;
+        player.bid = 0;
       });
       game.challenger = null;
       return gamesRef.child(gameId).set(game);
+    });
+});
+
+exports.handReset = functions.database.ref('/games/{gameId}/players/{playerIndex}/played').onDelete((change, context) => {
+  const { gameId, playerIndex } = context.params;
+  let uid;
+  return gamesRef.child(gameId).child('players').once('value')
+    .then(snapshot => {
+      const players = snapshot.val();
+      if(!players) return null;
+      uid = players[playerIndex].userId;
+      return handsRef.child(uid).child('hand').once('value');
+    })
+    .then(snapshot => {
+      const hand = snapshot.val();
+      hand.forEach(card => {
+        card.order = 0;
+      });
+      return handsRef.child(uid).child('hand').set(hand);
     });
 });
 
