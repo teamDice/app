@@ -30,17 +30,17 @@ class Game extends PureComponent {
   }
 
   componentDidUpdate() {
-    const { game, history } = this.props;
+    const { game, history, removeGame } = this.props;
     if(game !== null) return;
+    removeGame();
     history.push({
       pathname: '/lobby'
     });
   }
 
   componentWillUnmount() {
-    const { match, unloadGame, removeGame } = this.props;
+    const { match, unloadGame } = this.props;
     unloadGame(match.params.gameKey);
-    removeGame();
   }
 
   // postEmote = emote => {
