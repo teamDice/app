@@ -372,13 +372,32 @@ exports.evaluateFlip = functions.database.ref('/games/{gameId}/players/{playerIn
       }
 
       return null;
-    });
-
-      
-      
+    });  
 });
 
+exports.onWin = functions.database.ref('/games/{gameId}/players/{playerIndex}/wins').onUpdate((change, context) => {
+  const wins = change.after.val();
+  const { gameId, playerIndex } = context.params;
 
+  return gamesRef.child(gameId).once('value')
+    .then(snapshot => {
+      const game = snapshot.val();
+      if(wins === 2) {
+        game.winner = game.challenger.userId;
+        game.phase = 4;
+      }
+      else {
+        game.phase = 1;
+        game.players.forEach(player => {
+          player.hand = player.hand + player.played.length;
+          delete player.played;
+          player.bid = 0;
+        });
+        game.challenger = null;
+      }
+      return gamesRef.child(gameId).set(game);
+    });
+});
   
 
   
