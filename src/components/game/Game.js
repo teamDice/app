@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import GameDisplay from './GameDisplay';
 import { startGame, loadHand, endGame, unloadGame } from './actions';
+import { removeGame } from '../lobby/actions';
 import { getGame, getHand } from './reducers';
 import { getUser } from '../auth/reducers';
 import { db } from '../../services/firebase';
@@ -15,6 +16,7 @@ class Game extends PureComponent {
     startGame: PropTypes.func.isRequired,
     unloadGame: PropTypes.func.isRequired,
     loadHand: PropTypes.func.isRequired,
+    removeGame: PropTypes.func.isRequired,
     game: PropTypes.object,
     hand: PropTypes.array,
     user: PropTypes.object
@@ -36,8 +38,9 @@ class Game extends PureComponent {
   }
 
   componentWillUnmount() {
-    const { match, unloadGame } = this.props;
+    const { match, unloadGame, removeGame } = this.props;
     unloadGame(match.params.gameKey);
+    removeGame();
   }
 
   // postEmote = emote => {
@@ -102,5 +105,5 @@ export default connect(
     hand: getHand(state),
     user: getUser(state)
   }),
-  { startGame, loadHand, endGame, unloadGame }
+  { startGame, loadHand, endGame, unloadGame, removeGame }
 )(Game);
