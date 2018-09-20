@@ -64,5 +64,5 @@ export default connect(
     games: getGames(state),
     stats: getStats(state)
   }),
-  { requestGame, getStatsById, loadChatroom }
+  { requestGame, getStatsById, loadChatroom, removeGame }
 )(Lobby);
