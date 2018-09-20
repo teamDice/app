@@ -278,7 +278,10 @@ exports.bidMove = functions.database.ref('/bidMove/{uid}').onCreate((snapshot, c
       }
       else game.challenger = newChallenger;
 
-      const totalPlayedCards = players.reduce(((acc, cur) => acc + cur.played.length), 0);
+      const totalPlayedCards = players.reduce(((acc, cur) => {
+        const played = cur.played ? cur.played.length : 0;
+        return acc + played;
+      }), 0);
 
       if(move.bid === totalPlayedCards) game.phase = 3;
       else {
