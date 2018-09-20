@@ -49,7 +49,6 @@ export class Lobby extends Component {
     return (
       <div className={styles.lobby}>
         <QueueForm onClick={requestGame}/>
-        <Avatar avatar={user.profile.avatar}/>
         <Chatroom user={user}/>
       </div>
     );

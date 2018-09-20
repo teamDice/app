@@ -278,16 +278,19 @@ exports.bidMove = functions.database.ref('/bidMove/{uid}').onCreate((snapshot, c
       else game.challenger = newChallenger;
 
       const totalPlayedCards = players.reduce(((acc, cur) => acc + cur.played.length), 0);
-      console.log('***TOTAL PLAYED CARDS***', totalPlayedCards);
 
       if(move.bid === totalPlayedCards) game.phase = 3;
       else {
-        const nextPlayerIndex = (players.indexOf(currentPlayer) + 1) % players.length;
+        let nextPlayerIndex = (players.indexOf(currentPlayer) + 1) % players.length;
+
+        while(players[nextPlayerIndex].bid < 0) {
+          nextPlayerIndex = (nextPlayerIndex + 1) % players.length;
+        }
+
         game.turn = players[nextPlayerIndex].userId;
 
-        console.log('NEXT TURN IS', game.turn);
         if(game.phase === 1) game.phase = 2;
-        else if(game.phase === 2 && game.challenger === game.turn) game.phase = 3;
+        else if(game.phase === 2 && game.challenger.userId === game.turn) game.phase = 3;
       }
 
       return Promise.all([
@@ -366,9 +369,7 @@ exports.moveToPhase1 = functions.database.ref('/games/{gameId}').onCreate((snaps
 exports.updateGame = functions.database.ref('/hands/{uid}').onUpdate((change, context) => {
   const { uid } = context.params;
   const userState = change.after.val();
-  console.log('*** STATE ***', userState);
   const { gameId, hand } = userState;
-  console.log(gameId, hand);
   const playedCard = hand.sort((a, b) => b.order - a.order)[0];
   delete playedCard.type;
 
