@@ -21,7 +21,10 @@ class Bids extends PureComponent {
   componentDidMount() {
     const { players, phase, challenger } = this.props;
     if(players) {
-      const totalPlayed = players.reduce(((acc, cur) => acc + cur.played.length), 0);
+      const totalPlayed = players.reduce(((acc, cur) => {
+        const played = cur.played ? cur.played.length : 0;
+        return acc + played;
+      }), 0);
       const startingBid = phase === 1 ? 1 : challenger.bid + 1;
       this.setState({
         minBid: startingBid,

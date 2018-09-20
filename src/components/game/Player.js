@@ -1,7 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from './Avatar';
+import { db } from '../../services/firebase';
 import Card from './Card';
+import back from '../../assets/back.png';
 import styles from './Player.css';
 
 class Player extends PureComponent {
@@ -9,11 +11,14 @@ class Player extends PureComponent {
   static propTypes = {
     player: PropTypes.object.isRequired,
     turn: PropTypes.string,
+    profile: PropTypes.object.isRequired,
     phase: PropTypes.number,
-    postFlip: PropTypes.func
+    postFlip: PropTypes.func,
+    challenger: PropTypes.object
   };
 
   // componentDidMount() {
+      
   //   setTimeout(() => {
   //     clearEmote();
   //   }, 5000);
@@ -21,8 +26,13 @@ class Player extends PureComponent {
   // }
 
   render() {
-    const { player, turn, phase, postFlip } = this.props;
+    const { player, turn, postFlip } = this.props;
     const { hand, played, name, avatar, bid } = player;
+    let lastCard;
+    if(played) {
+      const notFlippedCards = played.filter(card => !card.type);
+      lastCard = notFlippedCards[notFlippedCards.length - 1];
+    }
     // const order = played.map(card => card.order);
     // const highestOrder = Math.max(...order);
 
@@ -35,13 +45,20 @@ class Player extends PureComponent {
         <h2>{name}</h2>
         <div className="hand">
           {hand > 0 && 
-            <Card cards={hand}/>
+          <Fragment>
+            <div className='handDisplay'>{hand}</div>
+            <img className='handImage' src={back}/>
+          </Fragment>
           }
         </div>
         {played && 
           <div className="played">
             {played.map((card, i) => (
-              <Card key={i} card={card} postMove={phase === 3 ? postFlip : null}  playerId={player.userId}/>
+              <Card
+                key={i}
+                card={card}
+                postFlip={card === lastCard ? postFlip : null}
+                playerId={player.userId}/>
             ))}
           </div>
         }
