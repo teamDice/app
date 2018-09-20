@@ -90,7 +90,7 @@ const createNewGame = (users, queue) => {
       avatar: queue[user].avatar,
       wins: 0,
       hand: 4,
-      bid: null
+      bid: 0
     };
   });
 
