@@ -5,21 +5,27 @@ import { postRecord } from '../../services/api';
 
 
 export const startGame = gameKey => {
+
   return (dispatch, getState) => {
     gamesRef.child(gameKey).on('value', snapshot => {
       const game = snapshot.val();
       game.key = gameKey;
       if(game.winner) {
         const { profile } = getUser(getState());
-        
-        dispatch({
-          type: GAME_END,
-          payload: game.winner === profile._id ? postRecord(game) : null
-        });
-        handsRef.child(profile._id).remove();
-        handsRef.child(profile._id).off('value');
-        gamesRef.child(gameKey).remove();
-        gamesRef.child(gameKey).off('value');
+        setTimeout(
+          () => {
+            return Promise.all([
+              dispatch({
+                type: GAME_END,
+                payload: game.winner === profile._id ? postRecord(game) : null
+              }),
+              handsRef.child(profile._id).remove(),
+              handsRef.child(profile._id).off('value'),
+              gamesRef.child(gameKey).remove(),
+              gamesRef.child(gameKey).off('value')
+            ]);
+          },
+          3000);
       }
       else {
         dispatch({

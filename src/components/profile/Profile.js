@@ -52,6 +52,7 @@ class Profile extends Component {
 
     return (
       <div className={styles.profile}>
+
         {user &&        
           <section >
             <div className="profile-avatar">
@@ -77,6 +78,7 @@ class Profile extends Component {
                 />
               }
             </section>
+
           </section>
         }
       </div>
