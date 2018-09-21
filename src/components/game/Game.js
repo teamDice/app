@@ -50,8 +50,9 @@ class Game extends PureComponent {
     const { game, profile } = this.props;
     const player = game.players.find(player => player.userId === profile._id);
     const playerIndex = game.players.indexOf(player);
-
-    return db.ref('games').child(game.key).child('players').child(playerIndex).child('emote').set(emote);
+    const emoteRef = db.ref('games').child(game.key).child('players').child(playerIndex).child('emote');
+    return emoteRef.set(emote)
+      .then(() => setTimeout(() => emoteRef.remove(), 2000));
   };
 
   postCard = move => {
