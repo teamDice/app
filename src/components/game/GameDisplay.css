@@ -1,3 +1,11 @@
 :local(.gameDisplay) {
-  
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+  align-self: center;
+  justify-self: center;
+  /* width: 400px; */
+  height: 100%;
+  border: 1px solid red;
 }

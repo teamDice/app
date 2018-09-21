@@ -1,7 +1,5 @@
 :local(.app) {
-  main {
-  }
-
-  div {
+  .game {
+    height: 86vh;
   }
 }
