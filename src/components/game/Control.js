@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getUser } from '../auth/reducers';
+import { getProfile } from '../profile/reducers';
 import Card from './Card';
 import Bids from './ControlBids';
 import Emotes from './ControlEmotes';
@@ -17,7 +17,7 @@ class Control extends PureComponent {
   static propTypes = {
     game: PropTypes.object.isRequired,
     hand: PropTypes.array.isRequired,
-    user: PropTypes.object,
+    profile: PropTypes.object,
     postCard: PropTypes.func,
     postBid: PropTypes.func
   };
@@ -43,9 +43,9 @@ class Control extends PureComponent {
 
   render() { 
     const { emoting, bidding, processing } = this.state;
-    const { hand, game, user, postCard, postBid } = this.props;
+    const { hand, game, profile, postCard, postBid } = this.props;
     const { phase, turn, players, challenger } = game;
-    const uid = user.profile._id;
+    const uid = profile._id;
     
     const isTurn = turn === uid;
     
@@ -104,7 +104,7 @@ class Control extends PureComponent {
  
 export default connect(
   state => ({
-    user: getUser(state),
+    profile: getProfile(state),
   }),
   null
 )(Control);
