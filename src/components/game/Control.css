@@ -1,8 +1,8 @@
 :local(.control) {
-
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
+  
   background: url('../../assets/wood2.png');
   position: fixed;
   bottom: 0;
@@ -10,10 +10,21 @@
   height: 100px;
   
   button {
-    border: 1px solid black;
-    height: 40px;
+    border: 1px solid white;
+    height: 50px;
+    padding: 0px 10px;
+    background: none;
+    color: white;
+    font-size: 2em;
   }
 
+  .controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 375px;
+  }
   .emoji {
     width: 30px;
     height: 30px;
@@ -25,7 +36,7 @@
   }
 
   i {
-    color: #F6F867;
+    color: #FF6138;
     font-family: Font Awesome\ 5 Free;
   }
 
@@ -33,11 +44,12 @@
     width: 100%;
     display: flex;
     justify-content: space-around;
+    align-items: center;
     font-size: 3em;
   }
 
-  .emotes > i {
-    padding: 7.5px;
+  .emotes > p {
+    padding: 4px;
     border-top: 5px solid rgba(0, 0, 0, .15);
     border-left: 5px solid rgba(0, 0, 0, .25);
     border-bottom: 5px solid rgba(0, 0, 0, .45);
@@ -46,7 +58,7 @@
     transition: .15s
   }
   
-  .emotes > i:hover {
+  .emotes > p:hover {
     border-bottom: 5px solid rgba(0, 0, 0, .35);
     border-right: 5px solid rgba(0, 0, 0, .45);
     border-top: 5px solid rgba(0, 0, 0, .65);
@@ -54,16 +66,53 @@
     background-color: rgba(0, 0, 0, 0.3);
     transition: .15s
   }
+
   .bids {
+    padding: 0px 10px;
     width: 100%;
-    display: flex;
-    justify-content: space-around;
-    font-size: 3em;
+    display: grid;
+    text-align: center;
+    align-items: center;
+    grid-template: auto / repeat(5, 1fr);
+    grid-template-areas: "pass minus bid plus submit";
+    flex-direction: row;
   }
 
   .disabled {
     opacity: 0.6;
     filter: grayscale(100%);
   }
-  
+ 
+  .bids > .fa-times, .pass {
+    grid-area: pass;
+    font-size: 2.5em;
+
+  }
+  .fa-minus {
+    grid-area: minus;
+    font-size: 2.5em;
+  }
+  .fa-plus{
+    grid-area: plus;
+    font-size: 2.5em;
+
+  }
+  .bid {
+    grid-area: bid;
+    font-size: 4em;
+    color: white;
+    font-weight: 700;
+
+  }
+  .submit {
+    grid-area: submit;
+  }
+
+  .flip {
+    font-size: 2em;
+    text-align: center;
+    align-self: center;
+    color: white;
+  }
+
 }

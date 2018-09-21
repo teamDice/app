@@ -7,13 +7,14 @@ class Avatar extends PureComponent {
 
   static propTypes = {
     avatar: PropTypes.string.isRequired,
-    bid: PropTypes.any
+    bid: PropTypes.any,
+    emote: PropTypes.string
   };
 
   
   render() { 
 
-    const { avatar, bid } = this.props;
+    const { avatar, bid, emote } = this.props;
 
     const overlay =
       !bid
@@ -21,8 +22,10 @@ class Avatar extends PureComponent {
         : bid > 0 
           ? bid
           : 'PASS';
+          
     return (
       <div className={styles.avatar}>
+        <span>{emote}</span>
         <p>{overlay}</p>
         {
           avatar &&

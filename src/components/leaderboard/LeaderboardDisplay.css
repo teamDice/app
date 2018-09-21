@@ -1,13 +1,35 @@
 :local(.leader_display) {
  
 
-    text-align: center;
-  
-    .leader_table {
+  text-align: center;
+  color: white;
+
+  .leaderBoardTitle {
+    font-size: 2.5em;
+  }
+
+  td {
+    margin: 5px 25px 5px 15px;
+  }
+  .leader_table {
     margin-left: auto;
     margin-right: auto;
+  }
 
-    }
+  .leaderContainer {
+    display: flex;
+    justify-content: space-between
+  }
+
+  .leaderName {
+    font-weight: bold;
+    font-size: 2em;
+  }
+
+  .leaderWins {
+    font-size: 2em;
+  }
+  
   thead {
     text-align: center;
    

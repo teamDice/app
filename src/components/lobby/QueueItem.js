@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import { ClipLoader } from 'react-spinners';
+import { ClipLoader } from 'react-spinners';
 
 class QueueItem extends Component {
 
@@ -9,9 +9,10 @@ class QueueItem extends Component {
   };
 
   static propTypes = {
-    playersWaiting: PropTypes.string,
+    playersWaiting: PropTypes.number,
     queueType: PropTypes.string,
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
+
   };
 
   handleClick = () => {
@@ -26,19 +27,33 @@ class QueueItem extends Component {
   };
 
   render() { 
-    const { queueType } = this.props;
+    const { queueType, playersWaiting } = this.props;
     const { searching } = this.state;
 
     return (
-      <article>
+      <article 
+        className={this.state.searching ? 'queueSelected' : 'queue'}
+        onClick={this.handleClick}
+      >
         <div 
-          onClick={this.handleClick}
-          className={this.state.searching ? 'queueSelected' : 'queue'}
+
         >
           
           {searching ? 
-            'Searching'
+            <div className='sweet-loading'>
+              <ClipLoader
+                sizeUnit={'px'}
+                size={20}
+                color={'white'}
+                loading={this.state.loading}
+              />
+              &nbsp;Searching...
+            </div> 
             : `Find ${queueType}-player Game `}
+        </div>
+        <div>
+          <h4>{playersWaiting}</h4>
+          <p>Players in Queue</p>
         </div>
       </article>
     );

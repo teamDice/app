@@ -1,4 +1,6 @@
 :local(.avatarDisplay) {
+  text-align: center;
+  
   img {
     width: 250px;
     border: 2px solid white;

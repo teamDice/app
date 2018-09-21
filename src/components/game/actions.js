@@ -3,7 +3,6 @@ import { getProfile } from '../profile/reducers';
 import { gamesRef, handsRef } from '../../services/firebaseRef';
 import { postRecord } from '../../services/api';
 
-
 export const startGame = gameKey => {
 
   return (dispatch, getState) => {
@@ -53,6 +52,7 @@ export const loadHand = () => {
     });
 
   };
+  
 };
 
 export const unloadGame = gameKey => {

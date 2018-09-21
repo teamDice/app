@@ -53,7 +53,7 @@ class Chatroom extends Component {
         <ChatDisplay chatroom={chatroom}/>
         <form onSubmit={event => this.handleSubmit(event, this.state.message)} className='chat-form'>
           <input name='message' value={message} onChange={this.handleChange} className='chat-field'/>
-          <button type='submit' className='chat-button'>Send</button>
+          <button type='submit'>Send</button>
         </form>
       </div>
     );
