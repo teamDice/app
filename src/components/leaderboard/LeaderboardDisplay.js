@@ -11,7 +11,7 @@ class LeaderboardDisplay extends Component {
   
   static propTypes = {
     loadLeaders: PropTypes.func.isRequired,
-    users: PropTypes.array
+    leaders: PropTypes.array
   };
 
   componentDidMount() {
@@ -21,7 +21,7 @@ class LeaderboardDisplay extends Component {
  
 
   render() { 
-    const { users } = this.props;
+    const { leaders } = this.props;
     return (
       <div className={styles.leader_display}>
         <h2>L E A D E R B O A R D</h2>
@@ -33,9 +33,9 @@ class LeaderboardDisplay extends Component {
             <td>Win %</td> 
           </thead> */}
           {
-            users &&
-            users.map(user => (
-              <User key={user.id} user={user}/>
+            leaders &&
+            leaders.map(leader => (
+              <User key={leader.id} user={leader.user} wins={leader.wins}/>
             ))
           }
           
@@ -47,7 +47,7 @@ class LeaderboardDisplay extends Component {
  
 export default connect(
   state => ({
-    users: getLeaders(state)
+    leaders: getLeaders(state)
   }),
   { loadLeaders }
 )(LeaderboardDisplay);
