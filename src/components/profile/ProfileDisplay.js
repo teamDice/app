@@ -20,10 +20,7 @@ class Profile extends Component {
       <div className={styles.profile_display}>
         {user.profile &&        
         <section >
-          <div className="profile-avatar">
-            <img src="https://toolnavy.com/customavatars/avatar38224_10.gif" />
-            {/* <img src="https://firebasestor...f-a1fe-9a9a6e721345f" /> */}
-          </div>
+          
           <section className="profile-name">
             <article>
               <h1 className="name">Name: { name }</h1>

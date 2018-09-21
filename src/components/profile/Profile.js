@@ -1,85 +1,81 @@
-import React, { Component } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ProfileDisplay from './ProfileDisplay';
 import ProfileForm from './ProfileForm';
-import { update } from './actions';
+import AvatarDisplay from './AvatarDisplay';
+import AvatarForm from './AvatarForm';
+import { updateProfile } from '../auth/actions';
 import { getUser } from '../auth/reducers';
-import firebase from 'firebase';
 import styles from './Profile.css';
 
-class Profile extends Component {
+class Profile extends PureComponent {
 
   state = {
-    editing: false,
-    imageSource: null
+    editingInfo: false,
+    editingAvatar: false,
   };
 
   static propTypes = {
     user: PropTypes.object.isRequired,
-    update: PropTypes.func
+    updateProfile: PropTypes.func.isRequired
+  };
+  
+  toggleEditingInfo = () => {
+    this.setState(({ editingInfo }) => ({ editingInfo: !editingInfo }));
   };
 
-  handleEdit = () => {
-    this.setState({ editing: true });
+  toggleEditingAvatar = () => {
+    this.setState(({ editingAvatar }) => ({ editingAvatar: !editingAvatar }));
   };
 
-  handleComplete = profile => {
-    const { update } = this.props;
-    update(profile);
-    this.handleEndEdit();
+  handleEditInfo = profile => {
+    const { updateProfile } = this.props;
+    return updateProfile(profile)
+      .then(() =>this.toggleEditingInfo);
   };
 
-  handleEndEdit = () => {
-    this.setState({ editing: false });
+  handleEditAvatar = avatar => {
+    const { updateProfile, user } = this.props;
+    user.profile.avatar = avatar;
+    return updateProfile(user.profile)
+      .then(() =>this.toggleEditingAvatar);
   };
 
-  componentDidMount() {
-    const { profile } = this.props.user;
-    const storageRef = firebase.storage().ref();
-    const image = storageRef.child(profile.avatar);
-    image.getDownloadURL().then((url) => { 
-      this.setState({ imageSource: url });
-    });
-
-  }
+  
 
   render() { 
-    const { editing } = this.state;
+    const { editingInfo, editingAvatar } = this.state;
     const { user } = this.props;
     const { profile } = user;
-    const { name, greeting, location } = profile;
+    const { avatar } = profile;
 
     return (
       <div className={styles.profile}>
+        {user &&  
 
-        {user &&        
-          <section >
-            <div className="profile-avatar">
-              {/* <img src={image} /> */}
-              <img src={this.state.imageSource} />
-            </div>
-            <section className="profile-name">
-              <article>
-                <h1 className="name">Name: { name }</h1>
-                <h3>Greeting: { greeting }</h3>
-                <h3>Location: { location }</h3>
-              </article>
-              
-              {editing
-                ? <ProfileForm
-                  profile={profile}
-                  onComplete={this.handleComplete}
-                  onCancel={this.handleEndEdit}
-                />
-                : <ProfileDisplay
-                  profile={profile}
-                  onEdit={this.handleEdit}
-                />
-              }
-            </section>
-
+          <section>
+            {editingAvatar
+              ? <AvatarForm toggleEdit={this.toggleEditingAvatar} editAvatar={this.handleEditAvatar} currentAvatar={avatar}/>
+              : <Fragment>
+                <AvatarDisplay toggleEdit={this.toggleEditingAvatar} imageSource={avatar}/>
+                <section className="profile-name">             
+                  {editingInfo
+                    ? <ProfileForm
+                      profile={profile}
+                      onComplete={this.handleComplete}
+                      onCancel={this.handleEndEdit}
+                    />
+                    : <ProfileDisplay
+                      profile={profile}
+                      onEdit={this.handleEditInfo}
+                    />
+                  }
+                </section>
+              </Fragment>
+            }
           </section>
+
         }
       </div>
 
@@ -91,5 +87,5 @@ export default connect(
   state => ({
     user: getUser(state)
   }),
-  { update }
+  { updateProfile }
 )(Profile);
