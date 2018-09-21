@@ -1,5 +1,5 @@
-import { USER_AUTH, LOGOUT, CHECKED_AUTH, PROFILE_UPDATE } from './reducers';
-import { verifyUser, putProfile } from '../../services/api';
+import { USER_AUTH, LOGOUT, CHECKED_AUTH } from './reducers';
+import { verifyUser } from '../../services/api';
 import { getStoredUser, clearStoredUser } from '../../services/request';
 
 import {
@@ -37,9 +37,4 @@ export const tryLoadUser = () => dispatch => {
     });
 };
 
-
-export const updateProfile = profile => ({
-  type: PROFILE_UPDATE,
-  payload: putProfile(profile)
-});
 

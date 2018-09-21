@@ -5,8 +5,9 @@ import ProfileDisplay from './ProfileDisplay';
 import ProfileForm from './ProfileForm';
 import AvatarDisplay from './AvatarDisplay';
 import AvatarForm from './AvatarForm';
-import { updateProfile } from '../auth/actions';
-import { getUser } from '../auth/reducers';
+import Header from '../app/Header';
+import { loadProfile, updateProfile } from './actions';
+import { getProfile } from './reducers';
 import styles from './Profile.css';
 
 class Profile extends PureComponent {
@@ -17,9 +18,14 @@ class Profile extends PureComponent {
   };
 
   static propTypes = {
-    user: PropTypes.object.isRequired,
-    updateProfile: PropTypes.func.isRequired
+    profile: PropTypes.object.isRequired,
+    updateProfile: PropTypes.func.isRequired,
+    loadProfile: PropTypes.func.isRequired
   };
+
+  componentDidMount() {
+    this.props.loadProfile();
+  }
   
   toggleEditingInfo = () => {
     this.setState(({ editingInfo }) => ({ editingInfo: !editingInfo }));
@@ -36,9 +42,9 @@ class Profile extends PureComponent {
   };
 
   handleEditAvatar = avatar => {
-    const { updateProfile, user } = this.props;
-    user.profile.avatar = avatar;
-    return updateProfile(user.profile)
+    const { updateProfile, profile } = this.props;
+    const { name, location, greeting } = profile;
+    return updateProfile({ name, location, avatar, greeting })
       .then(() =>this.toggleEditingAvatar);
   };
 
@@ -46,20 +52,20 @@ class Profile extends PureComponent {
 
   render() { 
     const { editingInfo, editingAvatar } = this.state;
-    const { user } = this.props;
-    const { profile } = user;
+    const { profile } = this.props;
     const { avatar } = profile;
 
     return (
       <div className={styles.profile}>
-        {user &&  
-
+        {profile &&  
+          
           <section>
+            <Header/>
             {editingAvatar
               ? <AvatarForm toggleEdit={this.toggleEditingAvatar} editAvatar={this.handleEditAvatar} currentAvatar={avatar}/>
               : <Fragment>
                 <AvatarDisplay toggleEdit={this.toggleEditingAvatar} imageSource={avatar}/>
-                <section className="profile-name">             
+                <section className="info">             
                   {editingInfo
                     ? <ProfileForm
                       profile={profile}
@@ -85,7 +91,7 @@ class Profile extends PureComponent {
  
 export default connect(
   state => ({
-    user: getUser(state)
+    profile: getProfile(state)
   }),
-  { updateProfile }
+  { loadProfile, updateProfile }
 )(Profile);

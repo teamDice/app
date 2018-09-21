@@ -6,6 +6,7 @@ import { game, hand } from '../components/game/reducers';
 import { user, checkedAuth } from '../components/auth/reducers';
 import { leaders } from '../components/leaderboard/reducers';
 import { games, stats, chatroom } from '../components/lobby/reducers';
+import { profile } from '../components/profile/reducers';
 
 const rootReducer = combineReducers({
   error,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   user,
   checkedAuth,
   games,
+  profile,
   game,
   hand,
   stats,

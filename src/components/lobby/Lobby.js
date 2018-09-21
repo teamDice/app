@@ -1,26 +1,32 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../app/Header';
-import PlayerDisplay from './PlayerDisplay';
 import QueueForm from './QueueForm';
 import Chatroom from './Chatroom';
 import { connect } from 'react-redux';
 import { getStats, getGames } from './reducers';
-import { getUser } from '../auth/reducers';
+import { getProfile } from '../profile/reducers';
+import { loadProfile } from '../profile/actions';
+
 import { requestGame, removeGame, getStatsById, loadChatroom } from './actions';
 import styles from './Lobby.css';
 
 export class Lobby extends Component {
 
   static propTypes = {
-    user: PropTypes.object,
+    profile: PropTypes.object,
     games: PropTypes.string,
     stats: PropTypes.object,
     requestGame: PropTypes.func.isRequired,
     getStatsById: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
-    removeGame: PropTypes.func.isRequired
+    removeGame: PropTypes.func.isRequired,
+    loadProfile: PropTypes.func.isRequired
   };
+
+  componentDidMount() {
+    this.props.loadProfile();
+  }
 
   componentDidUpdate() {
     const { games, history } = this.props;
@@ -40,13 +46,14 @@ export class Lobby extends Component {
   }
 
   render() { 
-    const { requestGame, user } = this.props;
+    const { requestGame, profile } = this.props;
     
 
     return (
       <div className={styles.lobby}>
+        <Header/>
         <QueueForm onClick={requestGame}/>
-        <Chatroom user={user}/>
+        <Chatroom profile={profile}/>
       </div>
     );
   }
@@ -54,9 +61,9 @@ export class Lobby extends Component {
  
 export default connect(
   state => ({
-    user: getUser(state),
+    profile: getProfile(state),
     games: getGames(state),
     stats: getStats(state)
   }),
-  { requestGame, getStatsById, loadChatroom, removeGame }
+  { requestGame, getStatsById, loadChatroom, removeGame, loadProfile }
 )(Lobby);
