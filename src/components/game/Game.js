@@ -77,7 +77,8 @@ class Game extends PureComponent {
   postBid = move => {
     const { profile, match } = this.props;
     const { gameKey } = match.params;
-    this.postMessage(`I bet I can find ${move.bid} squirrel${move.bid > 1 ? 's in a row' : ''}!`);
+    if(move.bid > 0) this.postMessage(`I bet I can find ${move.bid} squirrel${move.bid > 1 ? 's in a row' : ''}!`);
+    if(move.bid < 1) this.postMessage('Pass.');
     db.ref('bidMove').child(profile._id).set({
       gameId: gameKey,
       ...move
