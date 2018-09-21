@@ -35,9 +35,10 @@ class Profile extends PureComponent {
       .then(() =>this.toggleEditingInfo);
   };
 
-  handleEditAvatar = profile => {
-    const { updateProfile } = this.props;
-    return updateProfile(profile)
+  handleEditAvatar = avatar => {
+    const { updateProfile, user } = this.props;
+    user.profile.avatar = avatar;
+    return updateProfile(user.profile)
       .then(() =>this.toggleEditingAvatar);
   };
 
