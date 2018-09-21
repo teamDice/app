@@ -45,4 +45,8 @@
     width: 60px;
     margin: 2px 2px;
   }
+
+  p {
+    grid-area: message;
+  }
 };

@@ -46,11 +46,13 @@ class Game extends PureComponent {
     unloadGame(match.params.gameKey);
   }
 
-  // postEmote = emote => {
-  //   const { game, user } = this.props;
+  postEmote = emote => {
+    const { game, profile } = this.props;
+    const player = game.players.find(player => player.userId === profile._id);
+    const playerIndex = game.players.indexOf(player);
 
-  //   return db.ref('games').child()
-  // };
+    return db.ref('games').child(game.key).child('players').child(playerIndex).child('emote').set(emote);
+  };
 
   postCard = move => {
     const { profile, match } = this.props;
@@ -95,6 +97,7 @@ class Game extends PureComponent {
             postCard={this.postCard}
             postBid={this.postBid}
             postFlip={this.postFlip}
+            postEmote={this.postEmote}
           />
         }
       </section>
