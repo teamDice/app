@@ -11,12 +11,7 @@ export const signin = credentials => post(SIGNIN_URL, credentials);
 
 export const postRecord = game => {
   delete game.key;
-  const players = Object.keys(game).filter(key => key !== 'winner');
-  const data = {
-    players,
-    game
-  };
-  post(RECORD_URL, data);
+  post(RECORD_URL, game);
 };
 
 export const verifyUser = token => {

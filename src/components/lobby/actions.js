@@ -1,6 +1,6 @@
 import { ERROR } from '../app/reducers';
 import { getUser } from '../auth/reducers';
-import { GAMES_LOAD, STATS_LOAD, LEADERS_LOAD, CHAT_LOAD } from './reducers';
+import { GAMES_LOAD, GAMES_REMOVE, STATS_LOAD, LEADERS_LOAD, CHAT_LOAD } from './reducers';
 import { db } from '../../services/firebase';
 import { handsRef, chatRef } from '../../services/firebaseRef';
 import { getStatsById as _getStats, getLeaderboard } from '../../services/api';
@@ -13,6 +13,8 @@ const convertToArray = obj => {
     return each;
   });
 };
+
+export const removeGame = () => ({ type: GAMES_REMOVE });
 
 export const requestGame = (searching, queueRef) => {
   return (dispatch, getState) => {

@@ -37,6 +37,8 @@ export function hand(state = [], { type, payload }) {
   switch(type) {
     case HAND_START:
       return payload;
+    case GAME_END:
+      return null;
     case CARD_PLAY:
       return state.filter(card => card.order === 0);
     default:

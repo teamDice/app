@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Header from '../app/Header';
 import PlayerDisplay from './PlayerDisplay';
 import QueueForm from './QueueForm';
 import Chatroom from './Chatroom';
 import { connect } from 'react-redux';
 import { getStats, getGames } from './reducers';
 import { getUser } from '../auth/reducers';
-import { requestGame, getStatsById, loadChatroom } from './actions';
+import { requestGame, removeGame, getStatsById, loadChatroom } from './actions';
 import styles from './Lobby.css';
-import Avatar from '../game/Avatar';
 
 export class Lobby extends Component {
 
@@ -18,25 +18,22 @@ export class Lobby extends Component {
     stats: PropTypes.object,
     requestGame: PropTypes.func.isRequired,
     getStatsById: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
+    removeGame: PropTypes.func.isRequired
   };
-
-  // componentDidMount() {
-
-  // const { getStatsById, user } = this.props;
-  // getStatsById(user.profile._id);
-  // }
 
   componentDidUpdate() {
     const { games, history } = this.props;
     if(!games) return;
+
     history.push({
       pathname: `/games/${games}`
     });
   }
 
   componentWillUnmount() {
-    const { requestGame } = this.props;
+    const { requestGame, removeGame } = this.props;
+    removeGame();
     requestGame(true, 'queue2');
     requestGame(true, 'queue3');
     requestGame(true, 'queue4');
@@ -61,5 +58,5 @@ export default connect(
     games: getGames(state),
     stats: getStats(state)
   }),
-  { requestGame, getStatsById, loadChatroom }
+  { requestGame, getStatsById, loadChatroom, removeGame }
 )(Lobby);

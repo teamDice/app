@@ -23,6 +23,8 @@ class Credentials extends PureComponent {
 
   handleSubmit = event => {
     event.preventDefault();
+    const { name, email, password, matchPassword } = this.state;
+    if(!name || !email || !password || !matchPassword) return;
     this.props.submit(this.state);
   };
 
@@ -45,7 +47,7 @@ class Credentials extends PureComponent {
 
         { allowName &&
           <FormControl label="Retype Password">
-            <input name="matchPassword" value={matchPassword} onChange={this.handleChange}></input>
+            <input name="matchPassword" type="password" value={matchPassword} onChange={this.handleChange}></input>
           </FormControl>
         }
         <button>{action}</button>

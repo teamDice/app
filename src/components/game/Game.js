@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import GameDisplay from './GameDisplay';
-import { startGame, loadHand, clearEmotes, endGame } from './actions';
+import { startGame, loadHand, endGame, unloadGame } from './actions';
+import { removeGame } from '../lobby/actions';
 import { getGame, getHand } from './reducers';
 import { getUser } from '../auth/reducers';
 import { db } from '../../services/firebase';
@@ -11,8 +12,11 @@ class Game extends PureComponent {
 
   static propTypes = {
     match: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
     startGame: PropTypes.func.isRequired,
+    unloadGame: PropTypes.func.isRequired,
     loadHand: PropTypes.func.isRequired,
+    removeGame: PropTypes.func.isRequired,
     game: PropTypes.object,
     hand: PropTypes.array,
     user: PropTypes.object
@@ -23,8 +27,27 @@ class Game extends PureComponent {
     const { gameKey } = match.params;
     startGame(gameKey);
     loadHand();
-
   }
+
+  componentDidUpdate() {
+    const { game, history, removeGame } = this.props;
+    if(game !== null) return;
+    removeGame();
+    history.push({
+      pathname: '/lobby'
+    });
+  }
+
+  componentWillUnmount() {
+    const { match, unloadGame } = this.props;
+    unloadGame(match.params.gameKey);
+  }
+
+  // postEmote = emote => {
+  //   const { game, user } = this.props;
+
+  //   return db.ref('games').child()
+  // };
 
   postCard = move => {
     const { user, match } = this.props;
@@ -58,12 +81,13 @@ class Game extends PureComponent {
 
 
   render() { 
-    const { game, hand } = this.props;
+    const { game, hand, user } = this.props;
     return (
       <section>
         {game && hand &&
           <GameDisplay
             game={game}
+            profile={user.profile}
             hand={hand}
             postCard={this.postCard}
             postBid={this.postBid}
@@ -81,5 +105,5 @@ export default connect(
     hand: getHand(state),
     user: getUser(state)
   }),
-  { startGame, loadHand, endGame }
+  { startGame, loadHand, endGame, unloadGame, removeGame }
 )(Game);

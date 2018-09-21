@@ -9,44 +9,34 @@ class Card extends PureComponent {
   static propTypes = {
     cards: PropTypes.number,
     card: PropTypes.object,
-    postMove: PropTypes.func,
+    postCard: PropTypes.func,
+    postFlip: PropTypes.func,
     setProcessing: PropTypes.func,
     order: PropTypes.number,
-    playerId: PropTypes.string
+    playerId: PropTypes.string,
   };
 
   handleClick = () => {
-    const { postMove, card, playerId } = this.props;
+    const { postCard, postFlip, card, playerId } = this.props;
     
     // setProcessing();
-    if(card.order) postMove({ order: card.order, playerId });
-    else postMove({ type: card.type });
+    if(postFlip) postFlip({ order: card.order, playerId });
+    if(postCard) postCard({ type: card.type });
 
   };
 
   render() { 
-    const { card, cards, postMove } = this.props;
+    const { card, postCard, postFlip } = this.props;
     return (
       <div className={styles.card}>
-        {cards && 
-          <div>{cards}</div>
-        }
-        
-        {cards > -1
-          ? <img src={back}/>
-          : <img onClick={postMove ? this.handleClick : null} src={
-            card.type > -1
-              ? card.type === 1
-                ? squirrel
-                : snake
-              : back
-          }/>
-        }
-        
 
-        
-
-
+        <img className={postFlip ? 'clickable' : null} onClick={postCard || postFlip ? this.handleClick : null} src={
+          card.type > -1
+            ? card.type === 1
+              ? squirrel
+              : snake
+            : back
+        }/> 
       </div>
     );
   }
