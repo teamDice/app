@@ -23,17 +23,17 @@ class Game extends PureComponent {
   };
 
   componentDidMount() {
-    const { match, startGame } = this.props;
+    const { match, startGame, loadHand } = this.props;
     const { gameKey } = match.params;
     
     startGame(gameKey);
+    loadHand();
+
+      
   }
 
   componentDidUpdate() {
-    const { game, history, removeGame, profile, hand } = this.props;
-    if(profile && !hand) loadHand();
-
-
+    const { game, history, removeGame } = this.props;
     if(game !== null) return;
     removeGame();
     history.push({
@@ -55,6 +55,15 @@ class Game extends PureComponent {
       .then(() => setTimeout(() => emoteRef.remove(), 2000));
   };
 
+  postMessage = message => {
+    const { game, profile } = this.props;
+    const player = game.players.find(player => player.userId === profile._id);
+    const playerIndex = game.players.indexOf(player);
+    const messageRef = db.ref('games').child(game.key).child('players').child(playerIndex).child('message');
+    return messageRef.set(message)
+      .then(() => setTimeout(() => messageRef.remove(), 10000));
+  };
+
   postCard = move => {
     const { profile, match } = this.props;
     const { gameKey } = match.params;
@@ -68,7 +77,7 @@ class Game extends PureComponent {
   postBid = move => {
     const { profile, match } = this.props;
     const { gameKey } = match.params;
-    
+    this.postMessage('I bet I can flip squirrels!');
     db.ref('bidMove').child(profile._id).set({
       gameId: gameKey,
       ...move

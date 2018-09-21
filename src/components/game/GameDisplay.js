@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Player from './Player';
 import Control from './Control';
+import styles from './GameDisplay.css';
 
 class Game extends PureComponent {
 
@@ -22,7 +23,7 @@ class Game extends PureComponent {
     const allFlipped = currentChallenger ? currentChallenger.played.filter(card => !card.type).length === 0 : null;
 
     return (
-      <section>
+      <section className={styles.gameDisplay}>
         {
           players &&
             players.map(player => (
