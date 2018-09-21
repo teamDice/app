@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getUser } 
+import { getUser } from '../auth/reducers';
 import { NavLink } from 'react-router-dom';
+import { logout } from '../auth/actions';
 import styles from './Home.css';
 
 export class Home extends Component {
   state = {
     rules: false
+  };
+
+  static propTypes = {
+    user: PropTypes.object,
+    logout: PropTypes.func
   };
 
   toggleRules = () => {
@@ -16,6 +22,7 @@ export class Home extends Component {
 
   render() { 
     const { rules } = this.state;
+    const { user, logout } = this.props;
 
     return (
       <div className={styles.home}>
@@ -46,12 +53,17 @@ export class Home extends Component {
             <NavLink exact to="/leaderboard">
               <button>Leaderboard</button>
             </NavLink>
-            <NavLink exact to="/profile">
-              <button>Profile</button>
-            </NavLink>
-            <NavLink to="/auth">
-              <button>Log In</button>
-            </NavLink>
+            {user &&
+              <NavLink exact to="/profile">
+                <button>Profile</button>
+              </NavLink>
+            }
+            {user
+              ? <button onClick={logout}>Log Out</button>
+              : <NavLink to="/auth/signin">
+                <button>Log In</button>
+              </NavLink>
+            }
           </section>
        
           
@@ -65,5 +77,5 @@ export default connect(
   state => ({
     user: getUser(state)
   }),
-  null
+  { logout }
 )(Home);

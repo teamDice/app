@@ -13,7 +13,7 @@ class ChatDisplay extends Component {
     return (
       <div className={styles.chat_display}>
         {chatroom.map(chat => (
-          <p key={chat.key}><strong>{chat.name}</strong>: {chat.text}</p>
+          <p key={chat.key}><span className='chatName'>{chat.name}</span>: {chat.text}</p>
         ))}
       </div>
     );
