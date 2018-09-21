@@ -6,6 +6,7 @@ import Card from './Card';
 import Bids from './ControlBids';
 import Emotes from './ControlEmotes';
 import styles from './Control.css';
+import emoji from '../../assets/emoji.png';
 
 class Control extends PureComponent {
   state = {
@@ -55,6 +56,7 @@ class Control extends PureComponent {
         {emoting
           ? <Emotes toggle={this.toggleEmoting}/>
           : <Fragment>
+            {/* <img className='emoji' src={emoji} onClick={this.toggleEmoting}/> */}
             <button onClick={this.toggleEmoting}>Emote</button>
             {phase > 2
               ? <section>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { ClipLoader } from 'react-spinners';
 
 class QueueItem extends Component {
 
@@ -34,8 +35,16 @@ class QueueItem extends Component {
           onClick={this.handleClick}
           className={this.state.searching ? 'queueSelected' : 'queue'}
         >
-          {queueType}
-          {/* searching ? 'Looking for players' :  */}
+          
+          {searching ? <div className='sweet-loading'>
+            <ClipLoader
+              sizeUnit={'px'}
+              size={30}
+              color={'white'}
+              loading={this.state.loading}
+            />
+          </div> 
+            : queueType} 
         </div>
       </article>
     );

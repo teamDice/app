@@ -38,7 +38,7 @@ class Player extends PureComponent {
 
     return (
       <section className={styles.player} 
-        style={{ backgroundColor: turn === player.userId ? '#ff0000' : null }}
+        style={{ backgroundColor: turn === player.userId ? 'rgba(0, 0, 0, .25)' : null }} //HERE HERE HERE
       >
         <Avatar avatar={avatar} bid={bid}/>
         {/* <h2>{emote}</h2> */}
