@@ -6,6 +6,7 @@ import Card from './Card';
 import Bids from './ControlBids';
 import Emotes from './ControlEmotes';
 import styles from './Control.css';
+import emoji from '../../assets/emoji.png';
 
 class Control extends PureComponent {
   state = {
@@ -19,7 +20,8 @@ class Control extends PureComponent {
     hand: PropTypes.array.isRequired,
     profile: PropTypes.object,
     postCard: PropTypes.func,
-    postBid: PropTypes.func
+    postBid: PropTypes.func,
+    postEmote: PropTypes.func
   };
 
   componentDidUpdate() {
@@ -43,7 +45,7 @@ class Control extends PureComponent {
 
   render() { 
     const { emoting, bidding, processing } = this.state;
-    const { hand, game, profile, postCard, postBid } = this.props;
+    const { hand, game, profile, postCard, postBid, postEmote } = this.props;
     const { phase, turn, players, challenger } = game;
     const uid = profile._id;
     
@@ -53,8 +55,9 @@ class Control extends PureComponent {
       <section className={styles.control}>
 
         {emoting
-          ? <Emotes toggle={this.toggleEmoting}/>
+          ? <Emotes postEmote={postEmote} toggle={this.toggleEmoting}/>
           : <Fragment>
+            {/* <img className='emoji' src={emoji} onClick={this.toggleEmoting}/> */}
             <button onClick={this.toggleEmoting}>Emote</button>
             {phase > 2
               ? <section>

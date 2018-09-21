@@ -1,6 +1,7 @@
 import { USER_AUTH, LOGOUT, CHECKED_AUTH } from './reducers';
-import { verifyUser } from '../../services/api';
+import { verifyUser, getProfile } from '../../services/api';
 import { getStoredUser, clearStoredUser } from '../../services/request';
+import { PROFILE_LOAD } from '../profile/reducers';
 
 import {
   signup as signupApi,
@@ -19,6 +20,8 @@ export const logout = () => ({ type: LOGOUT });
 const authChecked = () => ({ type: CHECKED_AUTH });
 
 export const tryLoadUser = () => dispatch => {
+
+  // USER COMES FROM LOCAL STORAGE
   const user = getStoredUser();
   if(!user || !user.token) {
     return dispatch(authChecked());
@@ -29,6 +32,12 @@ export const tryLoadUser = () => dispatch => {
       type: USER_AUTH,
       payload: user
     }))
+    .then(() => {
+      dispatch({
+        type: PROFILE_LOAD,
+        payload: getProfile()
+      });
+    })
     .catch(() => {
       clearStoredUser();
     })

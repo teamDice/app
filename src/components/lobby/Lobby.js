@@ -6,7 +6,6 @@ import Chatroom from './Chatroom';
 import { connect } from 'react-redux';
 import { getStats, getGames } from './reducers';
 import { getProfile } from '../profile/reducers';
-import { loadProfile } from '../profile/actions';
 
 import { requestGame, removeGame, getStatsById, loadChatroom } from './actions';
 import styles from './Lobby.css';
@@ -21,12 +20,7 @@ export class Lobby extends Component {
     getStatsById: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     removeGame: PropTypes.func.isRequired,
-    loadProfile: PropTypes.func.isRequired
   };
-
-  componentDidMount() {
-    this.props.loadProfile();
-  }
 
   componentDidUpdate() {
     const { games, history } = this.props;
@@ -65,5 +59,5 @@ export default connect(
     games: getGames(state),
     stats: getStats(state)
   }),
-  { requestGame, getStatsById, loadChatroom, removeGame, loadProfile }
+  { requestGame, getStatsById, loadChatroom, removeGame }
 )(Lobby);

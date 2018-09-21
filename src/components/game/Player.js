@@ -27,7 +27,7 @@ class Player extends PureComponent {
 
   render() {
     const { player, turn, postFlip } = this.props;
-    const { hand, played, name, avatar, bid } = player;
+    const { hand, played, name, avatar, bid, emote } = player;
     let lastCard;
     if(played) {
       const notFlippedCards = played.filter(card => !card.type);
@@ -38,10 +38,10 @@ class Player extends PureComponent {
 
     return (
       <section className={styles.player} 
-        style={{ backgroundColor: turn === player.userId ? '#ff0000' : null }}
+        style={{ backgroundColor: turn === player.userId ? 'rgba(0, 0, 0, .25)' : null }} //HERE HERE HERE
       >
         <Avatar avatar={avatar} bid={bid}/>
-        {/* <h2>{emote}</h2> */}
+        <p>{emote}</p>
         <h2>{name}</h2>
         <div className="hand">
           {hand > 0 && 

@@ -1,7 +1,7 @@
 :local(.header) {
   
-  height: 8vh;
-  padding: 5px 10px;
+  height: 3vh;
+  /* padding: 5px 10px; */
   
 
   section {
@@ -15,12 +15,17 @@
     font-size: 1em;
   }
 
-  span {
+  nav {
+    height: 100%;
+  }
+
+  p {
     position: absolute;
     top: 5px;
     right: 10px;
-    font-size: .5em;
     text-align: right;
+    font-size: 1em;
+    color: white;
   }
 
   ul {
@@ -33,6 +38,8 @@
 
   li {
     list-style-type: none;
+    width: 100%;
+    height: 100%
   }
 
   a {
@@ -51,19 +58,30 @@
       background-repeat: no-repeat;
       background-size: cover;
       width: 100vw;
-      height: 60px;
+      height: 80px;
       bottom: 0;
       left: 0;
       z-index: 10;
       display: flex;
       justify-content: center;
-      padding: 10px 0px;
-      border-top: 1px solid grey;
+      border-top: 1px solid white;
     }
 
-    nav > a {
-      width: 100%;
+    li {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    nav a {
+      width: 20vw;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav i {
+      font-size: 2em;
+      margin: 5px 0px;
     }
   
     h1 {

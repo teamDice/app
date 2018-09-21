@@ -11,11 +11,12 @@ class Game extends PureComponent {
     profile: PropTypes.object.isRequired,
     postCard: PropTypes.func.isRequired,
     postBid: PropTypes.func.isRequired,
-    postFlip: PropTypes.func.isRequired
+    postFlip: PropTypes.func.isRequired,
+    postEmote: PropTypes.func.isRequired
   };
 
   render() { 
-    const { game, hand, profile, postCard, postBid, postFlip } = this.props;
+    const { game, hand, profile, postCard, postBid, postFlip, postEmote } = this.props;
     const { players, turn, phase, challenger } = game;
     const currentChallenger = players && challenger ? players.find(player => player.userId === challenger.userId) : null;
     const allFlipped = currentChallenger ? currentChallenger.played.filter(card => !card.type).length === 0 : null;
@@ -67,6 +68,7 @@ class Game extends PureComponent {
           game={game} 
           postCard={postCard}
           postBid={postBid}
+          postEmote={postEmote}
         />
       </section>
     );

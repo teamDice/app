@@ -27,7 +27,7 @@ export class Error extends Component {
     if(!error) return null;
 
     return (
-      <pre>{error}</pre>
+      <pre>{error.error}</pre>
     );
   }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getUser } from '../auth/reducers';
+import { getProfile } from '../profile/reducers';
 import { logout } from '../auth/actions';
 import { NavLink } from 'react-router-dom';
 import Error from './Error';
@@ -10,53 +10,69 @@ import styles from './Header.css';
 class Header extends Component {
 
   static propTypes = {
-    user: PropTypes.object,
+    profile: PropTypes.object,
     logout: PropTypes.func.isRequired
   };
 
  
 
   render() { 
-    const { user, logout } = this.props;
+    const { profile, logout } = this.props;
+    const { name } = profile;
 
     return (
       <header className={styles.header}>
         <section>
-          {/* <h1>Snakes & Squirrels</h1> */}
+          <div className="header-top">
+            {/* <h1>Snakes & Squirrels</h1> */}
+            {name && <p>Logged in as {profile.name}</p>}
+          </div>
           <nav>
             <ul>
               <li>
                 <NavLink exact to="/">
                   <i className="fas fa-home"></i>
+                  Home
                 </NavLink>
               </li>
-              { user &&
+              { profile &&
                 <li>
-                  <NavLink exact to="/lobby">
-                    <i className="fas fa-home">Play</i>
+                  <NavLink activeStyle={{ color: '#FF570C', 'text-shadow': '1px 1px 5px black' }} exact to="/lobby">
+                    <i className="far fa-play-circle"></i>
+                    <span>Play</span>
                   </NavLink>
                 </li>
               }
               <li>
                 <NavLink
-                  activeStyle={{ borderBottom: '2px solid black' }}
+                  activeStyle={{ color: '#FF570C', 'text-shadow': '1px 1px 5px black' }}
                   exact to="/leaderboard"
                 >
                   <i className="fas fa-list-ol"></i>
+                  <span>Leaderboard</span>
                 </NavLink>
               </li>
+              {name &&
               <li>
                 <NavLink
-                  activeStyle={{ borderBottom: '2px solid black' }}
+                  activeStyle={{ color: '#FF570C', 'text-shadow': '1px 1px 5px black' }}
                   exact to="/profile"
                 >
                   <i className="fas fa-user"></i>
+                  <span>Profile</span>
                 </NavLink>
               </li>
+              }
               <li>
-                { user
-                  ? <NavLink to="/" onClick={logout}><i className="fas fa-sign-out-alt"></i></NavLink>
-                  : <NavLink to="/auth"><i className="fas fa-sign-in-alt"></i></NavLink>
+                {name
+                  ? <NavLink to="/" onClick={logout}>
+                    <i className="fas fa-sign-out-alt"></i>
+                    <span>Log Out</span>
+                  </NavLink>
+                  : <NavLink activeStyle={{ color: '#FF570C', 'text-shadow': '1px 1px 5px black' }} to="/auth">
+                    <i className="fas fa-sign-in-alt"></i>
+                    <span>Log In</span>
+                  </NavLink>
                 }
               </li>
             </ul>
@@ -70,6 +86,6 @@ class Header extends Component {
 }
  
 export default connect(
-  state => ({ user: getUser(state) }),
+  state => ({ profile: getProfile(state) }),
   { logout }
 )(Header);
