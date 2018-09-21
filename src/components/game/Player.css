@@ -7,7 +7,7 @@
     "avatar hand played";
   height: 18vh;
   color: white;
-  width: 400px;
+  width: 375px;
 
   h2 {
     grid-area: username;
@@ -58,9 +58,24 @@
   }
 
   .message {
+    margin: 4px;
     grid-area: message;
     background: white;
-    border: 1px solid #FF6138;
+    color: black;
     border-radius: 5px;
+    display: flex;
+  }
+
+  .arrow-left {
+    width: 0; 
+    height: 0; 
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent; 
+  
+    border-right: 7px solid white; 
+  }
+
+  .text {
+    width: auto;
   }
 };
