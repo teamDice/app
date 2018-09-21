@@ -1,17 +1,37 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './Profile.css';
 import { connect } from 'react-redux';
+import ProfileDisplay from './ProfileDisplay';
+import ProfileForm from './ProfileForm';
+import { update } from './actions';
 import { getUser } from '../auth/reducers';
 import firebase from 'firebase';
+import styles from './Profile.css';
 
 class Profile extends Component {
-  state = { 
+
+  state = {
+    editing: false,
     imageSource: null
   };
 
   static propTypes = {
-    user: PropTypes.object,
+    user: PropTypes.object.isRequired,
+    update: PropTypes.func
+  };
+
+  handleEdit = () => {
+    this.setState({ editing: true });
+  };
+
+  handleComplete = profile => {
+    const { update } = this.props;
+    update(profile);
+    this.handleEndEdit();
+  };
+
+  handleEndEdit = () => {
+    this.setState({ editing: false });
   };
 
   componentDidMount() {
@@ -25,31 +45,43 @@ class Profile extends Component {
   }
 
   render() { 
+    const { editing } = this.state;
     const { user } = this.props;
-    const { name, greeting, location } = user.profile;
+    const { profile } = user;
+    const { name, greeting, location } = profile;
 
     return (
       <div className={styles.profile}>
-        {user.profile &&        
-        <section >
-          <div className="profile-avatar">
-            {/* <img src={image} /> */}
-            <img src={this.state.imageSource} />
-          </div>
-          <section className="profile-name">
-            <article>
-              <h1 className="name">Name: { name }</h1>
-              <h3>Greeting: { greeting }</h3>
-              <h3>Location: { location }</h3>
-            </article>
-            
+        {user &&        
+          <section >
+            <div className="profile-avatar">
+              {/* <img src={image} /> */}
+              <img src={this.state.imageSource} />
+            </div>
+            <section className="profile-name">
+              <article>
+                <h1 className="name">Name: { name }</h1>
+                <h3>Greeting: { greeting }</h3>
+                <h3>Location: { location }</h3>
+              </article>
+              
+              {editing
+                ? <ProfileForm
+                  profile={profile}
+                  onComplete={this.handleComplete}
+                  onCancel={this.handleEndEdit}
+                />
+                : <ProfileDisplay
+                  profile={profile}
+                  onEdit={this.handleEdit}
+                />
+              }
+            </section>
           </section>
-        </section>
         }
       </div>
-      
-    );
 
+    );
   }
 }
  
@@ -57,6 +89,5 @@ export default connect(
   state => ({
     user: getUser(state)
   }),
-  null
-
+  { update }
 )(Profile);
