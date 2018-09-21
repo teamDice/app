@@ -9,9 +9,10 @@ class QueueItem extends Component {
   };
 
   static propTypes = {
-    playersWaiting: PropTypes.string,
+    playersWaiting: PropTypes.number,
     queueType: PropTypes.string,
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
+
   };
 
   handleClick = () => {
@@ -26,7 +27,7 @@ class QueueItem extends Component {
   };
 
   render() { 
-    const { queueType } = this.props;
+    const { queueType, playersWaiting } = this.props;
     const { searching } = this.state;
 
     return (
@@ -43,7 +44,7 @@ class QueueItem extends Component {
             : `Find ${queueType}-player Game `}
         </div>
         <div>
-          <h4>3</h4>
+          <h4>{playersWaiting}</h4>
           <p>Players in Queue</p>
         </div>
       </article>

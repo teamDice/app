@@ -6,18 +6,21 @@ import styles from './QueueForm.css';
 class QueueForm extends Component {
 
   static propTypes = {
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
+    queue2Users: PropTypes.number,
+    queue3Users: PropTypes.number,
+    queue4Users: PropTypes.number,
   };
 
   render() { 
-    const { onClick } = this.props;
+    const { onClick, queue2Users, queue3Users, queue4Users } = this.props;
 
     return (
       <div className={styles.queueForm}>
         <section>
-          <QueueItem onClick={onClick} queueType="2"/>
-          <QueueItem onClick={onClick} queueType="3"/>
-          <QueueItem onClick={onClick} queueType="4"/>
+          <QueueItem onClick={onClick} playersWaiting={queue2Users} queueType="2"/>
+          <QueueItem onClick={onClick} playersWaiting={queue3Users} queueType="3"/>
+          <QueueItem onClick={onClick} playersWaiting={queue4Users} queueType="4"/>
         </section>
       </div>
     );

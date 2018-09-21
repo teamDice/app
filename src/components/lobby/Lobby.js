@@ -4,7 +4,7 @@ import Header from '../app/Header';
 import QueueForm from './QueueForm';
 import Chatroom from './Chatroom';
 import { connect } from 'react-redux';
-import { getStats, getGames, getQueue2Users } from './reducers';
+import { getStats, getGames, getQueue2Users, getQueue3Users, getQueue4Users } from './reducers';
 import { getProfile } from '../profile/reducers';
 import { requestGame, removeGame, getStatsById, loadChatroom, loadQueue2Users, loadQueue3Users, loadQueue4Users } from './actions';
 import styles from './Lobby.css';
@@ -16,6 +16,8 @@ export class Lobby extends Component {
     games: PropTypes.string,
     stats: PropTypes.object,
     queue2: PropTypes.number,
+    queue3: PropTypes.number,
+    queue4: PropTypes.number,
     requestGame: PropTypes.func.isRequired,
     getStatsById: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
@@ -50,13 +52,18 @@ export class Lobby extends Component {
   }
 
   render() { 
-    const { requestGame, profile } = this.props;
+    const { requestGame, profile, queue2, queue3, queue4 } = this.props;
     
 
     return (
       <div className={styles.lobby}>
         <Header/>
-        <QueueForm onClick={requestGame}/>
+        <QueueForm 
+          onClick={requestGame}
+          queue2Users={queue2}
+          queue3Users={queue3}
+          queue4Users={queue4}
+        />
         <Chatroom profile={profile}/>
       </div>
     );
@@ -68,7 +75,9 @@ export default connect(
     profile: getProfile(state),
     games: getGames(state),
     stats: getStats(state),
-    queue2: getQueue2Users(state)
+    queue2: getQueue2Users(state),
+    queue3: getQueue3Users(state),
+    queue4: getQueue4Users(state)
   }),
   { requestGame, getStatsById, loadChatroom, removeGame, loadQueue2Users, loadQueue3Users, loadQueue4Users }
 )(Lobby);
