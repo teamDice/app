@@ -56,7 +56,10 @@
     margin: 2px 2px;
   }
 
-  p {
+  .message {
     grid-area: message;
+    background: white;
+    border: 1px solid #FF6138;
+    border-radius: 5px;
   }
 };

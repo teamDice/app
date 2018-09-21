@@ -52,7 +52,7 @@ class Game extends PureComponent {
     const playerIndex = game.players.indexOf(player);
     const emoteRef = db.ref('games').child(game.key).child('players').child(playerIndex).child('emote');
     return emoteRef.set(emote)
-      .then(() => setTimeout(() => emoteRef.remove(), 2000));
+      .then(() => setTimeout(() => emoteRef.remove(), 5000));
   };
 
   postMessage = message => {
