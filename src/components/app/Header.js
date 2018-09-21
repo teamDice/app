@@ -37,7 +37,9 @@ class Header extends Component {
               </li>
               { profile &&
                 <li>
-                  <NavLink activeStyle={{ color: '#FF570C', 'text-shadow': '1px 1px 5px black' }} exact to="/lobby">
+                  <NavLink
+                    activeStyle={{ color: '#FF570C', textShadow: '1px 1px 5px black' }}
+                    exact to="/lobby">
                     <i className="far fa-play-circle"></i>
                     <span>Play</span>
                   </NavLink>
@@ -45,7 +47,7 @@ class Header extends Component {
               }
               <li>
                 <NavLink
-                  activeStyle={{ color: '#FF570C', 'text-shadow': '1px 1px 5px black' }}
+                  activeStyle={{ color: '#FF570C', textShadow: '1px 1px 5px black' }}
                   exact to="/leaderboard"
                 >
                   <i className="fas fa-list-ol"></i>
@@ -55,7 +57,7 @@ class Header extends Component {
               {name &&
               <li>
                 <NavLink
-                  activeStyle={{ color: '#FF570C', 'text-shadow': '1px 1px 5px black' }}
+                  activeStyle={{ color: '#FF570C', textShadow: '1px 1px 5px black' }}
                   exact to="/profile"
                 >
                   <i className="fas fa-user"></i>

@@ -22,6 +22,7 @@
     align-items: center;
     position: relative;
   }
+  
   .played {
     grid-area: played;
     display: flex;

@@ -2,22 +2,24 @@
 
   .chat-form {
     margin: 5px;
+    display: flex;
   }
 
   .chat-field {
     font-family: 'Rajdhani', sans-serif;
     font-size: 1.5em;
     height: 40px;
-    width: 300px;
+    width: 100%;
     border-radius: 100px;
     border: none;
-    margin-right: 2px;
+    margin-right: 7px;
     padding-left: 1em;
   }
 
   .chat-button {
     background-color:#FF6138;
-    border-radius: 100px;
+    /* border-radius: 100px; */
+    border: 1px solid white;
     height: 40px;
   }
 
