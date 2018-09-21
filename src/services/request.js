@@ -28,7 +28,11 @@ export const getStoredUser = () => {
 export const clearStoredUser = () => storage.removeItem(key);
 
 function request(url, options = {}, data) {
+  console.log('***Req data ', data);
+  console.log('***Req options ', options);
+  
   if(data) options.body = JSON.stringify(data);
+  console.log('***Req body ', options.body);
   if(token) {
     if(!options.headers) options.headers = {};
     options.headers.Authorization = token;

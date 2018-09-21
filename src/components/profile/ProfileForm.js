@@ -15,7 +15,7 @@ class ProfileForm extends Component {
   static propTypes = {
     profile: PropTypes.object,
     onComplete: PropTypes.func.isRequired,
-    onCancel: PropTypes.func
+    onCancel: PropTypes.func,
   };
 
   componentDidMount() {
@@ -31,8 +31,10 @@ class ProfileForm extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    this.props.onComplete(this.state);
-    this.setState({ name: '', location: '', greeting: '' });
+    this.props.onComplete(this.state)
+      .then(this.props.onCancel());
+ 
+   
   };
 
   render() { 
@@ -43,9 +45,9 @@ class ProfileForm extends Component {
       <Fragment>
         <form className={styles.profile} onSubmit={this.handleSubmit}>
           <h3>Update Profile Details</h3>
-          <InputControl name="Name      " value={name} onChange={this.handleChange}/>
-          <InputControl name="Location " value={location} onChange={this.handleChange}/>
-          <InputControl name="Greeting " value={greeting} onChange={this.handleChange}/>
+          <InputControl name="name" value={name} onChange={this.handleChange}/>
+          <InputControl name="location" value={location} onChange={this.handleChange}/>
+          <InputControl name="greeting" value={greeting} onChange={this.handleChange}/>
           <p className="buttons">
             <button type="submit">Update</button>
             <button type="button" onClick={onCancel}>Cancel</button>

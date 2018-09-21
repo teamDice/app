@@ -37,7 +37,8 @@ class Profile extends PureComponent {
 
   handleEditInfo = profile => {
     const { updateProfile } = this.props;
-    return updateProfile(profile)
+    const { name, location, greeting } = profile;
+    return updateProfile({ name, location, greeting })
       .then(() =>this.toggleEditingInfo);
   };
 
@@ -69,12 +70,12 @@ class Profile extends PureComponent {
                   {editingInfo
                     ? <ProfileForm
                       profile={profile}
-                      onComplete={this.handleComplete}
-                      onCancel={this.handleEndEdit}
+                      onComplete={this.handleEditInfo}
+                      onCancel={this.toggleEditingInfo}
                     />
                     : <ProfileDisplay
                       profile={profile}
-                      onEdit={this.handleEditInfo}
+                      onEdit={this.toggleEditingInfo}
                     />
                   }
                 </section>
