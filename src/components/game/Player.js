@@ -32,7 +32,12 @@ class Player extends PureComponent {
         style={turn === player.userId ? { backgroundColor: 'rgba(0, 0, 0, .25)', border: '1px solid white', borderRadius: '10px' } : null } 
       >
         <Avatar emote={emote} avatar={avatar} bid={bid}/>
-        {message && <p className="message">{message}</p>}
+        {message && 
+          <span className="message">
+            <p className="arrow-left"></p>
+            <p className="text">{message}</p>
+          </span>
+        }
         <h2>{name}</h2>
         <div className="hand">
           {hand > 0 && 

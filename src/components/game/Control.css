@@ -23,7 +23,7 @@
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    width: 400px;
+    width: 375px;
   }
   .emoji {
     width: 30px;
@@ -58,7 +58,7 @@
     transition: .15s
   }
   
-  .emotes > i:hover {
+  .emotes > p:hover {
     border-bottom: 5px solid rgba(0, 0, 0, .35);
     border-right: 5px solid rgba(0, 0, 0, .45);
     border-top: 5px solid rgba(0, 0, 0, .65);
