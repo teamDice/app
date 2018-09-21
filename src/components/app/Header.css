@@ -1,6 +1,6 @@
 :local(.header) {
   
-  height: 8vh;
+  height: 3vh;
   padding: 5px 10px;
   
 
@@ -15,12 +15,13 @@
     font-size: 1em;
   }
 
-  span {
+  p {
     position: absolute;
     top: 5px;
     right: 10px;
-    font-size: .5em;
     text-align: right;
+    font-size: 1em;
+    color: white;
   }
 
   ul {
@@ -51,19 +52,25 @@
       background-repeat: no-repeat;
       background-size: cover;
       width: 100vw;
-      height: 60px;
+      height: 80px;
       bottom: 0;
       left: 0;
       z-index: 10;
       display: flex;
       justify-content: center;
-      padding: 10px 0px;
-      border-top: 1px solid grey;
+      padding: 20px 0px;
+      border-top: 1px solid white;
     }
 
-    nav > a {
+    nav a {
       width: 100%;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav i {
+      font-size: 2em;
     }
   
     h1 {
