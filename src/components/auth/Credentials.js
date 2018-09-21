@@ -23,6 +23,8 @@ class Credentials extends PureComponent {
 
   handleSubmit = event => {
     event.preventDefault();
+    const { email, password } = this.state;
+    if(!email || !password) return;
     this.props.submit(this.state);
   };
 

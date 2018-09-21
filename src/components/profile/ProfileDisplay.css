@@ -1,0 +1,32 @@
+:local(.profile_display) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+
+  .info-display {
+    display: flex;
+  }
+
+  .info-display > div {
+    margin: 0px 10px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 3em;
+    border-bottom: 1px solid white;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+
+  h3, p {
+    font-size: 1.7em;
+  }
+
+  .edit-icon {
+    text-align: center;
+  }
+
+  
+}  

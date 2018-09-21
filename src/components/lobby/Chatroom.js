@@ -21,7 +21,7 @@ class Chatroom extends Component {
     sendChat: PropTypes.func,
     loadChatroom: PropTypes.func.isRequired,
     chatroom: PropTypes.array,
-    user: PropTypes.object.isRequired
+    profile: PropTypes.object.isRequired
   };
 
   componentDidMount() {
@@ -36,7 +36,7 @@ class Chatroom extends Component {
 
   handleSubmit = (event, message) => {
     event.preventDefault();
-    const { name } = this.props.user.profile;
+    const { name } = this.props.profile;
     db.ref(chatRef).push({
       name: name,
       text: message

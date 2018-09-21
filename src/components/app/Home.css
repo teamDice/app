@@ -45,7 +45,6 @@
   button {
     margin: 10px;
     border: 1px solid white;
-    border-radius: 5%;
     background: none;
     color: white;
     font-size: 2em;
@@ -55,7 +54,6 @@
   }
 
   button:hover {
-    background: #94A35F;
     background: #FF6138;
   }
 }
