@@ -1,13 +1,13 @@
 :local(.leader_display) {
  
 
-    text-align: center;
-  
-    .leader_table {
+  text-align: center;
+
+  .leader_table {
     margin-left: auto;
     margin-right: auto;
-
-    }
+  }
+  
   thead {
     text-align: center;
    
