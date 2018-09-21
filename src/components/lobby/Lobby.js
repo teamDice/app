@@ -4,10 +4,9 @@ import Header from '../app/Header';
 import QueueForm from './QueueForm';
 import Chatroom from './Chatroom';
 import { connect } from 'react-redux';
-import { getStats, getGames } from './reducers';
+import { getStats, getGames, getQueue2Users } from './reducers';
 import { getProfile } from '../profile/reducers';
-
-import { requestGame, removeGame, getStatsById, loadChatroom } from './actions';
+import { requestGame, removeGame, getStatsById, loadChatroom, loadQueue2Users, loadQueue3Users, loadQueue4Users } from './actions';
 import styles from './Lobby.css';
 
 export class Lobby extends Component {
@@ -16,11 +15,22 @@ export class Lobby extends Component {
     profile: PropTypes.object,
     games: PropTypes.string,
     stats: PropTypes.object,
+    queue2: PropTypes.number,
     requestGame: PropTypes.func.isRequired,
     getStatsById: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     removeGame: PropTypes.func.isRequired,
+    loadQueue2Users: PropTypes.func.isRequired,
+    loadQueue3Users: PropTypes.func.isRequired,
+    loadQueue4Users: PropTypes.func.isRequired
   };
+
+  componentDidMount() {
+    const { loadQueue2Users, loadQueue3Users, loadQueue4Users } = this.props;
+    loadQueue2Users();
+    loadQueue3Users();
+    loadQueue4Users();
+  }
 
   componentDidUpdate() {
     const { games, history } = this.props;
@@ -57,7 +67,8 @@ export default connect(
   state => ({
     profile: getProfile(state),
     games: getGames(state),
-    stats: getStats(state)
+    stats: getStats(state),
+    queue2: getQueue2Users(state)
   }),
-  { requestGame, getStatsById, loadChatroom, removeGame }
+  { requestGame, getStatsById, loadChatroom, removeGame, loadQueue2Users, loadQueue3Users, loadQueue4Users }
 )(Lobby);

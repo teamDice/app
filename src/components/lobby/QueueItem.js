@@ -30,15 +30,21 @@ class QueueItem extends Component {
     const { searching } = this.state;
 
     return (
-      <article>
+      <article 
+        className={this.state.searching ? 'queueSelected' : 'queue'}
+        onClick={this.handleClick}
+      >
         <div 
-          onClick={this.handleClick}
-          className={this.state.searching ? 'queueSelected' : 'queue'}
+
         >
           
           {searching ? 
             'Searching'
             : `Find ${queueType}-player Game `}
+        </div>
+        <div>
+          <h4>3</h4>
+          <p>Players in Queue</p>
         </div>
       </article>
     );

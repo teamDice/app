@@ -1,8 +1,15 @@
 import { ERROR } from '../app/reducers';
 import { getProfile } from '../profile/reducers';
-import { GAMES_LOAD, GAMES_REMOVE, STATS_LOAD, CHAT_LOAD } from './reducers';
+import { 
+  GAMES_LOAD, 
+  GAMES_REMOVE, 
+  STATS_LOAD, 
+  CHAT_LOAD,
+  QUEUE_2_LOAD,
+  QUEUE_3_LOAD,
+  QUEUE_4_LOAD } from './reducers';
 import { db } from '../../services/firebase';
-import { handsRef, chatRef } from '../../services/firebaseRef';
+import { handsRef, chatRef, queue2Ref, queue3Ref, queue4Ref } from '../../services/firebaseRef';
 import { getStatsById as _getStats } from '../../services/api';
 
 const convertToArray = obj => {
@@ -61,17 +68,66 @@ export const loadChatroom = () => {
       }
     });
   };
-};
-
-// export const sendChat = message => {
-//   db.ref(chatRef).push({
-//     name: 'anon',
-//     text: message
-//   });
-// };
-  
+};  
 
 export const getStatsById = id => ({
   type: STATS_LOAD,
   payload: _getStats(id)
 });
+
+export const loadQueue2Users = () => {
+  return (dispatch) => {
+    db.ref(queue2Ref).on('value', snapshot => {
+      if(!snapshot.val()) {
+        dispatch({
+          type: QUEUE_2_LOAD,
+          payload: 0
+        });
+      }
+      else {
+        dispatch({
+          type: QUEUE_2_LOAD,
+          payload: Object.keys(snapshot.val()).length
+        });
+      }
+    });
+  };
+};
+
+export const loadQueue3Users = () => {
+  return (dispatch) => {
+    db.ref(queue3Ref).on('value', snapshot => {
+      if(!snapshot.val()) {
+        dispatch({
+          type: QUEUE_3_LOAD,
+          payload: 0
+        });
+      }
+      else {
+        dispatch({
+          type: QUEUE_3_LOAD,
+          payload: Object.keys(snapshot.val()).length
+        });
+      }
+    });
+  };
+};
+
+export const loadQueue4Users = () => {
+  return (dispatch) => {
+    db.ref(queue4Ref).on('value', snapshot => {
+      if(!snapshot.val()) {
+        dispatch({
+          type: QUEUE_4_LOAD,
+          payload: 0
+        });
+      }
+      else {
+        dispatch({
+          type: QUEUE_4_LOAD,
+          payload: Object.keys(snapshot.val()).length
+        });
+      }
+    });
+  };
+};

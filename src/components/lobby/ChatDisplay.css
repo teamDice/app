@@ -1,5 +1,5 @@
 :local(.chat_display) {
-  height: 340px;
+  height: 40vh;
   overflow-y: auto;
   border: 2px solid white;
   padding: 5px;
