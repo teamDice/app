@@ -30,7 +30,7 @@ export class Home extends Component {
           <h1>Snakes &amp; Squirrels</h1>
         </hgroup>
         {rules
-          ? <section>
+          ? <section className="rules">
             <h3>How to Play:</h3>
             <p>Each turn, either play a card or make a challenge. The first player to win 2 challenges is the victor!</p>
             <ul>
