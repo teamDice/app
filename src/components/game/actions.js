@@ -1,5 +1,5 @@
 import { GAME_LOAD, GAME_END, CARD_PLAY, HAND_START, EMOTE_CLEAR_ALL, getGame } from './reducers';
-import { getUser } from '../auth/reducers';
+import { getProfile } from '../profile/reducers';
 import { gamesRef, handsRef } from '../../services/firebaseRef';
 import { postRecord } from '../../services/api';
 
@@ -11,16 +11,21 @@ export const startGame = gameKey => {
       const game = snapshot.val();
       game.key = gameKey;
       if(game.winner) {
-        const { profile } = getUser(getState());
-        
-        dispatch({
-          type: GAME_END,
-          payload: game.winner === profile._id ? postRecord(game) : null
-        });
-        handsRef.child(profile._id).remove();
-        handsRef.child(profile._id).off('value');
-        gamesRef.child(gameKey).remove();
-        gamesRef.child(gameKey).off('value');
+        const profile = getProfile(getState());
+        setTimeout(
+          () => {
+            return Promise.all([
+              dispatch({
+                type: GAME_END,
+                payload: game.winner === profile._id ? postRecord(game) : null
+              }),
+              handsRef.child(profile._id).remove(),
+              handsRef.child(profile._id).off('value'),
+              gamesRef.child(gameKey).remove(),
+              gamesRef.child(gameKey).off('value')
+            ]);
+          },
+          3000);
       }
       else {
         dispatch({
@@ -34,7 +39,7 @@ export const startGame = gameKey => {
 
 export const loadHand = () => {
   return (dispatch, getState) => {
-    const { profile } = getUser(getState());
+    const profile = getProfile(getState());
     handsRef.child(profile._id).on('value', snapshot => {
       const startingState = snapshot.val();
 

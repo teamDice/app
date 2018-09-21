@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 
 import PropTypes from 'prop-types';
 import styles from './Avatar.css';
-import avatarImage from '../../assets/dolphin.png';
 
 class Avatar extends PureComponent {
 
@@ -27,7 +26,7 @@ class Avatar extends PureComponent {
         <p>{overlay}</p>
         {
           avatar &&
-          <img src={avatarImage} />
+          <img src={avatar} />
         }
       </div>
       

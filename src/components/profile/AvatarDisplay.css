@@ -1,0 +1,11 @@
+:local(.avatarDisplay) {
+  img {
+    width: 250px;
+    border: 2px solid white;
+  }
+
+  button.edit-icon {
+    border: none;
+    position: absolute;
+  }
+}

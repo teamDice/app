@@ -1,23 +1,33 @@
 :local(.home) {
 
 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  padding: 80px 0px;
-  color: #F30E5C;
-  color: black;
-  text-align: center;
-  padding: 30px;
+  display: grid;
   height: 90vh;
+  grid-template: 40vh auto / 100%;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+
+  hgroup {
+    width: 50%;
+    justify-self: center;
+    align-self: center;
+
+  }
 
   h1 {
+    width: auto;
     border-top: 2px solid white;
     border-bottom: 2px solid white;
-    padding: 20px 0px;
+    padding: 20px 20px;
     letter-spacing: .2em;
     font-size: 2em;
+  }
+
+  .rules {
+    text-align: center;
+    padding: 50px;
   }
 
   ul {
@@ -26,8 +36,27 @@
     list-style-type: none;
   }
 
+  .buttons {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+  }
 
-  li {
-    text-align: left;
+  button {
+    margin: 10px;
+    border: 1px solid white;
+    background: none;
+    color: white;
+    font-size: 2em;
+    padding: .2em;
+    width: 7.5em;
+    transition: all .3s ease;
+  }
+
+  button:hover {
+    background: #FF6138;
   }
 }

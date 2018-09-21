@@ -1,11 +1,12 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getUser } from '../auth/reducers';
+import { getProfile } from '../profile/reducers';
 import Card from './Card';
 import Bids from './ControlBids';
 import Emotes from './ControlEmotes';
 import styles from './Control.css';
+import emoji from '../../assets/emoji.png';
 
 class Control extends PureComponent {
   state = {
@@ -17,9 +18,10 @@ class Control extends PureComponent {
   static propTypes = {
     game: PropTypes.object.isRequired,
     hand: PropTypes.array.isRequired,
-    user: PropTypes.object,
+    profile: PropTypes.object,
     postCard: PropTypes.func,
-    postBid: PropTypes.func
+    postBid: PropTypes.func,
+    postEmote: PropTypes.func
   };
 
   componentDidUpdate() {
@@ -43,9 +45,9 @@ class Control extends PureComponent {
 
   render() { 
     const { emoting, bidding, processing } = this.state;
-    const { hand, game, user, postCard, postBid } = this.props;
+    const { hand, game, profile, postCard, postBid, postEmote } = this.props;
     const { phase, turn, players, challenger } = game;
-    const uid = user.profile._id;
+    const uid = profile._id;
     
     const isTurn = turn === uid;
     
@@ -53,8 +55,9 @@ class Control extends PureComponent {
       <section className={styles.control}>
 
         {emoting
-          ? <Emotes toggle={this.toggleEmoting}/>
+          ? <Emotes postEmote={postEmote} toggle={this.toggleEmoting}/>
           : <Fragment>
+            {/* <img className='emoji' src={emoji} onClick={this.toggleEmoting}/> */}
             <button onClick={this.toggleEmoting}>Emote</button>
             {phase > 2
               ? <section>
@@ -104,7 +107,7 @@ class Control extends PureComponent {
  
 export default connect(
   state => ({
-    user: getUser(state),
+    profile: getProfile(state),
   }),
   null
 )(Control);

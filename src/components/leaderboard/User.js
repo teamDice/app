@@ -3,17 +3,16 @@ import PropTypes from 'prop-types';
 
 class User extends PureComponent {
   static propTypes = {
-    user: PropTypes.object
+    user: PropTypes.object,
+    wins: PropTypes.number
   };
 
   render() { 
-    const { user } = this.props;
+    const { user, wins } = this.props;
     return (  
       <tr>
         <td>{user.name}</td>
-        <td>{user.totalWin}</td>
-        <td>{user.totalGames}</td>
-        <td>{user.winPercent}</td>
+        <td>{wins}</td>
       </tr>
     );
   }

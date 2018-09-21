@@ -4,7 +4,9 @@ import promiseMiddleware from './promise-middleware';
 import { error, loading } from '../components/app/reducers';
 import { game, hand } from '../components/game/reducers';
 import { user, checkedAuth } from '../components/auth/reducers';
-import { games, stats, leaders, chatroom } from '../components/lobby/reducers';
+import { leaders } from '../components/leaderboard/reducers';
+import { games, stats, chatroom } from '../components/lobby/reducers';
+import { profile } from '../components/profile/reducers';
 
 const rootReducer = combineReducers({
   error,
@@ -12,11 +14,12 @@ const rootReducer = combineReducers({
   user,
   checkedAuth,
   games,
+  profile,
   game,
   hand,
   stats,
   leaders,
-  chatroom
+  chatroom,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

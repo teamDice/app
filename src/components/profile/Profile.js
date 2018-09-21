@@ -1,50 +1,97 @@
-import React, { Component } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import styles from './Profile.css';
 import { connect } from 'react-redux';
-import { getUser } from '../auth/reducers';
+import ProfileDisplay from './ProfileDisplay';
+import ProfileForm from './ProfileForm';
+import AvatarDisplay from './AvatarDisplay';
+import AvatarForm from './AvatarForm';
+import Header from '../app/Header';
+import { loadProfile, updateProfile } from './actions';
+import { getProfile } from './reducers';
+import styles from './Profile.css';
 
-class Profile extends Component {
-  state = {  };
+class Profile extends PureComponent {
 
-  static propTypes = {
-    user: PropTypes.object,
-  
+  state = {
+    editingInfo: false,
+    editingAvatar: false,
   };
 
+  static propTypes = {
+    profile: PropTypes.object.isRequired,
+    updateProfile: PropTypes.func.isRequired,
+    loadProfile: PropTypes.func.isRequired
+  };
+
+  componentDidMount() {
+    // this.props.loadProfile();
+  }
+  
+  toggleEditingInfo = () => {
+    this.setState(({ editingInfo }) => ({ editingInfo: !editingInfo }));
+  };
+
+  toggleEditingAvatar = () => {
+    this.setState(({ editingAvatar }) => ({ editingAvatar: !editingAvatar }));
+  };
+
+  handleEditInfo = profile => {
+    const { updateProfile } = this.props;
+    return updateProfile(profile)
+      .then(() =>this.toggleEditingInfo);
+  };
+
+  handleEditAvatar = avatar => {
+    const { updateProfile, profile } = this.props;
+    const { name, location, greeting } = profile;
+    return updateProfile({ name, location, avatar, greeting })
+      .then(() =>this.toggleEditingAvatar);
+  };
+
+  
+
   render() { 
-    const { user } = this.props;
-    const { name, greeting, location } = user.profile;
-    
+    const { editingInfo, editingAvatar } = this.state;
+    const { profile } = this.props;
+    const { avatar } = profile;
+
     return (
       <div className={styles.profile}>
-        {user.profile &&        
-        <section >
-          <div className="profile-avatar">
-            <img src="https://toolnavy.com/customavatars/avatar38224_10.gif" />
-            {/* <img src="https://firebasestor...f-a1fe-9a9a6e721345f" /> */}
-          </div>
-          <section className="profile-name">
-            <article>
-              <h1 className="name">Name: { name }</h1>
-              <h3>Greeting: { greeting }</h3>
-              <h3>Location: { location }</h3>
-            </article>
-            
+        {profile &&  
+          
+          <section>
+            <Header/>
+            {editingAvatar
+              ? <AvatarForm toggleEdit={this.toggleEditingAvatar} editAvatar={this.handleEditAvatar} currentAvatar={avatar}/>
+              : <Fragment>
+                <AvatarDisplay toggleEdit={this.toggleEditingAvatar} imageSource={avatar}/>
+                <section className="info">             
+                  {editingInfo
+                    ? <ProfileForm
+                      profile={profile}
+                      onComplete={this.handleComplete}
+                      onCancel={this.handleEndEdit}
+                    />
+                    : <ProfileDisplay
+                      profile={profile}
+                      onEdit={this.handleEditInfo}
+                    />
+                  }
+                </section>
+              </Fragment>
+            }
           </section>
-        </section>
+
         }
       </div>
-      
-    );
 
+    );
   }
 }
  
 export default connect(
   state => ({
-    user: getUser(state)
+    profile: getProfile(state)
   }),
-  null
-
+  { loadProfile, updateProfile }
 )(Profile);
