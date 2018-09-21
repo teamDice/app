@@ -26,21 +26,22 @@ class LeaderboardDisplay extends Component {
     return (
       <div className={styles.leader_display}>
         <Header />
-        <h2>L E A D E R B O A R D</h2>
+        <h2 className='leaderBoardTitle'>L E A D E R B O A R D</h2>
         <table className="leader_table">
-          {/* <thead>
-            <td>Name</td>
-            <td>Total Wins</td>
-            <td>Total Games</td>
-            <td>Win %</td> 
-          </thead> */}
-          {
-            leaders &&
-            leaders.map(leader => (
-              <User key={leader.id} user={leader.user} wins={leader.wins}/>
-            ))
-          }
-          
+          <tbody>
+            {/* <thead>
+              <td>Name</td>
+              <td>Total Wins</td>
+              <td>Total Games</td>
+              <td>Win %</td> 
+            </thead> */}
+            {
+              leaders &&
+              leaders.map(leader => (
+                <User key={leader.id} user={leader.user} wins={leader.wins}/>
+              ))
+            }
+          </tbody>
         </table>
       </div>
     );

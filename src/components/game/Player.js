@@ -17,7 +17,6 @@ class Player extends PureComponent {
     challenger: PropTypes.object
   };
 
-
   render() {
     const { player, turn, postFlip } = this.props;
     const { hand, played, name, avatar, bid, emote, message } = player;
@@ -48,10 +47,9 @@ class Player extends PureComponent {
           }
         </div>
         {played && 
-          <div className="played">
+          <div className='played'>
             {played.map((card, i) => (
               <Card
-                // className='animated bounceInLeft'
                 key={i}
                 card={card}
                 postFlip={card === lastCard ? postFlip : null}
