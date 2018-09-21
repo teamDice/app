@@ -38,7 +38,7 @@ class Player extends PureComponent {
 
     return (
       <section className={styles.player} 
-        style={turn === player.userId ? { backgroundColor: 'rgba(0, 0, 0, .25)', border: '1px solid white', borderRadius: '10px' } : null } //HERE HERE HERE
+        style={turn === player.userId ? { backgroundColor: 'rgba(0, 0, 0, .25)', border: '1px solid white', borderRadius: '10px' } : null } 
       >
         <Avatar avatar={avatar} bid={bid}/>
         <p>{emote}</p>
@@ -55,6 +55,7 @@ class Player extends PureComponent {
           <div className="played">
             {played.map((card, i) => (
               <Card
+                // className='animated bounceInLeft'
                 key={i}
                 card={card}
                 postFlip={card === lastCard ? postFlip : null}
