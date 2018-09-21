@@ -10,9 +10,9 @@ class User extends PureComponent {
   render() { 
     const { user, wins } = this.props;
     return (  
-      <tr>
-        <td>{user.name}</td>
-        <td>{wins}</td>
+      <tr className='leaderContainer'>
+        <td className='leaderName'>Username: {user.name}</td>
+        <td className='leaderWins'>Wins: {wins}</td>
       </tr>
     );
   }

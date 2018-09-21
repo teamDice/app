@@ -42,7 +42,7 @@ class Player extends PureComponent {
           }
         </div>
         {played && 
-          <div className={['played', 'animated ', 'bounceInLeft'].join('')}>
+          <div className='played'>
             {played.map((card, i) => (
               <Card
                 key={i}
