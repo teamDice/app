@@ -71,7 +71,7 @@ class Header extends Component {
                     <i className="fas fa-sign-out-alt"></i>
                     <span>Log Out</span>
                   </NavLink>
-                  : <NavLink activeStyle={{ color: '#FF570C', 'text-shadow': '1px 1px 5px black' }} to="/auth">
+                  : <NavLink activeStyle={{ color: '#FF570C', textShadow: '1px 1px 5px black' }} to="/auth">
                     <i className="fas fa-sign-in-alt"></i>
                     <span>Log In</span>
                   </NavLink>
