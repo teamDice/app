@@ -38,7 +38,7 @@ class QueueItem extends Component {
           
           {searching ? 
             'Searching'
-            : queueType} 
+            : `Find ${queueType}-player Game `}
         </div>
       </article>
     );

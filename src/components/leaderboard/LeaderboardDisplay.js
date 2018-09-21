@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import User from './User.js';
+import Header from '../app/Header';
 import { connect } from 'react-redux';
 import { getLeaders } from './reducers';
 import { loadLeaders } from './actions';
@@ -24,6 +25,7 @@ class LeaderboardDisplay extends Component {
     const { leaders } = this.props;
     return (
       <div className={styles.leader_display}>
+        <Header />
         <h2>L E A D E R B O A R D</h2>
         <table className="leader_table">
           {/* <thead>

@@ -5,7 +5,6 @@ import PrivateRoute from './PrivateRoute';
 import { connect } from 'react-redux';
 import { tryLoadUser } from '../auth/actions';
 import { getCheckedAuth } from '../auth/reducers';
-// import Header from './Header';
 import Home from './Home';
 import Game from '../game/Game';
 import Auth from '../auth/Auth';
@@ -31,8 +30,6 @@ class App extends Component {
     return (
       <Router>
         <div className={styles.app}>
-          {/* <Header/> */}
-
           <main>
             {checkedAuth &&
               <Switch>
@@ -41,9 +38,6 @@ class App extends Component {
                 <PrivateRoute exact path="/lobby" component={Lobby}/>
                 <Route exact path="/leaderboard" component={LeaderboardDisplay}/>
                 <PrivateRoute exact path="/profile" component={Profile}/>
-                {/* Placeholder game route for static html */}
-                {/* <Route exact path="/game" component={GameDisplay}/> */}
-
                 <PrivateRoute path="/games/:gameKey" component={Game}/>
                 <Redirect to="/"/>
               </Switch>

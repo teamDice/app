@@ -20,6 +20,8 @@ export const logout = () => ({ type: LOGOUT });
 const authChecked = () => ({ type: CHECKED_AUTH });
 
 export const tryLoadUser = () => dispatch => {
+
+  // USER COMES FROM LOCAL STORAGE
   const user = getStoredUser();
   if(!user || !user.token) {
     return dispatch(authChecked());

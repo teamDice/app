@@ -24,7 +24,7 @@ class Profile extends PureComponent {
   };
 
   componentDidMount() {
-    this.props.loadProfile();
+    // this.props.loadProfile();
   }
   
   toggleEditingInfo = () => {
