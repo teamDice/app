@@ -1,0 +1,43 @@
+:local(.avatarForm) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  section {
+    display: grid;
+    grid-template: repeat(4, min-content) / repeat(3, minmax(100px, 180px));
+    grid-gap: 5px;
+    padding: 10px;
+  }
+
+  img {
+    width: 100%;
+    border: 1px solid white;
+    transition: all .2s ease;
+  }
+
+  .selected {
+    transform: scale(1.2);
+    border: 5px solid #FF6138;
+    z-index: 3;
+  }
+
+  button {
+    margin: 10px;
+    border: 1px solid white;
+    background: none;
+    color: white;
+    font-size: 2em;
+    padding: .2em;
+    transition: all .3s ease;
+  }
+
+  .save-button {
+    width: 7.5em;
+  }
+
+  button:hover {
+    background: #FF6138;
+  }
+}
