@@ -1,5 +1,5 @@
 import { ERROR } from '../app/reducers';
-import { getUser } from '../auth/reducers';
+import { getProfile } from '../profile/reducers';
 import { GAMES_LOAD, GAMES_REMOVE, STATS_LOAD, CHAT_LOAD } from './reducers';
 import { db } from '../../services/firebase';
 import { handsRef, chatRef } from '../../services/firebaseRef';
@@ -19,7 +19,7 @@ export const removeGame = () => ({ type: GAMES_REMOVE });
 export const requestGame = (searching, queueRef) => {
   return (dispatch, getState) => {
 
-    const { profile } = getUser(getState());
+    const profile = getProfile(getState());
     const profileId = profile._id;
 
     if(searching) {

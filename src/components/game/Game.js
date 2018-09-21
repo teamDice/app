@@ -5,7 +5,7 @@ import GameDisplay from './GameDisplay';
 import { startGame, loadHand, endGame, unloadGame } from './actions';
 import { removeGame } from '../lobby/actions';
 import { getGame, getHand } from './reducers';
-import { getUser } from '../auth/reducers';
+import { getProfile } from '../auth/reducers';
 import { db } from '../../services/firebase';
 
 class Game extends PureComponent {
@@ -19,7 +19,7 @@ class Game extends PureComponent {
     removeGame: PropTypes.func.isRequired,
     game: PropTypes.object,
     hand: PropTypes.array,
-    user: PropTypes.object
+    profile: PropTypes.object
   };
 
   componentDidMount() {
@@ -50,30 +50,30 @@ class Game extends PureComponent {
   // };
 
   postCard = move => {
-    const { user, match } = this.props;
+    const { profile, match } = this.props;
     const { gameKey } = match.params;
     
-    db.ref('cardMove').child(user.profile._id).set({
+    db.ref('cardMove').child(profile._id).set({
       gameId: gameKey,
       ...move
     });
   };
 
   postBid = move => {
-    const { user, match } = this.props;
+    const { profile, match } = this.props;
     const { gameKey } = match.params;
     
-    db.ref('bidMove').child(user.profile._id).set({
+    db.ref('bidMove').child(profile._id).set({
       gameId: gameKey,
       ...move
     });
   };
 
   postFlip = move => {
-    const { user, match } = this.props;
+    const { profile, match } = this.props;
     const { gameKey } = match.params;
     
-    db.ref('flipMove').child(user.profile._id).set({
+    db.ref('flipMove').child(profile._id).set({
       gameId: gameKey,
       ...move
     });
@@ -81,13 +81,13 @@ class Game extends PureComponent {
 
 
   render() { 
-    const { game, hand, user } = this.props;
+    const { game, hand, profile } = this.props;
     return (
       <section>
         {game && hand &&
           <GameDisplay
             game={game}
-            profile={user.profile}
+            profile={profile}
             hand={hand}
             postCard={this.postCard}
             postBid={this.postBid}
@@ -103,7 +103,7 @@ export default connect(
   state => ({
     game: getGame(state),
     hand: getHand(state),
-    user: getUser(state)
+    profile: getProfile(state)
   }),
   { startGame, loadHand, endGame, unloadGame, removeGame }
 )(Game);
