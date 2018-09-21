@@ -1,4 +1,5 @@
 :local(.player) {
+  transition: all .3s ease;
   display: grid;
   grid-template: min-content 1fr / min-content 1fr auto;
   grid-template-areas:
@@ -22,7 +23,15 @@
     align-items: center;
     position: relative;
   }
-  
+
+  .hand > div {
+    position: absolute;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4.5em;
+  }
   .played {
     grid-area: played;
     display: flex;

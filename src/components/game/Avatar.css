@@ -4,9 +4,20 @@
   
   img {
     width: 80px;
-    /* border-radius: 100%; */
+    border-radius: 100px;
     border: 2px solid white;
   }
+
+  span {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4.5em;
+  }
+
   p {
     position: absolute;
     transform: translateY(20px);

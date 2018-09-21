@@ -39,7 +39,9 @@ export const startGame = gameKey => {
 
 export const loadHand = () => {
   return (dispatch, getState) => {
+
     const profile = getProfile(getState());
+    console.log('**PROFILE**', profile);
     handsRef.child(profile._id).on('value', snapshot => {
       const startingState = snapshot.val();
 
