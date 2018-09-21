@@ -5,15 +5,16 @@
   justify-content: center;
   align-items: center;
   text-align: center;
+  height: 100%;
 
   color: white;
 
   input {
     font-family: 'Rajdhani', sans-serif;
-    font-size: 2em;
+    font-size: 1.8em;
     text-align: center;
     margin-bottom: 4.5vh;
-    height: 50px;
+    height: 40px;
     width: 300px;
     border-radius: 100px;
     border: none;
@@ -21,5 +22,14 @@
 
   p {
     font-size: 1.2em;
+    margin-top: 20px;
+  }
+
+  label {
+    font-size: 1.3em;
+  }
+
+  a {
+    color: white;
   }
 }
