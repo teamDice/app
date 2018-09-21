@@ -1,9 +1,9 @@
 import { ERROR } from '../app/reducers';
 import { getUser } from '../auth/reducers';
-import { GAMES_LOAD, GAMES_REMOVE, STATS_LOAD, LEADERS_LOAD, CHAT_LOAD } from './reducers';
+import { GAMES_LOAD, GAMES_REMOVE, STATS_LOAD, CHAT_LOAD } from './reducers';
 import { db } from '../../services/firebase';
 import { handsRef, chatRef } from '../../services/firebaseRef';
-import { getStatsById as _getStats, getLeaderboard } from '../../services/api';
+import { getStatsById as _getStats } from '../../services/api';
 
 const convertToArray = obj => {
   if(!obj) return [];
@@ -74,9 +74,4 @@ export const loadChatroom = () => {
 export const getStatsById = id => ({
   type: STATS_LOAD,
   payload: _getStats(id)
-});
-
-export const loadLeaders = () => ({
-  type: LEADERS_LOAD,
-  payload: getLeaderboard()
 });
