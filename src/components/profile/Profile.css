@@ -1,7 +1,9 @@
 :local(.profile) {
   text-align: center;
   color: white;
+
   .profile_avatar {
+    width: 200px;
     margin-left: auto;
     margin-right: auto;
 

@@ -41,7 +41,8 @@ class AvatarForm extends Component {
   };
 
   handleSubmit = () => {
-    this.props.editAvatar(this.state.selected);
+    return this.props.editAvatar(this.state.selected)
+      .then(this.props.toggleEdit);
   };
 
   render() { 
