@@ -73,7 +73,7 @@
       align-items: center;
     }
     nav a {
-      width: 100%;
+      width: 20vw;
       text-align: center;
       display: flex;
       flex-direction: column;

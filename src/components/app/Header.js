@@ -18,13 +18,14 @@ class Header extends Component {
 
   render() { 
     const { profile, logout } = this.props;
+    const { name } = profile;
 
     return (
       <header className={styles.header}>
         <section>
           <div className="header-top">
             {/* <h1>Snakes & Squirrels</h1> */}
-            <p>Logged in as {profile.name}</p>
+            {name && <p>Logged in as {profile.name}</p>}
           </div>
           <nav>
             <ul>
@@ -36,7 +37,7 @@ class Header extends Component {
               </li>
               { profile &&
                 <li>
-                  <NavLink exact to="/lobby">
+                  <NavLink activeStyle={{ color: '#FF570C', 'text-shadow': '1px 1px 5px black' }} exact to="/lobby">
                     <i className="far fa-play-circle"></i>
                     <span>Play</span>
                   </NavLink>
@@ -44,29 +45,31 @@ class Header extends Component {
               }
               <li>
                 <NavLink
-                  activeStyle={{ borderBottom: '2px solid white' }}
+                  activeStyle={{ color: '#FF570C', 'text-shadow': '1px 1px 5px black' }}
                   exact to="/leaderboard"
                 >
                   <i className="fas fa-list-ol"></i>
                   <span>Leaderboard</span>
                 </NavLink>
               </li>
+              {name &&
               <li>
                 <NavLink
-                  activeStyle={{ borderBottom: '2px solid white' }}
+                  activeStyle={{ color: '#FF570C', 'text-shadow': '1px 1px 5px black' }}
                   exact to="/profile"
                 >
                   <i className="fas fa-user"></i>
                   <span>Profile</span>
                 </NavLink>
               </li>
+              }
               <li>
-                { profile
+                {name
                   ? <NavLink to="/" onClick={logout}>
                     <i className="fas fa-sign-out-alt"></i>
                     <span>Log Out</span>
                   </NavLink>
-                  : <NavLink to="/auth">
+                  : <NavLink activeStyle={{ color: '#FF570C', 'text-shadow': '1px 1px 5px black' }} to="/auth">
                     <i className="fas fa-sign-in-alt"></i>
                     <span>Log In</span>
                   </NavLink>

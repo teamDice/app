@@ -23,26 +23,25 @@ class Auth extends PureComponent {
     if(user) return <Redirect to={redirect}/>;
 
     return (
-      <div className={styles.auth}>
+      <div>
         <Header/>
-        <Switch>
-          <Route path="/auth/signin" component={() => (
-            <section>
-              
+        <div className={styles.auth}>
+          <Switch>
+            <Route path="/auth/signin" component={() => (
+              <section>
                 <p>Don&apos;t have an account?<br/><Link to="/auth/signup">Create an account.</Link></p>
-            
-             
-              <Credentials action="Sign In" submit={signin}/>
-            </section>
-          )}/>
-          <Route path="/auth/signup" render={() => (
-            <section>
-              <p>Already have an account?<br/> <Link to="/auth/signin">Log In</Link></p>
-              <Credentials action="Sign Up" submit={signup} allowName={true}/>
-            </section>
-          )}/>
-          <Redirect to="/auth/signin"/>
-        </Switch>
+                <Credentials action="Sign In" submit={signin}/>
+              </section>
+            )}/>
+            <Route path="/auth/signup" render={() => (
+              <section>
+                <p>Already have an account?<br/> <Link to="/auth/signin">Log In</Link></p>
+                <Credentials action="Sign Up" submit={signup} allowName={true}/>
+              </section>
+            )}/>
+            <Redirect to="/auth/signin"/>
+          </Switch>
+        </div>
       </div>
     );
   }
