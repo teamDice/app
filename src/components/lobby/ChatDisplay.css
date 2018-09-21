@@ -1,7 +1,15 @@
 :local(.chat_display) {
   height: 350px;
   overflow-y: auto;
-  border: 1px solid gray;
+  border: 2px solid white;
   padding: 5px;
-  margin: 10px;
+  margin: 25px 5px 5px 5px;
+  color: white;
+  font-size: 1.3em;
+  background-color: rgba(0, 0, 0, .75);
+
+  .chatName {
+    color: #FF6138;
+    font-weight: bold;
+  }
 }

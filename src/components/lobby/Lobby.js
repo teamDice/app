@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Header from '../app/Header';
 import PlayerDisplay from './PlayerDisplay';
 import QueueForm from './QueueForm';
 import Chatroom from './Chatroom';
@@ -20,12 +21,6 @@ export class Lobby extends Component {
     history: PropTypes.object.isRequired,
     removeGame: PropTypes.func.isRequired
   };
-
-  // componentDidMount() {
-
-  // const { getStatsById, user } = this.props;
-  // getStatsById(user.profile._id);
-  // }
 
   componentDidUpdate() {
     const { games, history } = this.props;

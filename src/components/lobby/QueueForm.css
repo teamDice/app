@@ -1,32 +1,30 @@
 :local(.queueForm) {
   text-align: center;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-areas: "queue queue queue"
-                        "play play play";
+
   section {
     align-items: center;
     color: black;
-    display: flex;
     grid-area: queue;
-    justify-content: center;
+    grid-column-start: 1;
+    grid-column-end: span queue;
+    
   }
   section > article > div {
     align-items: center;
-    background-color: black;
+    border: 2px solid white;
+    background: none;
     color: white;
-    display: flex;
-    height: 110px;
-    justify-content: center;
-    margin: 5px;
-    width: 110px;
+    display: block;
     font-size: 2.5em;
+    justify-content: center;
+    margin: 10px 5px 5px 5px;
+    padding: 5px;
+    transition: 200ms;
   }
+  
   section > article > .queueSelected {
-    border: 3px solid yellow;
+    background-color: #FF6138;
+    transition: 200ms;
   }
 
-  .submit {
-    grid-area: play;
-  }
 }
