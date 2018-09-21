@@ -34,7 +34,8 @@ class QueueItem extends Component {
           onClick={this.handleClick}
           className={this.state.searching ? 'queueSelected' : 'queue'}
         >
-          {searching ? 'Looking for players' : queueType}
+          {queueType}
+          {/* searching ? 'Looking for players' :  */}
         </div>
       </article>
     );

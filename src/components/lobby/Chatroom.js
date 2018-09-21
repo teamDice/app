@@ -6,6 +6,7 @@ import { getChatroom } from './reducers';
 import { loadChatroom } from './actions';
 import { db } from '../../services/firebase';
 import { chatRef } from '../../services/firebaseRef';
+import styles from './Chatroom.css';
 
 
 import ChatDisplay from './ChatDisplay';
@@ -48,11 +49,11 @@ class Chatroom extends Component {
     const { message } = this.state;
     
     return (
-      <div>
+      <div className={styles.chatroom}>
         <ChatDisplay chatroom={chatroom}/>
-        <form onSubmit={event => this.handleSubmit(event, this.state.message)}>
-          <input name='message' value={message} onChange={this.handleChange}/>
-          <button type='submit'>Send</button>
+        <form onSubmit={event => this.handleSubmit(event, this.state.message)} className='chat-form'>
+          <input name='message' value={message} onChange={this.handleChange} className='chat-field'/>
+          <button type='submit' className='chat-button'>Send</button>
         </form>
       </div>
     );
