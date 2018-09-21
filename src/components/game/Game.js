@@ -6,7 +6,6 @@ import { startGame, loadHand, endGame, unloadGame } from './actions';
 import { removeGame } from '../lobby/actions';
 import { getGame, getHand } from './reducers';
 import { getProfile } from '../profile/reducers';
-import { loadProfile } from '../profile/actions';
 import { db } from '../../services/firebase';
 
 class Game extends PureComponent {
@@ -21,19 +20,20 @@ class Game extends PureComponent {
     game: PropTypes.object,
     hand: PropTypes.array,
     profile: PropTypes.object,
-    loadProfile: PropTypes.func.isRequired
   };
 
   componentDidMount() {
-    const { match, startGame, loadHand, loadProfile } = this.props;
+    const { match, startGame } = this.props;
     const { gameKey } = match.params;
-    loadProfile();
+    
     startGame(gameKey);
-    loadHand();
   }
 
   componentDidUpdate() {
-    const { game, history, removeGame } = this.props;
+    const { game, history, removeGame, profile, hand } = this.props;
+    if(profile && !hand) loadHand();
+
+
     if(game !== null) return;
     removeGame();
     history.push({
@@ -112,5 +112,5 @@ export default connect(
     hand: getHand(state),
     profile: getProfile(state)
   }),
-  { startGame, loadHand, endGame, unloadGame, removeGame, loadProfile }
+  { startGame, loadHand, endGame, unloadGame, removeGame }
 )(Game);
