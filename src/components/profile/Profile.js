@@ -3,26 +3,38 @@ import PropTypes from 'prop-types';
 import styles from './Profile.css';
 import { connect } from 'react-redux';
 import { getUser } from '../auth/reducers';
+import firebase from 'firebase';
 
 class Profile extends Component {
-  state = {  };
+  state = { 
+    imageSource: null
+  };
 
   static propTypes = {
     user: PropTypes.object,
-  
   };
+
+  componentDidMount() {
+    const { profile } = this.props.user;
+    const storageRef = firebase.storage().ref();
+    const image = storageRef.child(profile.avatar);
+    image.getDownloadURL().then((url) => { 
+      this.setState({ imageSource: url });
+    });
+
+  }
 
   render() { 
     const { user } = this.props;
     const { name, greeting, location } = user.profile;
-    
+
     return (
       <div className={styles.profile}>
         {user.profile &&        
         <section >
           <div className="profile-avatar">
-            <img src="https://toolnavy.com/customavatars/avatar38224_10.gif" />
-            {/* <img src="https://firebasestor...f-a1fe-9a9a6e721345f" /> */}
+            {/* <img src={image} /> */}
+            <img src={this.state.imageSource} />
           </div>
           <section className="profile-name">
             <article>
