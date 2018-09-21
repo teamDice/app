@@ -21,20 +21,20 @@ class Game extends PureComponent {
     game: PropTypes.object,
     hand: PropTypes.array,
     profile: PropTypes.object,
-    loadProfile: PropTypes.func.isRequired
+    loadProfile: PropTypes.func
   };
 
   componentDidMount() {
-    const { match, startGame, loadHand, loadProfile } = this.props;
+    const { match, startGame, loadHand } = this.props;
     const { gameKey } = match.params;
-    loadProfile();
     startGame(gameKey);
-    loadHand();
+    setTimeout(() => loadHand(), 500);
   }
 
   componentDidUpdate() {
     const { game, history, removeGame } = this.props;
     if(game !== null) return;
+
     removeGame();
     history.push({
       pathname: '/lobby'
@@ -52,7 +52,16 @@ class Game extends PureComponent {
     const playerIndex = game.players.indexOf(player);
     const emoteRef = db.ref('games').child(game.key).child('players').child(playerIndex).child('emote');
     return emoteRef.set(emote)
-      .then(() => setTimeout(() => emoteRef.remove(), 2000));
+      .then(() => setTimeout(() => emoteRef.remove(), 3000));
+  };
+
+  postMessage = message => {
+    const { game, profile } = this.props;
+    const player = game.players.find(player => player.userId === profile._id);
+    const playerIndex = game.players.indexOf(player);
+    const messageRef = db.ref('games').child(game.key).child('players').child(playerIndex).child('message');
+    return messageRef.set(message)
+      .then(() => setTimeout(() => messageRef.remove(), 5000));
   };
 
   postCard = move => {
@@ -68,7 +77,7 @@ class Game extends PureComponent {
   postBid = move => {
     const { profile, match } = this.props;
     const { gameKey } = match.params;
-    
+    this.postMessage(`I bet I can find ${move.bid} squirrel${move.bid > 1 ? 's in a row' : ''}!`);
     db.ref('bidMove').child(profile._id).set({
       gameId: gameKey,
       ...move
@@ -89,7 +98,7 @@ class Game extends PureComponent {
   render() { 
     const { game, hand, profile } = this.props;
     return (
-      <section>
+      <section className="game">
         {game && hand &&
           <GameDisplay
             game={game}

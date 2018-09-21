@@ -9,20 +9,24 @@
     grid-column-end: span queue;
     
   }
-  section > article > div {
+  section > article {
     align-items: center;
     border: 2px solid white;
     background: none;
     color: white;
-    display: block;
-    font-size: 2.5em;
-    justify-content: center;
+    display: flex;
+    font-size: 1.5em;
+    justify-content: space-between;
     margin: 10px 5px 5px 5px;
     padding: 5px;
     transition: 200ms;
   }
+
+  section > article > div > p {
+    font-size: .5em;
+  }
   
-  section > article > .queueSelected {
+  section > .queueSelected {
     background-color: #FF6138;
     transition: 200ms;
   }

@@ -12,55 +12,6 @@ const gamesRef = db.ref('games');
 const handsRef = db.ref('hands');
 const stackRef = db.ref('stack');
 
-
-// TURN TIMER SET TO 10 SECONDS
-// timerRef.child('timeInMs').set(10000);
-
-// exports.myCloudTimer = functions.database.ref('/startTimerRequest/{gameId}').onCreate((snapshot, context) => {
-//   const { gameId } = context.params;
-//   return db.ref('timer/timeInMs').once('value', snap => {
-//       if (!snap.exists()) {
-//           return Promise.reject(Error('time is not defined in the database.'));
-//       }
-
-//       let timeInSeconds = snap.val() / 1000;
-//       console.log('Cloud Timer was Started: ' + timeInSeconds);
-
-//       return functionTimer(timeInSeconds,
-//           elapsedTime => {
-//               db.ref('cloudTimer').child(gameId).set(elapsedTime);
-//           })
-//           .then(totalTime => {
-//               console.log('Timer of ' + totalTime + ' has finished.');
-//               return new Promise(resolve => setTimeout(resolve, 1000));
-//           })
-//           .then(() => snapshot.ref.remove())
-//           .catch(error => console.error(error));
-//   });
-// });
-
-// function functionTimer (seconds, call) {
-//   return new Promise((resolve, reject) => {
-//       if (seconds > 300) {
-//           reject(Error('execution would take too long...'));
-//           return;
-//       }
-//       let interval = setInterval(onInterval, 1000);
-//       let elapsedSeconds = 0;
-
-//       function onInterval () {
-//           if (elapsedSeconds >= seconds) {
-//               clearInterval(interval);
-//               call(0);
-//               resolve(elapsedSeconds);
-//               return;
-//           }
-//           call(seconds - elapsedSeconds);
-//           elapsedSeconds++;
-//       }
-//   });
-// }
-
 // Fisher-Yates Shuffle algorithm
 const shuffle = players => {
   let currentIndex = players.length, tempValue, randomIndex;
@@ -86,7 +37,6 @@ const createNewGame = (users, queue) => {
     return {
       userId: user,
       name: queue[user].name,
-      emote: queue[user].greeting,
       avatar: queue[user].avatar,
       wins: 0,
       hand: 4,
@@ -228,11 +178,6 @@ exports.cardMove = functions.database.ref('/cardMove/{uid}').onCreate((snapshot,
       // Prevent out of turn Plays
       if(game.turn !== uid) return userMoveRef.child(uid).remove();
 
-      // Clear timers
-      // db.ref('startTimerRequest').child(gameId).remove();
-      // db.ref('timer').child(gameId).remove();
-  
-
       return playerHandRef.once('value');
     })
     .then(snapshot => {
@@ -259,10 +204,6 @@ exports.bidMove = functions.database.ref('/bidMove/{uid}').onCreate((snapshot, c
       const game = snapshot.val();
       // Prevent out of turn Plays
       if(game.turn !== uid) return userMoveRef.child(uid).remove();
-
-      // Clear timers
-      // db.ref('startTimerRequest').child(gameId).remove();
-      // db.ref('timer').child(gameId).remove();
 
       const { players } = game;
       const currentPlayer = players.find(player => player.userId === uid);
@@ -316,10 +257,6 @@ exports.flipMove = functions.database.ref('/flipMove/{uid}').onCreate((snapshot,
       game = snapshot.val();
       // Prevent out of turn Plays
       if(game.turn !== uid) return userMoveRef.child(uid).remove();
-
-      // Clear timers
-      // db.ref('startTimerRequest').child(gameId).remove();
-      // db.ref('timer').child(gameId).remove();
 
       return playerHandRef.once('value');
     })
@@ -407,19 +344,6 @@ exports.onWin = functions.database.ref('/games/{gameId}/players/{playerIndex}/wi
     });
 });
   
-// exports.endGame = functions.database.ref('/stack/{gameId}/endGame').onCreate((snapshot, context) => {
-//   const { gameId } = context.params;
-
-//   return gamesRef(gameId).child('players').once('value')
-//     .then(snapshot => {
-//       const players = snapshot.val().map(player => player.userId);
-
-//       return players.forEach(playerId => {
-//         return handsRef.child(playerId).remove();
-//       });
-//     });
-// });
-
 
 
 
@@ -549,15 +473,3 @@ exports.handReset = functions.database.ref('/games/{gameId}/players/{playerIndex
       return handsRef.child(uid).child('hand').set(hand);
     });
 });
-
-
-// ON TURN CHANGE, START A TURN TIMER
-// exports.firstTurnTimer = functions.database.ref('/games/{gameId}/turn').onCreate((snapshot, context) => {
-//   const { gameId } = context.params;
-//   return db.ref('startTimerRequest').set({ [gameId]: true });
-// });
-
-// exports.turnTimer = functions.database.ref('/games/{gameId}/turn').onUpdate((snapshot, context) => {
-//   const { gameId } = context.params;
-//   return db.ref('startTimerRequest').set({ [gameId]: true });
-// });

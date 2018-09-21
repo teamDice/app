@@ -17,31 +17,26 @@ class Player extends PureComponent {
     challenger: PropTypes.object
   };
 
-  // componentDidMount() {
-      
-  //   setTimeout(() => {
-  //     clearEmote();
-  //   }, 5000);
-
-  // }
-
   render() {
     const { player, turn, postFlip } = this.props;
-    const { hand, played, name, avatar, bid, emote } = player;
+    const { hand, played, name, avatar, bid, emote, message } = player;
     let lastCard;
     if(played) {
       const notFlippedCards = played.filter(card => !card.type);
       lastCard = notFlippedCards[notFlippedCards.length - 1];
     }
-    // const order = played.map(card => card.order);
-    // const highestOrder = Math.max(...order);
 
     return (
       <section className={styles.player} 
-        style={{ backgroundColor: turn === player.userId ? 'rgba(0, 0, 0, .25)' : null }} //HERE HERE HERE
+        style={turn === player.userId ? { backgroundColor: 'rgba(0, 0, 0, .25)', border: '1px solid white', borderRadius: '10px' } : null } 
       >
-        <Avatar avatar={avatar} bid={bid}/>
-        <p>{emote}</p>
+        <Avatar emote={emote} avatar={avatar} bid={bid}/>
+        {message && 
+          <span className="message">
+            <p className="arrow-left"></p>
+            <p className="text">{message}</p>
+          </span>
+        }
         <h2>{name}</h2>
         <div className="hand">
           {hand > 0 && 
@@ -52,7 +47,7 @@ class Player extends PureComponent {
           }
         </div>
         {played && 
-          <div className="played">
+          <div className='played'>
             {played.map((card, i) => (
               <Card
                 key={i}

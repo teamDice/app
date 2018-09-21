@@ -20,10 +20,10 @@ class Emotes extends PureComponent {
     return (
       <div className="emotes">
         <i onClick={toggle} className="fas fa-times"></i>
-        <i onClick={() => this.handleEmote('😂')} className="far fa-laugh-squint"></i>
-        <i onClick={() => this.handleEmote('😢')} className="far fa-sad-cry"></i>
-        <i onClick={() => this.handleEmote('🤩')} className="far fa-grimace"></i>
-        <i onClick={() => this.handleEmote('😡')} className="far fa-angry"></i>
+        <p onClick={() => this.handleEmote('😂')}>😂</p>
+        <p onClick={() => this.handleEmote('😭')}>😭</p>
+        <p onClick={() => this.handleEmote('🤔')}>🤔</p>
+        <p onClick={() => this.handleEmote('😡')}>😡</p>
       </div>
     );
   }
