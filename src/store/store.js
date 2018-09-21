@@ -4,7 +4,8 @@ import promiseMiddleware from './promise-middleware';
 import { error, loading } from '../components/app/reducers';
 import { game, hand } from '../components/game/reducers';
 import { user, checkedAuth } from '../components/auth/reducers';
-import { games, stats, leaders, chatroom } from '../components/lobby/reducers';
+import { leaders } from '../components/leaderboard/reducers';
+import { games, stats, chatroom } from '../components/lobby/reducers';
 
 const rootReducer = combineReducers({
   error,

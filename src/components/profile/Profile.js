@@ -33,7 +33,6 @@ class Profile extends Component {
         {user.profile &&        
         <section >
           <div className="profile-avatar">
-            {/* <img src={image} /> */}
             <img src={this.state.imageSource} />
           </div>
           <section className="profile-name">
