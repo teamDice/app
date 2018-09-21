@@ -17,5 +17,18 @@
     font-size: 1.5em;
   }
 
+  button {
+    margin: 10px;
+    border: 1px solid white;
+    background: none;
+    color: white;
+    font-size: 2em;
+    padding: .2em;
+    transition: all .3s ease;
+  }
+
+  button:hover {
+    background: #FF6138;
+  }
   
 }  

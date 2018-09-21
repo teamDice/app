@@ -1,8 +1,8 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AvatarForm.css';
 
-class AvatarForm extends PureComponent {
+class AvatarForm extends Component {
   state = {
     imageUrls: [
       'https://firebasestorage.googleapis.com/v0/b/snakes-game-2b62c.appspot.com/o/avatars%2Fbald_eagle.png?alt=media&token=d898359f-641d-41bc-b0ec-e4b6af3b8c96',
@@ -23,7 +23,8 @@ class AvatarForm extends PureComponent {
 
   static propTypes = {
     currentAvatar: PropTypes.string,
-    toggleEdit: PropTypes.func
+    toggleEdit: PropTypes.func,
+    editAvatar: PropTypes.func
   };
 
   componentDidMount() {
@@ -39,8 +40,12 @@ class AvatarForm extends PureComponent {
     this.setState({ selected });
   };
 
+  handleSubmit = () => {
+    this.props.editAvatar(this.state.selected);
+  };
+
   render() { 
-    
+    const { toggleEdit } = this.props;
     const { imageUrls, selected } = this.state;
     
     return (
@@ -56,10 +61,12 @@ class AvatarForm extends PureComponent {
           ))}
         </section>
         <section>
-          <button>
+          <button onClick={toggleEdit}>
             <i className="fas fa-times"></i>
           </button>
-          <button className="save-button">Save</button>
+          <button className="save-button" onClick={this.handleSubmit}>
+            Save
+          </button>
         </section>
       </div>
     );

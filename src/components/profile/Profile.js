@@ -55,7 +55,7 @@ class Profile extends PureComponent {
 
           <section>
             {editingAvatar
-              ? <AvatarForm toggleEdit={this.toggleEditingAvatar} currentAvatar={avatar}/>
+              ? <AvatarForm toggleEdit={this.toggleEditingAvatar} editAvatar={this.handleEditAvatar} currentAvatar={avatar}/>
               : <Fragment>
                 <AvatarDisplay toggleEdit={this.toggleEditingAvatar} imageSource={avatar}/>
                 <section className="profile-name">             

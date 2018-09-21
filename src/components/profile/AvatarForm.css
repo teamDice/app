@@ -22,22 +22,9 @@
     border: 5px solid #FF6138;
     z-index: 3;
   }
-
-  button {
-    margin: 10px;
-    border: 1px solid white;
-    background: none;
-    color: white;
-    font-size: 2em;
-    padding: .2em;
-    transition: all .3s ease;
-  }
-
+  
   .save-button {
     width: 7.5em;
   }
-
-  button:hover {
-    background: #FF6138;
-  }
+  
 }
