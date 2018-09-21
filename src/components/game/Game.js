@@ -52,7 +52,7 @@ class Game extends PureComponent {
     const playerIndex = game.players.indexOf(player);
     const emoteRef = db.ref('games').child(game.key).child('players').child(playerIndex).child('emote');
     return emoteRef.set(emote)
-      .then(() => setTimeout(() => emoteRef.remove(), 5000));
+      .then(() => setTimeout(() => emoteRef.remove(), 3000));
   };
 
   postMessage = message => {
@@ -61,7 +61,7 @@ class Game extends PureComponent {
     const playerIndex = game.players.indexOf(player);
     const messageRef = db.ref('games').child(game.key).child('players').child(playerIndex).child('message');
     return messageRef.set(message)
-      .then(() => setTimeout(() => messageRef.remove(), 10000));
+      .then(() => setTimeout(() => messageRef.remove(), 5000));
   };
 
   postCard = move => {
@@ -77,7 +77,7 @@ class Game extends PureComponent {
   postBid = move => {
     const { profile, match } = this.props;
     const { gameKey } = match.params;
-    this.postMessage('I bet I can flip squirrels!');
+    this.postMessage(`I bet I can find ${move.bid} squirrel${move.bid > 1 ? 's in a row' : ''}!`);
     db.ref('bidMove').child(profile._id).set({
       gameId: gameKey,
       ...move

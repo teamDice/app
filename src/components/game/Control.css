@@ -108,5 +108,11 @@
     grid-area: submit;
   }
 
+  .flip {
+    font-size: 2em;
+    text-align: center;
+    align-self: center;
+    color: white;
+  }
 
 }

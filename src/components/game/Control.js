@@ -59,12 +59,11 @@ class Control extends PureComponent {
           {emoting
             ? <Emotes postEmote={postEmote} toggle={this.toggleEmoting}/>
             : <Fragment>
-              {/* <img className='emoji' src={emoji} onClick={this.toggleEmoting}/> */}
               <button onClick={this.toggleEmoting}>😀</button>
               {phase > 2
                 ? <section>
                   {challenger.userId === uid &&
-                    <p>Flip {challenger.bid} squirrels!</p>
+                    <p className="flip">Flip {challenger.bid} squirrels!</p>
                   }
                 </section>
                 : <Fragment>
