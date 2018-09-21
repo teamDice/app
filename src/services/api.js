@@ -1,7 +1,8 @@
-import { get, post } from './request';
+import { get, post, put } from './request';
 
 const URL = '/api';
 const AUTH_URL = `${URL}/auth`;
+const PROFILE_URL = `${URL}/profile`;
 const RECORD_URL = `${URL}/records`;
 const SIGNUP_URL = `${AUTH_URL}/signup`;
 const SIGNIN_URL = `${AUTH_URL}/signin`;
@@ -25,3 +26,6 @@ export const verifyUser = token => {
 export const getLeaderboard = () => get(`${RECORD_URL}/ranks/leaderboard`);
 
 export const getStatsById = id => get(`${RECORD_URL}/stats/${id}`);  
+
+export const getProfile = () => get(PROFILE_URL);
+export const putProfile = data => put(PROFILE_URL, data);
