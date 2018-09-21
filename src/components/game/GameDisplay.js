@@ -47,19 +47,6 @@ class Game extends PureComponent {
                 
                 
                 }
-                // 
-                 
-                // ? challengerId === player.userId && notFlippedCards.length > 0
-                //   ? notFlippedCards[notFlippedCards.length - 1]
-                //     ? postFlip
-                //     : null
-                //   : notFlippedCards.length > 0
-                //     ?
-                //     :
-                // // send postFlip to only challenger cards
-
-                // // send postFlip to the highest order non-type card
-                // : null
               />
             ))
         }
