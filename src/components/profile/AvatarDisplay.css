@@ -1,13 +1,15 @@
 :local(.avatarDisplay) {
   text-align: center;
-  
+  padding-top: 20px;
+
   img {
-    width: 250px;
+    width: 200px;
     border: 2px solid white;
   }
 
   button.edit-icon {
     border: none;
     position: absolute;
+    font-size: 1.5em;
   }
 }

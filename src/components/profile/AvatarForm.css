@@ -22,9 +22,13 @@
     border: 5px solid #FF6138;
     z-index: 3;
   }
+
+  i {
+    padding: 0 .4em;
+  }
   
   .save-button {
-    width: 7.5em;
+    width: 7em;
   }
   
 }
