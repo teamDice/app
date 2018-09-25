@@ -57,33 +57,31 @@ class Profile extends PureComponent {
     const { avatar } = profile;
 
     return (
-      <div className={styles.profile}>
-        {profile &&  
-          
-          <section>
-            <Header/>
-            {editingAvatar
-              ? <AvatarForm toggleEdit={this.toggleEditingAvatar} editAvatar={this.handleEditAvatar} currentAvatar={avatar}/>
-              : <Fragment>
-                <AvatarDisplay toggleEdit={this.toggleEditingAvatar} imageSource={avatar}/>
-                <section className="info">             
-                  {editingInfo
-                    ? <ProfileForm
-                      profile={profile}
-                      onComplete={this.handleEditInfo}
-                      onCancel={this.toggleEditingInfo}
-                    />
-                    : <ProfileDisplay
-                      profile={profile}
-                      onEdit={this.toggleEditingInfo}
-                    />
-                  }
-                </section>
-              </Fragment>
-            }
-          </section>
+      <div>
+        <Header/>
+        <section className={styles.profile}>
+          {editingAvatar
+            ? <AvatarForm toggleEdit={this.toggleEditingAvatar} editAvatar={this.handleEditAvatar} currentAvatar={avatar}/>
+            : <Fragment>
+              <AvatarDisplay toggleEdit={this.toggleEditingAvatar} imageSource={avatar}/>
+              <section className="info">             
+                {editingInfo
+                  ? <ProfileForm
+                    profile={profile}
+                    onComplete={this.handleEditInfo}
+                    onCancel={this.toggleEditingInfo}
+                  />
+                  : <ProfileDisplay
+                    profile={profile}
+                    onEdit={this.toggleEditingInfo}
+                  />
+                }
+              </section>
+            </Fragment>
+          }
+        </section>
 
-        }
+        
       </div>
 
     );

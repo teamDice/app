@@ -30,12 +30,12 @@
     font-size: 2em;
   }
   
-  thead {
+  /* thead {
     text-align: center;
    
     border: 1px solid black;
     height: 40px;
     background-color: #f6c243;; 
-  }
+  } */
   
 }

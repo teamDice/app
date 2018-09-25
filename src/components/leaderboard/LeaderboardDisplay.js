@@ -29,12 +29,10 @@ class LeaderboardDisplay extends Component {
         <h2 className='leaderBoardTitle'>L E A D E R B O A R D</h2>
         <table className="leader_table">
           <tbody>
-            {/* <thead>
+            <thead>
               <td>Name</td>
-              <td>Total Wins</td>
-              <td>Total Games</td>
-              <td>Win %</td> 
-            </thead> */}
+              <td>Wins</td>
+            </thead>
             {
               leaders &&
               leaders.map(leader => (

@@ -1,7 +1,6 @@
 :local(.avatarDisplay) {
   text-align: center;
-  padding-top: 20px;
-
+  margin-top: 10px;
   img {
     width: 200px;
     border: 2px solid white;
