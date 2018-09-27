@@ -26,8 +26,8 @@ class LeaderboardDisplay extends Component {
     return (
       <div className={styles.leader_display}>
         <Header />
-        <h2 className='leaderBoardTitle'>L E A D E R B O A R D</h2>
-        <table className="leader_table">
+        <h2>L E A D E R B O A R D</h2>
+        <table>
           <tbody>
             <thead>
               <td>Name</td>

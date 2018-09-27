@@ -5,6 +5,7 @@
 
   .info-display {
     display: flex;
+    margin-bottom: 10px;
   }
 
   .info-display > div {

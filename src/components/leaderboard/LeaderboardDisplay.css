@@ -4,38 +4,30 @@
   text-align: center;
   color: white;
 
-  .leaderBoardTitle {
+  h2 {
     font-size: 2.5em;
   }
 
   td {
     margin: 5px 25px 5px 15px;
+    font-size: 2em;
   }
-  .leader_table {
+  table {
+    width: 200px;
     margin-left: auto;
     margin-right: auto;
   }
 
-  .leaderContainer {
+  thead > td {
+    border-bottom: 1px solid white;
+  }
+
+  thead, tr {
     display: flex;
     justify-content: space-between
   }
 
   .leaderName {
     font-weight: bold;
-    font-size: 2em;
   }
-
-  .leaderWins {
-    font-size: 2em;
-  }
-  
-  /* thead {
-    text-align: center;
-   
-    border: 1px solid black;
-    height: 40px;
-    background-color: #f6c243;; 
-  } */
-  
 }
