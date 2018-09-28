@@ -7,9 +7,10 @@ import {
   CHAT_LOAD,
   QUEUE_2_LOAD,
   QUEUE_3_LOAD,
-  QUEUE_4_LOAD } from './reducers';
+  QUEUE_4_LOAD
+} from './reducers';
 import { db } from '../../services/firebase';
-import { handsRef, chatRef, queue2Ref, queue3Ref, queue4Ref } from '../../services/firebaseRef';
+import { handsRef, chatRef, queue2Ref, queue3Ref, queue4Ref, gameQueueRef } from '../../services/firebaseRef';
 import { getStatsById as _getStats } from '../../services/api';
 
 const convertToArray = obj => {
@@ -23,18 +24,18 @@ const convertToArray = obj => {
 
 export const removeGame = () => ({ type: GAMES_REMOVE });
 
-export const requestGame = (searching, queueRef) => {
+export const requestGame = (searching, numberOfPlayers) => {
   return (dispatch, getState) => {
 
     const profile = getProfile(getState());
     const profileId = profile._id;
 
     if(searching) {
-      db.ref(queueRef).child(profileId).remove();
+      gameQueueRef.child(numberOfPlayers).child(profileId).remove();
     }
     
     else {
-      db.ref(queueRef).child(profileId)
+      gameQueueRef.child(numberOfPlayers).child(profileId)
         .set(profile)
         .then(() => {
           handsRef.child(profileId).on('value', snapshot => {

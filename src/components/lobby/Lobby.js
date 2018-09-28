@@ -6,7 +6,11 @@ import Chatroom from './Chatroom';
 import { connect } from 'react-redux';
 import { getStats, getGames, getQueue2Users, getQueue3Users, getQueue4Users } from './reducers';
 import { getProfile } from '../profile/reducers';
-import { requestGame, removeGame, getStatsById, loadChatroom, loadQueue2Users, loadQueue3Users, loadQueue4Users } from './actions';
+import {
+  requestGame,
+  removeGame,
+  loadChatroom,
+  loadQueue2Users, loadQueue3Users, loadQueue4Users } from './actions';
 import styles from './Lobby.css';
 
 export class Lobby extends Component {
@@ -19,7 +23,6 @@ export class Lobby extends Component {
     queue3: PropTypes.number,
     queue4: PropTypes.number,
     requestGame: PropTypes.func.isRequired,
-    getStatsById: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     removeGame: PropTypes.func.isRequired,
     loadQueue2Users: PropTypes.func.isRequired,
@@ -79,5 +82,5 @@ export default connect(
     queue3: getQueue3Users(state),
     queue4: getQueue4Users(state)
   }),
-  { requestGame, getStatsById, loadChatroom, removeGame, loadQueue2Users, loadQueue3Users, loadQueue4Users }
+  { requestGame, loadChatroom, removeGame, loadQueue2Users, loadQueue3Users, loadQueue4Users }
 )(Lobby);

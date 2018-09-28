@@ -8,6 +8,8 @@ const queue2Ref = db.ref('queue2');
 const queue3Ref = db.ref('queue3');
 const queue4Ref = db.ref('queue4');
 
+const gameQueueRef = db.ref('gameQueue');
+
 const gamesRef = db.ref('games');
 const handsRef = db.ref('hands');
 const stackRef = db.ref('stack');
@@ -80,6 +82,30 @@ const newGameFuncs = (gameId, ids) => ids.map(id => {
     createQueue4Remove(id)(),
     createStartingStateSet(gameId, id)()
   ];
+});
+
+exports.gameQueue = functions.database.ref('gameQueues/{numberOfPlayers}/{uid}').onCreate((snapshot, context) => {
+  const { numberOfPlayers, uid } = context.params;
+  const queueRef = gameQueueRef.child(numberOfPlayers);
+  return queueRef.once('value')
+    .then(snapshot => {
+      const queue = snapshot.val();
+      const playerIds = Object.keys(queue);
+
+      if(playerIds.length < numberOfPlayers) return null;
+
+      const newGameRef = gamesRef.push();
+
+      const players = shuffle(playerIds);
+      const newGame = createNewGame(players, queue);
+
+      const gameId = newGameRef.key;
+
+      return Promise.all([
+        newGameRef.set(newGame),
+        ...newGameFuncs(gameId, players)
+      ]);
+    });
 });
 
 exports.playerQueue2 = functions.database.ref('/queue2/{uid}').onCreate((snapshot, context) => {
