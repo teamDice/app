@@ -62,7 +62,7 @@ export class Lobby extends Component {
       <div className={styles.lobby}>
         <Header/>
         <QueueForm 
-          onClick={requestGame}
+          handleQueue={requestGame}
           queue2Users={queue2}
           queue3Users={queue3}
           queue4Users={queue4}

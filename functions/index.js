@@ -8,7 +8,7 @@ const queue2Ref = db.ref('queue2');
 const queue3Ref = db.ref('queue3');
 const queue4Ref = db.ref('queue4');
 
-const gameQueueRef = db.ref('gameQueue');
+const gameQueuesRef = db.ref('gameQueues');
 
 const gamesRef = db.ref('games');
 const handsRef = db.ref('hands');
@@ -84,9 +84,9 @@ const newGameFuncs = (gameId, ids) => ids.map(id => {
   ];
 });
 
-exports.gameQueue = functions.database.ref('gameQueues/{numberOfPlayers}/{uid}').onCreate((snapshot, context) => {
+exports.gameMatchmaker = functions.database.ref('gameQueues/{numberOfPlayers}/{uid}').onCreate((snapshot, context) => {
   const { numberOfPlayers, uid } = context.params;
-  const queueRef = gameQueueRef.child(numberOfPlayers);
+  const queueRef = gameQueuesRef.child(numberOfPlayers);
   return queueRef.once('value')
     .then(snapshot => {
       const queue = snapshot.val();
