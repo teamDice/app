@@ -5,7 +5,7 @@ import { error, loading } from '../components/app/reducers';
 import { game, hand } from '../components/game/reducers';
 import { user, checkedAuth } from '../components/auth/reducers';
 import { leaders } from '../components/leaderboard/reducers';
-import { games, stats, chatroom, queue2, queue3, queue4 } from '../components/lobby/reducers';
+import { games, stats, chatroom, queues } from '../components/lobby/reducers';
 import { profile } from '../components/profile/reducers';
 
 const rootReducer = combineReducers({
@@ -20,9 +20,7 @@ const rootReducer = combineReducers({
   stats,
   leaders,
   chatroom,
-  queue2,
-  queue3,
-  queue4
+  queues
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

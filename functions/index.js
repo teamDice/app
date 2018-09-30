@@ -53,19 +53,20 @@ const createNewGame = (users, queue) => {
   };
 };
 
+
 const createQueue2Remove = id => {
   return function queue2Remove() {
-    return queue2Ref.child(id).remove();
+    return gameQueuesRef.child(2).child(id).remove();
   };
 };
 const createQueue3Remove = id => {
   return function queue3Remove() {
-    return queue3Ref.child(id).remove();
+    return gameQueuesRef.child(3).child(id).remove();
   };
 };
 const createQueue4Remove = id => {
   return function queue4Remove() {
-    return queue4Ref.child(id).remove();
+    return gameQueuesRef.child(4).child(id).remove();
   };
 };
 

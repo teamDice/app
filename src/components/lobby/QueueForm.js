@@ -7,20 +7,18 @@ class QueueForm extends Component {
 
   static propTypes = {
     handleQueue: PropTypes.func.isRequired,
-    queue2Users: PropTypes.number,
-    queue3Users: PropTypes.number,
-    queue4Users: PropTypes.number,
+    queues: PropTypes.object.isRequired
   };
 
   render() { 
-    const { handleQueue, queue2Users, queue3Users, queue4Users } = this.props;
+    const { handleQueue, queues } = this.props;
 
     return (
       <div className={styles.queueForm}>
         <section>
-          <QueueItem handleQueue={handleQueue} playersWaiting={queue2Users} queueType="2"/>
-          <QueueItem handleQueue={handleQueue} playersWaiting={queue3Users} queueType="3"/>
-          <QueueItem handleQueue={handleQueue} playersWaiting={queue4Users} queueType="4"/>
+          <QueueItem handleQueue={handleQueue} playersWaiting={queues[2]} queueType="2"/>
+          <QueueItem handleQueue={handleQueue} playersWaiting={queues[3]} queueType="3"/>
+          <QueueItem handleQueue={handleQueue} playersWaiting={queues[4]} queueType="4"/>
         </section>
       </div>
     );
