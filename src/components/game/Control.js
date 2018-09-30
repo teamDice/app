@@ -6,7 +6,6 @@ import Card from './Card';
 import Bids from './ControlBids';
 import Emotes from './ControlEmotes';
 import styles from './Control.css';
-import emoji from '../../assets/emoji.png';
 
 class Control extends PureComponent {
   state = {
@@ -44,7 +43,7 @@ class Control extends PureComponent {
   };
 
   render() { 
-    const { emoting, bidding, processing } = this.state;
+    const { emoting, bidding } = this.state;
     const { hand, game, profile, postCard, postBid, postEmote } = this.props;
     const { phase, turn, players, challenger } = game;
     const uid = profile._id;

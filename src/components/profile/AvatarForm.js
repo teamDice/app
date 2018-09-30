@@ -61,14 +61,14 @@ class AvatarForm extends Component {
             />
           ))}
         </section>
-        <section>
+        <div>
           <button onClick={toggleEdit}>
             <i className="fas fa-times"></i>
           </button>
           <button className="save-button" onClick={this.handleSubmit}>
             Save
           </button>
-        </section>
+        </div>
       </div>
     );
   }

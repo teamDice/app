@@ -1,8 +1,7 @@
 :local(.header) {
-  
-  height: 3vh;
+  height: 5vh;
+  border-bottom: 1px solid white;
   /* padding: 5px 10px; */
-  
 
   section {
     height: 100%;

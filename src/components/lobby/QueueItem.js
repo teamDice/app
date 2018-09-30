@@ -11,19 +11,17 @@ class QueueItem extends Component {
   static propTypes = {
     playersWaiting: PropTypes.number,
     queueType: PropTypes.string,
-    onClick: PropTypes.func.isRequired,
+    handleQueue: PropTypes.func.isRequired,
 
   };
 
   handleClick = () => {
-    const { onClick, queueType } = this.props;
+    const { handleQueue, queueType } = this.props;
     const { searching } = this.state;
 
-    onClick(searching, `queue${queueType}`);
+    handleQueue(searching, queueType);
      
-    this.setState({
-      searching: !this.state.searching
-    });
+    this.setState({ searching: !searching });
   };
 
   render() { 
@@ -32,12 +30,10 @@ class QueueItem extends Component {
 
     return (
       <article 
-        className={this.state.searching ? 'queueSelected' : 'queue'}
+        className={searching ? 'queueSelected' : 'queue'}
         onClick={this.handleClick}
       >
-        <div 
-
-        >
+        <div>
           
           {searching ? 
             <div className='sweet-loading'>

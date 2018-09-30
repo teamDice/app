@@ -6,9 +6,9 @@
 
   section {
     display: grid;
-    grid-template: repeat(4, min-content) / repeat(3, minmax(100px, 140px));
+    grid-template: repeat(4, min-content) / repeat(3, minmax(80px, 140px));
     grid-gap: 5px;
-    padding: 10px;
+    padding: 5px 20px;
   }
 
   img {
@@ -22,9 +22,13 @@
     border: 5px solid #FF6138;
     z-index: 3;
   }
+
+  i {
+    padding: 0 .4em;
+  }
   
   .save-button {
-    width: 7.5em;
+    width: 7em;
   }
   
 }

@@ -1,14 +1,14 @@
 :local(.profile) {
   color: white;
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   flex-direction: column;
-  height: 90vh;
+  height: 80vh;
     
 
   button {
-    margin: 10px;
+    margin: 0 10px;
     border: 1px solid white;
     background: none;
     color: white;
