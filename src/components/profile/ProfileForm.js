@@ -46,8 +46,8 @@ class ProfileForm extends Component {
         <form className={styles.profile} onSubmit={this.handleSubmit}>
           <h3>Update Profile Details</h3>
           <InputControl name="name" value={name} onChange={this.handleChange}/>
-          <InputControl name="location" value={location} onChange={this.handleChange}/>
           <InputControl name="greeting" value={greeting} onChange={this.handleChange}/>
+          <InputControl name="location" value={location} onChange={this.handleChange}/>
           <p className="buttons">
             <button type="submit">Update</button>
             <button type="button" onClick={onCancel}>Cancel</button>

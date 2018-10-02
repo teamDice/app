@@ -13,7 +13,6 @@
     width: 50%;
     justify-self: center;
     align-self: center;
-
   }
 
   h1 {
@@ -28,7 +27,7 @@
 
   .rules {
     text-align: center;
-    padding: 50px;
+    padding: 0px 50px;
   }
 
   ul {

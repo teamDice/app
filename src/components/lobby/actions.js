@@ -5,12 +5,10 @@ import {
   GAMES_REMOVE, 
   STATS_LOAD, 
   CHAT_LOAD,
-  QUEUE_2_LOAD,
-  QUEUE_3_LOAD,
-  QUEUE_4_LOAD } from './reducers';
+  QUEUE_LOAD
+} from './reducers';
 import { db } from '../../services/firebase';
-import { handsRef, chatRef, queue2Ref, queue3Ref, queue4Ref } from '../../services/firebaseRef';
-import { getStatsById as _getStats } from '../../services/api';
+import { handsRef, chatRef, gameQueuesRef } from '../../services/firebaseRef';
 
 const convertToArray = obj => {
   if(!obj) return [];
@@ -23,21 +21,21 @@ const convertToArray = obj => {
 
 export const removeGame = () => ({ type: GAMES_REMOVE });
 
-export const requestGame = (searching, queueRef) => {
+export const requestGame = (searching, queueType) => {
   return (dispatch, getState) => {
 
     const profile = getProfile(getState());
-    const profileId = profile._id;
+    const userId = profile._id;
 
     if(searching) {
-      db.ref(queueRef).child(profileId).remove();
+      gameQueuesRef.child(queueType).child(userId).remove();
     }
     
     else {
-      db.ref(queueRef).child(profileId)
+      gameQueuesRef.child(queueType).child(userId)
         .set(profile)
         .then(() => {
-          handsRef.child(profileId).on('value', snapshot => {
+          handsRef.child(userId).on('value', snapshot => {
             const userGame = snapshot.val();
             if(userGame) {
               dispatch({
@@ -70,62 +68,29 @@ export const loadChatroom = () => {
   };
 };  
 
-export const getStatsById = id => ({
-  type: STATS_LOAD,
-  payload: _getStats(id)
-});
 
-export const loadQueue2Users = () => {
+export const loadQueues = () => {
   return (dispatch) => {
-    db.ref(queue2Ref).on('value', snapshot => {
-      if(!snapshot.val()) {
+    gameQueuesRef.on('value', snapshot => {
+      const queues = snapshot.val();
+      if(!queues) {
         dispatch({
-          type: QUEUE_2_LOAD,
-          payload: 0
+          type: QUEUE_LOAD,
+          payload: {
+            '2': 0,
+            '3': 0,
+            '4': 0
+          }
         });
       }
       else {
         dispatch({
-          type: QUEUE_2_LOAD,
-          payload: Object.keys(snapshot.val()).length
-        });
-      }
-    });
-  };
-};
-
-export const loadQueue3Users = () => {
-  return (dispatch) => {
-    db.ref(queue3Ref).on('value', snapshot => {
-      if(!snapshot.val()) {
-        dispatch({
-          type: QUEUE_3_LOAD,
-          payload: 0
-        });
-      }
-      else {
-        dispatch({
-          type: QUEUE_3_LOAD,
-          payload: Object.keys(snapshot.val()).length
-        });
-      }
-    });
-  };
-};
-
-export const loadQueue4Users = () => {
-  return (dispatch) => {
-    db.ref(queue4Ref).on('value', snapshot => {
-      if(!snapshot.val()) {
-        dispatch({
-          type: QUEUE_4_LOAD,
-          payload: 0
-        });
-      }
-      else {
-        dispatch({
-          type: QUEUE_4_LOAD,
-          payload: Object.keys(snapshot.val()).length
+          type: QUEUE_LOAD,
+          payload: {
+            '2': queues[2] ? Object.keys(queues[2]).length : 0,
+            '3': queues[3] ? Object.keys(queues[3]).length : 0,
+            '4': queues[4] ? Object.keys(queues[4]).length : 0,
+          }
         });
       }
     });
