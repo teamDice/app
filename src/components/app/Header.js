@@ -32,9 +32,12 @@ class Header extends Component {
             {name && <p>Logged in as {profile.name}</p>}
           </div>
           <nav>
-            <h1>Snakes &amp; Squirrels</h1>
+            <h1>
+              <NavLink exact to="/">
+                Snakes &amp; Squirrels
+              </NavLink></h1>
             <ul>
-              <li>
+              <li className="home-link">
                 <NavLink exact to="/">
                   <i className="fas fa-home"></i>
                   <span>Home</span>

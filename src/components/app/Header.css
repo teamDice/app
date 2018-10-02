@@ -1,5 +1,5 @@
 :local(.header) {
-  height: 5vh;
+  height: 6vh;
   /* border-bottom: 1px solid white; */
   /* padding: 5px 10px; */
   grid-template: min-content / auto minmax(auto, 1fr);
@@ -28,13 +28,14 @@
     border-top: 1px solid white;
   }
   
-  p {
+  .header-top {
     position: absolute;
     top: 5px;
     right: 10px;
     text-align: right;
     font-size: 1em;
     color: white;
+    z-index: 11;
   }
 
   ul {
@@ -77,15 +78,21 @@
     display: none;
   }
   
+
   @media only screen and (min-width: 768px) {
+    
+    
     nav {
+      display: grid;
+      grid-template: min-content / 3fr 7fr 2fr;
       position: static;
       border-bottom: 1px solid white;
-      border-top: 0px
+      border-top: 0px;
     }
 
     nav h1 {
-      font-size: 1em;
+      padding: 5px 0px 10px 10px;
+      font-size: 1.5em;
       color: white;
       display: block;
     }
@@ -94,13 +101,16 @@
       width: 100%;
     }
 
-    nav i {
+    nav i, .home-link {
       display: none;
+    }
+
+    p {
+      font-size: .8em;
     }
   }
 
   @media only screen and (max-width: 321px) {
-    grid-template: min-content / auto minmax(auto, 1fr);
     nav {
       height: 55px;
     }
