@@ -25,6 +25,9 @@ body {
   height: 100%;
   margin: 0;
   font-family: 'Rajdhani', sans-serif;
+  max-width: 1000px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 h1 {
