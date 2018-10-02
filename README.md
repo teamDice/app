@@ -10,7 +10,7 @@ Snakes and squirrels is a multi-player game created with React with Redux, Expre
 1. Get matched against other players and play!
 
 ## Created by:
-Robert Thompson, [Arthur Jen](https://github.com/arthurjen), Carmen Ramos
+[Robert Thompson](https://github.com/rbtprograms), [Arthur Jen](https://github.com/arthurjen), [Carmen Ramos](https://github.com/carmenvramos)
 
 ## Special Thank
 Marty and Megan Nelson, Shannon Wolcott, Andrew Bodey, Andrew Potter, Ryan Manro, and everyone at Alchemy Code Lab!
