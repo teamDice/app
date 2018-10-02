@@ -21,4 +21,8 @@
     grid-template: auto / repeat(3, 1fr);
     grid-template-areas: "queues chat chat";
   }
+
+  @media only screen and (max-width: 321px) {
+   
+  }
 }
