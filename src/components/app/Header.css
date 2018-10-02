@@ -83,6 +83,8 @@
     
     
     nav {
+      background: rgba(116, 116, 116, 0.5);
+
       display: grid;
       grid-template: min-content / 3fr 7fr 2fr;
       position: static;
