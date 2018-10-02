@@ -3,7 +3,7 @@
 
   display: grid;
   height: 90vh;
-  grid-template: 40vh auto / 100%;
+  grid-template: 35vh auto / 100%;
   justify-content: center;
   align-items: center;
   color: white;
@@ -32,7 +32,6 @@
 
   ul {
     padding: 0;
-    margin-top: 30px;
     list-style-type: none;
   }
 
@@ -42,7 +41,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: 50px;
   }
 
   button {
@@ -50,7 +48,7 @@
     border: 1px solid white;
     background: none;
     color: white;
-    font-size: 2em;
+    font-size: 1.7em;
     padding: .2em;
     width: 7.5em;
     transition: all .3s ease;
