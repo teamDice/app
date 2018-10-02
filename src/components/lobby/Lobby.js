@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../app/Header';
 import QueueForm from './QueueForm';
@@ -52,14 +52,16 @@ export class Lobby extends Component {
     
 
     return (
-      <div className={styles.lobby}>
+      <Fragment>
         <Header/>
-        <QueueForm 
-          handleQueue={requestGame}
-          queues={queues}
-        />
-        <Chatroom profile={profile}/>
-      </div>
+        <div className={styles.lobby}>
+          <QueueForm 
+            handleQueue={requestGame}
+            queues={queues}
+          />
+          <Chatroom profile={profile}/>
+        </div>
+      </Fragment>
     );
   }
 }
