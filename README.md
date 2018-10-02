@@ -1,6 +1,5 @@
 # Snakes and Squirrels!
 
-**Welcome**
 Snakes and squirrels is a multi-player game created with React with Redux, Express, MongoDB, Node.js, and Firebases real time serverless database. The goal of the game is to win bets, sabotage your opponents, and bluff your way to victory!
 
 ## How to play
