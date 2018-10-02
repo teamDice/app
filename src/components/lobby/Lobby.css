@@ -1,4 +1,9 @@
 :local(.lobby) {
+
+  max-width: 1200px;
+  margin-right: auto;
+  margin-left: auto;
+  
   button {
     background: #FF570C;
     border: none;
@@ -11,4 +16,9 @@
     background: white;
   }
 
+  @media only screen and (min-width: 768px) {
+    display: grid;
+    grid-template: auto / repeat(3, 1fr);
+    grid-template-areas: "queues chat chat";
+  }
 }

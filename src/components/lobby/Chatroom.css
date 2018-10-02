@@ -22,5 +22,10 @@
     border: 1px solid white;
     height: 40px;
   }
-
+  @media only screen and (min-width: 768px) {
+    grid-area: "chat";
+    grid-column-start: 2;
+    grid-column-end: span chat;
+    height: 75vh;
+  }
 }
