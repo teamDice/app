@@ -22,13 +22,25 @@
     transition: 200ms;
   }
 
+  /* section > article:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transition: 200ms;
+  } */
+
   section > article > div > p {
     font-size: .5em;
   }
+
   
   section > .queueSelected {
     background-color: #FF6138;
     transition: 200ms;
   }
 
+  @media only screen and (min-width: 768px) {
+    grid-area: "queues";
+    section > article {
+      height: 25.75vh;
+    }
+  }
 }
