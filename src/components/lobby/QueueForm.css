@@ -41,6 +41,12 @@
     grid-area: "queues";
     section > article {
       height: 25.75vh;
+      flex-direction: column-reverse;
+      justify-content: center;
+    }
+
+    section > article > div > p {
+      font-size: .75em;
     }
   }
 }

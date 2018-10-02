@@ -1,4 +1,9 @@
 :local(.lobby) {
+
+  max-width: 1200px;
+  margin-right: auto;
+  margin-left: auto;
+  
   button {
     background: #FF570C;
     border: none;
